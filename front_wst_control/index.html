@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoreo de Terminales</title>
+  <link rel="stylesheet" href="styles.css">
+    <!-- Incluye Chart.js desde un CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Navbar a la izquierda -->
+    <aside class="navbar">
+      <div class="navbar-header">
+        <div class="menu-icon">☰</div>
+      </div>
+    <!-- Buscador en el navbar -->
+    <div class="search-bar">
+        <div class="search-icon">
+          <img src="search-svgrepo-com.svg" alt="Buscar">
+        </div>
+        <input type="text" placeholder="Buscar..." id="searchInput">
+      </div>
+      <div class="navbar-links">
+        <a href="#terminales" class="navbar-link">
+          <img src="pc-svgrepo-com.svg" alt="Terminales">
+          <span class="link-text">Terminales</span>
+        </a>
+        <a href="#cctv" class="navbar-link">
+          <img src="2cctv-svgrepo-com.svg" alt="CCTV">
+          <span class="link-text">CCTV</span>
+        </a>
+        <a href="#servidores" class="navbar-link">
+          <img src="server-svgrepo-com.svg" alt="Servidores">
+          <span class="link-text">Servidores</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+<!-- Contenido principal -->
+<div class="main-content">
+    <header>
+      <h1>Monitoreo de Actualizaciones</h1>
+    </header>
+    <main>
+      <div id="terminalsContainer" class="grid"></div>
+  
+      <section class="main">
+        <div class="main-top">
+          <h1>Filiales</h1>
+          <i class="fas fa-user-cog"></i>
+        </div>
+        <div class="main-skills">
+          <div class="card">
+            <div class="card-content">
+              <h3>Actualizadas</h3>
+              <p>Alguna descripción.</p>
+              <button>Ver</button>
+            </div>
+            <!-- Círculo con el porcentaje -->
+            <div class="circle">
+              <span>80%</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <h3>Pendientes</h3>
+              <p>Alguna descripción</p>
+              <button>Ver</button>
+            </div>
+            <!-- Círculo con el porcentaje -->
+            <div class="circle">
+              <span>10%</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <h3>Fallidas</h3>
+              <p>Alguna descripción</p>
+              <button>Ver</button>
+            </div>
+            <!-- Círculo con el porcentaje -->
+            <div class="circle">
+              <span>10%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+        
+        <!-- Añadir un canvas para el gráfico de barras -->
+        <div class="chart-container" style="width: 50%; margin: auto; padding-top: 20px;">
+          <canvas id="myChart"></canvas>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

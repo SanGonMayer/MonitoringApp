@@ -1,0 +1,301 @@
+/* Reset básico */
+body, h1, h2, h3, p, div, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f9;
+  }
+  
+  .container {
+    display: flex;
+    width: 100%;
+  }
+  
+  /* Estilos para el navbar */
+  .navbar {
+    width: 80px; /* Ancho inicial reducido */
+    background-color: #837c7c;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    transition: width 0.3s ease;
+    overflow: hidden; /* Oculta el texto inicialmente */
+    position: relative;
+  }
+  
+  .navbar:hover {
+    width: 220px; /* Ancho expandido aumentado */
+  }
+  
+  .navbar-header {
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  .menu-icon {
+    font-size: 24px; /* Tamaño aumentado para mejor visibilidad */
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    display: flex; /* Para alinear icono e input */
+    align-items: center;
+    margin-bottom: 20px;
+    width: 70%; /* Ajusta el ancho para mejor alineación */
+    padding: 0 10px;
+    background-color: #444;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+  }
+  
+  .search-icon {
+    margin-right: 10px; /* Espacio entre el ícono y el input */
+  }
+  
+  .search-icon img {
+    width: 16px; /* Ajusta el tamaño del ícono */
+    height: 16px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #444;
+    color: #fff;
+  }
+  
+  .search-bar input::placeholder {
+    color: #ccc;
+  }
+  
+  .search-bar input:focus {
+    background-color: #555;
+    outline: none;
+    color: #fff;
+  }
+  
+  .navbar-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px; /* Añade padding para espaciar mejor */
+  }
+  
+  .navbar-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    margin-bottom: 15px; /* Espacio entre los elementos */
+    padding: 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s, width 0.3s;
+    width: 100%;
+    justify-content: center; /* Centra los íconos al estar colapsado */
+    overflow: hidden;
+  }
+  
+  .navbar:hover .navbar-link {
+   justify-content: flex-start; /* Al expandirse, alinea el texto a la izquierda */
+  }
+  
+  .navbar-link:hover {
+    background-color: #f35309;
+    transform: translateX(10px);
+  }
+  
+  .navbar-link img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    transition: margin-right 0.3s ease;
+  }
+  
+  .link-text {
+    opacity: 0; /* Oculta el texto inicialmente */
+    white-space: nowrap;
+    transition: opacity 0.3s ease, margin-left 0.3s ease;
+    margin-left: -70px; /* Inicialmente fuera de vista */
+  }
+  
+  .navbar:hover .link-text {
+    opacity: 1; /* Muestra el texto al pasar el mouse */
+    margin-left: 10px; /* Texto al lado del ícono cuando el navbar está expandido */
+  }
+  
+  .navbar:hover .navbar-link img {
+    margin-right: 10px; /* Agrega margen derecho a los íconos cuando el navbar está expandido */
+  }
+  
+  /* Estilos para el contenido principal */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+
+/* Main Section */
+.main {
+    position: relative;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .main-top {
+    display: flex;
+    width: 100%;
+    justify-content: space-between; /* Espacio entre el título y el ícono */
+  }
+  
+  .main-top i {
+    color: rgb(110, 109, 109);
+    cursor: pointer;
+  }
+  
+  .main-skills {
+    display: flex;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    margin-top: 20px;
+  }
+  
+  .main-skills .card {
+    display: flex; /* Flexbox para alinear el contenido y el círculo */
+    align-items: center;
+    justify-content: space-between;
+    width: 30%; /* Ajusta el ancho para espaciar las tarjetas */
+    margin: 10px;
+    background: #fff;
+    text-align: center;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .card-content {
+    flex-grow: 1; /* Ocupa el máximo espacio disponible */
+    text-align: center; /* Centra el texto dentro del contenedor */
+  }
+  
+  .circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px; /* Espacio entre el contenido y el círculo */
+  }
+  
+  /* Colores específicos para cada círculo */
+  .main-skills .card:nth-child(1) .circle {
+    background-color: #28a745; /* Verde para "Actualizadas" */
+  }
+  
+  .main-skills .card:nth-child(2) .circle {
+    background-color: #ffc107; /* Amarillo para "Pendientes" */
+  }
+  
+  .main-skills .card:nth-child(3) .circle {
+    background-color: #dc3545; /* Rojo para "Fallidas" */
+  }
+  
+  .main-skills .card h3 {
+    margin: 10px;
+    text-transform: capitalize;
+  }
+  
+  .main-skills .card p {
+    font-size: 12px;
+  }
+  
+  .main-skills .card button {
+    background: orangered;
+    color: #fff;
+    padding: 7px 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  
+  .main-skills .card button:hover {
+    background: rgba(223, 70, 15, 0.856);
+  }
+  
+  .main-skills .card i {
+    font-size: 22px;
+    padding: 10px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  
+  .terminal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .updated {
+    background-color: #28a745;
+  }
+  
+  .outdated {
+    background-color: #dc3545;
+  }
+  
+  .warning {
+    background-color: #ffc107;
+  }
+  
+  .unknown {
+    background-color: #6c757d;
+  }
+  
