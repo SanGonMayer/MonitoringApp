@@ -10,11 +10,13 @@ body, h1, h2, h3, p, div, input, button {
     display: flex;
     height: 100vh;
     background-color: #f4f4f9;
+    justify-content: center;
   }
   
   .container {
     display: flex;
     width: 100%;
+    justify-content: center;
   }
   
   /* Estilos para el navbar */
@@ -43,46 +45,6 @@ body, h1, h2, h3, p, div, input, button {
   .menu-icon {
     font-size: 24px; /* Tamaño aumentado para mejor visibilidad */
     margin-bottom: 20px;
-  }
-  
-  .search-bar {
-    display: flex; /* Para alinear icono e input */
-    align-items: center;
-    margin-bottom: 20px;
-    width: 70%; /* Ajusta el ancho para mejor alineación */
-    padding: 0 10px;
-    background-color: #444;
-    border-radius: 5px;
-    transition: width 0.3s ease;
-  }
-  
-  .search-icon {
-    margin-right: 10px; /* Espacio entre el ícono y el input */
-  }
-  
-  .search-icon img {
-    width: 16px; /* Ajusta el tamaño del ícono */
-    height: 16px;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    background-color: #444;
-    color: #fff;
-  }
-  
-  .search-bar input::placeholder {
-    color: #ccc;
-  }
-  
-  .search-bar input:focus {
-    background-color: #555;
-    outline: none;
-    color: #fff;
   }
   
   .navbar-links {
@@ -138,7 +100,47 @@ body, h1, h2, h3, p, div, input, button {
   .navbar:hover .navbar-link img {
     margin-right: 10px; /* Agrega margen derecho a los íconos cuando el navbar está expandido */
   }
+
+  .submenu {
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    margin-left: 30px; /* Mueve el submenu hacia la derecha */
+  }
   
+  .submenu-link {
+    text-decoration: none;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .submenu-link img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    transition: margin-right 0.3s ease;
+  }
+  
+  
+  .submenu-link:hover {
+    background-color: #f35309; /* Cambia el color de fondo al pasar el mouse */
+  }
+  
+  /* Mostrar el submenu cuando se haga hover sobre "Terminales" */
+  .navbar-link:hover + .submenu {
+    display: flex;
+  }
+  
+  .navbar:hover .navbar-link img {
+    margin-right: 10px;
+    transition: margin-right 0.3s ease;
+  }
+  
+  /* Mostrar el submenu cuando se haga hover sobre el contenedor "navbar-item" */
+.navbar-item:hover .submenu {
+  display: flex;
+}
   /* Estilos para el contenido principal */
   .main-content {
     flex-grow: 1;
@@ -147,7 +149,7 @@ body, h1, h2, h3, p, div, input, button {
   
   header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
   }
@@ -169,102 +171,72 @@ body, h1, h2, h3, p, div, input, button {
     background-color: #0056b3;
   }
 
-/* Main Section */
-.main {
-    position: relative;
-    padding: 20px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .main-top {
-    display: flex;
-    width: 100%;
-    justify-content: space-between; /* Espacio entre el título y el ícono */
-  }
-  
-  .main-top i {
-    color: rgb(110, 109, 109);
-    cursor: pointer;
-  }
-  
-  .main-skills {
-    display: flex;
-    justify-content: center; /* Centra las tarjetas horizontalmente */
-    margin-top: 20px;
-  }
-  
-  .main-skills .card {
-    display: flex; /* Flexbox para alinear el contenido y el círculo */
-    align-items: center;
-    justify-content: space-between;
-    width: 30%; /* Ajusta el ancho para espaciar las tarjetas */
-    margin: 10px;
-    background: #fff;
-    text-align: center;
-    border-radius: 20px;
-    padding: 10px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  
-  .card-content {
-    flex-grow: 1; /* Ocupa el máximo espacio disponible */
-    text-align: center; /* Centra el texto dentro del contenedor */
-  }
-  
-  .circle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    color: #fff;
-    font-weight: bold;
-    font-size: 16px;
-    margin-left: 10px; /* Espacio entre el contenido y el círculo */
-  }
-  
-  /* Colores específicos para cada círculo */
-  .main-skills .card:nth-child(1) .circle {
-    background-color: #28a745; /* Verde para "Actualizadas" */
-  }
-  
-  .main-skills .card:nth-child(2) .circle {
-    background-color: #ffc107; /* Amarillo para "Pendientes" */
-  }
-  
-  .main-skills .card:nth-child(3) .circle {
-    background-color: #dc3545; /* Rojo para "Fallidas" */
-  }
-  
-  .main-skills .card h3 {
-    margin: 10px;
-    text-transform: capitalize;
-  }
-  
-  .main-skills .card p {
-    font-size: 12px;
-  }
-  
-  .main-skills .card button {
-    background: orangered;
-    color: #fff;
-    padding: 7px 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    cursor: pointer;
-  }
-  
-  .main-skills .card button:hover {
-    background: rgba(223, 70, 15, 0.856);
-  }
-  
-  .main-skills .card i {
-    font-size: 22px;
-    padding: 10px;
-  }
+.status-section {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Ajustes para los círculos interactivos */
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer; /* Añadimos la propiedad de cursor de botón */
+  transition: transform 0.3s ease; /* Añadimos una transición suave */
+}
+
+.circle:hover {
+  transform: scale(1.1); /* Aumenta el tamaño del círculo al pasar el ratón */
+}
+
+.main-skills {
+  display: flex;
+  justify-content: space-around; /* Espacio equitativo entre tarjetas */
+  flex-direction: row; /* Asegura que las tarjetas estén alineadas en fila */
+  margin-top: 20px;
+}
+
+/* Colores específicos para cada círculo */
+.main-skills .card:nth-child(1) .circle {
+  background-color: #28a745; /* Verde para "Actualizadas" */
+}
+
+.main-skills .card:nth-child(2) .circle {
+  background-color: #ffc107; /* Amarillo para "Pendientes" */
+}
+
+.main-skills .card:nth-child(3) .circle {
+  background-color: #dc3545; /* Rojo para "Fallidas" */
+}
+
+.main-skills .card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 30%; /* Ajusta el ancho para espaciar las tarjetas */
+  margin: 10px;
+  background: #fff;
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Otros estilos como el contenido del card y su texto */
+.card-content {
+  flex-grow: 1;
+  text-align: center;
+}
   
   .grid {
     display: grid;

@@ -1,0 +1,96 @@
+/* Variables */
+:root {
+    --rad: 0.7rem; /* Borde redondeado */
+    --dur: 0.3s; /* Duración de la transición */
+    --color-dark: #2f2f2f; /* Color oscuro */
+    --color-light: #fff; /* Color claro */
+    --color-brand: #57bd84; /* Color principal */
+    --font-fam: 'Lato', sans-serif; /* Fuente */
+    --height: 2.5rem; /* Altura del input */
+    --btn-width: 2.5rem; /* Ancho del botón */
+    --bez: cubic-bezier(0, 0, 0.43, 1.49); /* Curva de transición suave */
+  }
+  
+  /* Configuración del formulario */
+  form {
+    position: relative;
+    width: 100%; /* Se adapta al contenedor */
+    max-width: 400px; /* Limitar el ancho del formulario */
+    border-radius: var(--rad); /* Bordes redondeados */
+  }
+  
+  /* Estilos del input y el botón */
+  input, button {
+    height: var(--height);
+    font-family: var(--font-fam);
+    border: 0;
+    color: var(--color-dark);
+    font-size: 1rem;
+  }
+  
+  /* Estilos del input de búsqueda */
+  input[type="search"] {
+    outline: none;
+    width: 100%;
+    background: var(--color-light); /* Fondo blanco para el input */
+    padding: 0 1.8rem;
+    height: var(--height);
+    border-radius: var(--rad);
+    transition: all var(--dur) var(--bez);
+    transition-property: width, border-radius;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  /* Estilos del botón de búsqueda */
+  .search-button {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--btn-width);
+    height: var(--height); /* Altura igual al input */
+    background: var(--color-brand); /* Fondo verde solo para el botón */
+    border-radius: 0 var(--rad) var(--rad) 0;
+    color: white; /* Color del texto del botón */
+    cursor: pointer;
+
+    justify-content: center;
+    align-items: center;
+    padding: 0; /* Aseguramos que no haya padding dentro del botón */
+  }
+  
+  /* Ajustes cuando se escribe en el input */
+  input:not(:placeholder-shown) {
+    border-radius: var(--rad) 0 0 var(--rad);
+    width: calc(100% - var(--btn-width)); /* Ajustar el ancho del input */
+  }
+  
+  /* Mostrar el botón cuando hay texto en el input */
+  input:not(:placeholder-shown) + .search-button {
+    display: block;
+  }
+
+  .search-button img {
+    width: 16px; /* Tamaño del ícono SVG */
+    height: 16px; /* Asegura que el ícono sea cuadrado */
+  }
+  
+  /* Label oculto pero accesible */
+  label {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+  }
+  
+  .search-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    margin-top: 0; /* Mantén el margen superior si es necesario */
+  }
+  
