@@ -8,6 +8,40 @@
   <link rel="stylesheet" href='searchbar.css'>
     <!-- Incluye Chart.js desde un CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function getWorkstations() {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://<10.6.7.29>:3000/api/workstations', true);  // Cambia <IP_DEL_BACKEND> por la IP que obtuviste
+
+      xhr.onload = function () {
+        if (this.status === 200) {
+          const workstations = JSON.parse(this.responseText);
+          let output = '<h2>Workstations:</h2>';
+          workstations.forEach(function (workstation) {
+            output += `
+              <ul>
+                <li>Hostname: ${workstation.hostname}</li>
+                <li>Last Version Applied: ${workstation.lastVersionApplied}</li>
+                <li>Status: ${workstation.status}</li>
+              </ul>
+            `;
+          });
+          document.getElementById('output').innerHTML = output;
+        } else {
+          console.error('Error fetching workstations:', this.status);
+        }
+      };
+
+      xhr.onerror = function () {
+        console.error('Request failed');
+      };
+
+      xhr.send();
+    }
+
+    // Llamar a la función cuando cargue la página
+    window.onload = getWorkstations;
+  </script>
 </head>
 <body>
   <div class="container">
@@ -107,22 +141,6 @@
         </div>
       </section>
 
-      <title>Workstations desde AWX</title>
-        <!-- Tabla para mostrar los datos -->
-        <table border="1" id="workstationsTable">
-          <thead>
-            <tr>
-              <th>Hostname</th>
-              <th>Estado</th>
-              <th>Última Versión Aplicada</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Los datos se agregarán aquí dinámicamente -->
-          </tbody>
-        </table>
-
-        
         <!-- Añadir un canvas para el gráfico de barras -->
         <div class="chart-container" style="width: 50%; margin: auto; padding-top: 20px;">
           <canvas id="myChart"></canvas>
