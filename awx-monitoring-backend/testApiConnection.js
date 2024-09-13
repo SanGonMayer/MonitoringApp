@@ -5,7 +5,7 @@ const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';  // Aju
 
 // Credenciales de autenticación
 const username = 'segmayer';
-const password = '';  // La contraseña decodificada
+const password = 'APACHE03.';  // La contraseña decodificada
 
 // Función para probar la conexión
 async function testApiConnection() {

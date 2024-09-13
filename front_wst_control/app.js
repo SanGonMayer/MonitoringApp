@@ -46,4 +46,35 @@ document.addEventListener('DOMContentLoaded', () => {
       config
     );
   });
+
+  async function fetchWorkstations() {
+    try {
+      const response = await fetch('http://localhost:3000/api/workstations');
+      const data = await response.json();  // Transformar la respuesta en JSON
+
+      const tableBody = document.querySelector('#workstationsTable tbody');
+
+      // Limpiar el contenido anterior de la tabla (por si se actualiza)
+      tableBody.innerHTML = '';
+
+      // Iterar sobre los datos y agregarlos a la tabla
+      data.forEach(host => {
+        const row = `
+          <tr>
+            <td>${host.hostname}</td>
+            <td>${host.status}</td>
+            <td>${host.lastVersion}</td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
+      });
+
+    } catch (error) {
+      console.error('Error obteniendo las workstations:', error);
+    }
+  }
+
+  // Llamar a la función al cargar la página
+  window.onload = fetchWorkstations;
+</script>
   
