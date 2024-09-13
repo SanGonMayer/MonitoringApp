@@ -76,5 +76,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Llamar a la función al cargar la página
   window.onload = fetchWorkstations;
-</script>
-  

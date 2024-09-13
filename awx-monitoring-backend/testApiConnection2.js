@@ -5,7 +5,7 @@ const app = express()
 const PORT = 3000
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 
-app.get('api/awx/hosts', async (req, res) => {
+app.get('/api/awx/hosts', async (req, res) => {
     try{
         const awxResponse = await axios.get(awxApiUrl, {
             auth: {
