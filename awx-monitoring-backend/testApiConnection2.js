@@ -5,7 +5,9 @@ const axios= require('axios');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());  // <--- Usa el middleware CORS
+app.use(cors({
+    origin: 'https://sncl7001lx.bancocredicoop.coop'
+  }));  
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 

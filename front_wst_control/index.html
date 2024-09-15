@@ -11,7 +11,7 @@
   <script>
     function getWorkstations() {
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://10.6.7.29:3000/api/workstations', true);  // Cambia <IP_DEL_BACKEND> por la IP que obtuviste
+      xhr.open('GET', 'http://10.6.7.29:3000/api/workstations', true);  
 
       xhr.onload = function () {
         if (this.status === 200) {
