@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchWorkstations() {
     try {
-      const response = await fetch('http://localhost:3000/api/workstations');
+      const response = await fetch('http://10.6.7.29:3000/api/workstation');
       const data = await response.json();  // Transformar la respuesta en JSON
 
       const tableBody = document.querySelector('#workstationsTable tbody');
