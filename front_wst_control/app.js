@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchWorkstations() {
     try {
-      const response = await fetch('http://10.6.7.29:3000/api/workstation');
+      //  apuntar al backend con la ruta correcta
+      const response = await fetch('http://10.6.7.29:3000/api/awx/hosts');
       const data = await response.json();  // Transformar la respuesta en JSON
 
       const tableBody = document.querySelector('#workstationsTable tbody');
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('Error obteniendo las workstations:', error);
     }
-  }
+}
 
-  // Llamar a la función al cargar la página
-  window.onload = fetchWorkstations;
+// Llamar a la función al cargar la página
+window.onload = fetchWorkstations;

@@ -1,15 +1,14 @@
 const express = require('express');
-const cors = require('cors');  // <--- Importa cors
-const axios= require('axios');
+const cors = require('cors');  // Importa cors
+const axios = require('axios');
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors({
-    origin: 'https://sncl7001lx.bancocredicoop.coop/MonitoringAppFront/'
-  }));  
+// Configura CORS para aceptar solicitudes de cualquier origen (para pruebas) no hacerlo en produccion
+app.use(cors());
 
-const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
+const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
@@ -25,10 +24,10 @@ app.get('/api/awx/hosts', async (req, res) => {
         res.json(limitedHosts);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
-        res.status(500).json({ error: 'Error al conectar a la API de AWX'});
+        res.status(500).json({ error: 'Error al conectar a la API de AWX' });
     }
 });
 
 app.listen(PORT, () => {
-    console.log('Servidor escuchando');
+    console.log('Servidor escuchando en el puerto', PORT);
 });
