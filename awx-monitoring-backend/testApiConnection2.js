@@ -1,9 +1,22 @@
 const express = require('express');
 const cors = require('cors');  // Importa cors
 const axios = require('axios');
+const https = require('https');
+const fs = require('fs');
 
 const app = express();
 const PORT = 3000;
+
+//cargo certificado ssl
+const options = {
+    key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
+    cert: fs.readFileSync('/etc/nginx/ssl/sncl7001lx.bancocredicoop.coop.crt')
+};
+
+// iniciar servidor https
+https.createServer(options, app).listen(PORT, () => {
+    console.log('Servidor https escuchando en el ', PORT);
+});
 
 // Configura CORS para aceptar solicitudes de cualquier origen (para pruebas) no hacerlo en produccion
 app.use(cors());
