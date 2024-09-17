@@ -21,7 +21,7 @@ const PORT = 3000;
 // Configura CORS para aceptar solicitudes de cualquier origen (para pruebas) no hacerlo en produccion
 app.use(cors());
 
-const awxApiUrl = 'https://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';
+const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {

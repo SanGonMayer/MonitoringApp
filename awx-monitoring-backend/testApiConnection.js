@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // URL de la API de AWX
-const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';  // Ajusta la URL si es necesario
+const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 
 // Credenciales de autenticación
 const username = 'segmayer';
