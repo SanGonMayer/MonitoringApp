@@ -3,7 +3,6 @@ import cors from 'cors';  // Importa cors
 import axios from 'axios';
 import https from'https';
 import fs from 'fs';
-import { group } from 'console';
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +22,6 @@ const PORT = 3000;
 app.use(cors());
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
-const wstGroupID = 16108;
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
@@ -34,16 +32,9 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const filteredHosts = awxResponse.data.results.filter(host => {
-            if (host.summary_fields && host.summary_fields.groups && host.summary_fields.groups.results){
-            return host.summary_fields.groups.results.some(group => group.id === wstGroupID)
-        }
-        return false;
-        });
+        const limitedHosts = awxResponse.data.results.slice(0, 10);
 
-        //const limitedHosts = filteredHosts.slice(0, 10);
-
-        res.json(filteredHosts);
+        res.json(limitedHosts);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
