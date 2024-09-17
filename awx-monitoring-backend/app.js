@@ -6,7 +6,7 @@ import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 
 app.disable('x-powered-by')
 //app.use(corsMiddleware())
-app.use(requestLoggerMiddleware())
+//app.use(requestLoggerMiddleware())
 
 
 const app = express();
