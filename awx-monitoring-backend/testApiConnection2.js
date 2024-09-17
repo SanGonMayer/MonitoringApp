@@ -1,8 +1,8 @@
-import express, { json } from 'express';
-const cors = require('cors');  // Importa cors
-const axios = require('axios');
-const https = require('https');
-const fs = require('fs');
+import express from 'express';
+import cors from 'cors';  // Importa cors
+import { get } from 'axios';
+import https from 'https';
+import fs from 'fs';
 
 const app = express();
 const PORT = 3000;
@@ -25,7 +25,7 @@ const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
-        const awxResponse = await axios.get(awxApiUrl, {
+        const awxResponse = await get(awxApiUrl, {
             auth: {
                 username: 'segmayer',
                 password: 'APACHE03.'
@@ -40,7 +40,7 @@ app.get('/api/awx/hosts', async (req, res) => {
             const hostId = host.id;
 
             // Obtener grupos de cada host
-            const groupsResponse = await axios.get(`${awxApiUrl}${hostId}/groups/`, {
+            const groupsResponse = await get(`${awxApiUrl}${hostId}/groups/`, {
                 auth: {
                     username: 'segmayer',
                     password: 'APACHE03.'
