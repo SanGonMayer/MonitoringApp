@@ -1,5 +1,5 @@
-const axios = require('axios');
-const Workstation = require('../models/Workstation');  // Importa el modelo Workstation
+import axios from 'axios';
+import { Workstation } from  '../models/Workstation';  // Importa el modelo Workstation
 const awxApiUrl = process.env.AWX_API_URL;  // Obtenido de las variables de entorno (.env)
 
 // Controlador para obtener y guardar hosts de AWX en la base de datos
