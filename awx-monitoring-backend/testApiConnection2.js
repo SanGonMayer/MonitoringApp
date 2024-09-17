@@ -49,7 +49,7 @@ app.get('/api/awx/hosts', async (req, res) => {
             const groups = groupsResponse.data.results;
 
             // Verificar si el host pertenece al grupo "wst"
-            const isInWstGroup = groups.some(group => group.name === 'wst');
+            const isInWstGroup = groups.some(group => group.id === 16108);
 
             if (isInWstGroup) {
                 hostsInWstGroup.push(host);
