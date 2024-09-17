@@ -1,4 +1,4 @@
-const express = require('express');
+import express, { json } from 'express';
 const cors = require('cors');  // Importa cors
 const axios = require('axios');
 const https = require('https');
