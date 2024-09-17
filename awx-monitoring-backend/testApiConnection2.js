@@ -39,7 +39,10 @@ app.get('/api/awx/hosts', async (req, res) => {
         });
 
         const filteredHosts = awxResponse.data.results.filter(host => {
+            if (host.summary_fields && host.summary_fields.groups && host.summary_fields.groups.results){
             return host.summary_fields.groups.results.some(group => group.name === 'wst')
+        }
+        return false;
         });
 
         const limitedHosts = filteredHosts.slice(0, 10);
