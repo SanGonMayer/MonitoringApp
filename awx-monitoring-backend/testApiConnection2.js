@@ -32,9 +32,13 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 10);
+        const hosts = awxResponse.data.results;
 
-        res.json(limitedHosts);
+        const wstHosts = hosts.filter(host => {
+            return host.summary_fields.group.results.some(group => group.name === 'wst')
+        })
+
+        res.json(wstHosts);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
