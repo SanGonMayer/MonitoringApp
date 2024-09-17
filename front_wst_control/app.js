@@ -62,10 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Iterar sobre los datos y agregarlos a la tabla
       data.forEach(host => {
+
+        const description = host.description.split(' ');
+        const hostname = descriptionParts[0];
+        const filial = hostname.slice(-5);
+
         const row = `
           <tr>
             <td>${host.name}</td>
-            <td>${host.description}</td>
+            <td>${hostname}</td>
+            <td>${filial}</td>
             <td>${host.inventory}</td>
           </tr>
         `;
