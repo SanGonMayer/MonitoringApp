@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/awx/hosts');
       const data = await response.json();  // Transformar la respuesta en JSON
 
+      console.log(data) //muestro lo que recibe
+
       const tableBody = document.querySelector('#workstationsTable tbody');
 
       // Limpiar el contenido anterior de la tabla (por si se actualiza)
@@ -62,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
       data.forEach(host => {
         const row = `
           <tr>
-            <td>${host.hostname}</td>
-            <td>${host.status}</td>
-            <td>${host.lastVersion}</td>
+            <td>${host.name}</td>
+            <td>${host.description}</td>
+            <td>${host.inventory}</td>
           </tr>
         `;
         tableBody.innerHTML += row;
