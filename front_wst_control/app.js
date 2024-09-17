@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchWorkstations() {
     try {
       //  apuntar al backend con la ruta correcta
-      const response = await fetch('https://sncl7001lx.bancocredicoop.coop:3000/api/awx/hosts');
+      const response = await fetch('/api/awx/hosts');
       const data = await response.json();  // Transformar la respuesta en JSON
 
       const tableBody = document.querySelector('#workstationsTable tbody');
