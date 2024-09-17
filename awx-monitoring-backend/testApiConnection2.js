@@ -31,23 +31,15 @@ app.get('/api/awx/hosts', async (req, res) => {
                 password: 'APACHE03.'
             }
         });
-        
-        // Filtrar hosts que tienen "wst" en su lista de grupos
-        const filteredHosts = awxResponse.data.results.filter(host => {
-            // Verificar si el host tiene grupos en summary_fields.groups.results
-            return host.summary_fields.groups.results.some(group => group.name === 'wst');
-        });
 
-        // Limitar los resultados a los primeros 10 para evitar sobrecarga
-        const limitedHosts = filteredHosts.slice(0, 10);
+        const limitedHosts = awxResponse.data.results.slice(0, 10);
 
         res.json(limitedHosts);
-            } catch (error) {
+    } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
     }
 });
-
 
 app.listen(PORT, () => {
     console.log('Servidor escuchando en el puerto', PORT);
