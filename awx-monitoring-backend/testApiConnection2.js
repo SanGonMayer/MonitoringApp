@@ -32,18 +32,37 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const hosts = awxResponse.data.results;
-
-        const wstHosts = hosts.filter(host => {
-            return host.summary_fields.groups.results.some(group => group.name === 'wst')
-        })
-
-        res.json(wstHosts);
-    } catch (error) {
-        console.error('Error al conectar a la API de AWX: ', error.message);
-        res.status(500).json({ error: 'Error al conectar a la API de AWX' });
-    }
-});
+        // Obtener grupos de cada host
+        const hostsWithGroups = await Promise.all(awxResponse.data.results.map(async (host) => {
+            try {
+                const groupsUrl = `https://sawx0001lx.bancocredicoop.coop${host.related.groups}`;
+                const groupsResponse = await axios.get(groupsUrl, {
+                    auth: {
+                        username: 'segmayer',
+                        password: 'APACHE03.'
+                    }
+                });
+                host.groups = groupsResponse.data.results;
+                return host;
+            } catch (error) {
+                console.error(`Error al obtener grupos para el host ${host.name}:`, error.message);
+                return null; // Ignorar este host si hay un error al obtener los grupos
+            }
+        }));
+                // Filtrar hosts que tienen "wst" en su lista de grupos
+                const filteredHosts = hostsWithGroups.filter(host => {
+                    return host && host.groups.some(group => group.name === 'wst');
+                });
+        
+                // Limitar los resultados a los primeros 10 para evitar sobrecarga
+                const limitedHosts = filteredHosts.slice(0, 10);
+        
+                res.json(limitedHosts);
+            } catch (error) {
+                console.error('Error al conectar a la API de AWX: ', error.message);
+                res.status(500).json({ error: 'Error al conectar a la API de AWX' });
+            }
+        });
 
 app.listen(PORT, () => {
     console.log('Servidor escuchando en el puerto', PORT);
