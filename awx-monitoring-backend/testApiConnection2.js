@@ -10,6 +10,9 @@ dotenv.config();
 const username = process.env.AWX_USER_TEST;
 const password = process.env.AWX_USER_TEST_PASS;
 
+console.log('Username:', username);
+console.log('Password:', password);
+
 const app = express();
 const PORT = 3000;
 
