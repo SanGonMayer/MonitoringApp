@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const username = process.env.AWX_USER_TEST;
-const password = process.env.AWX_UAER_TEST_PASS;
+const password = process.env.AWX_USER_TEST_PASS;
 
 const app = express();
 const PORT = 3000;
