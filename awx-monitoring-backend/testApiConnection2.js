@@ -48,8 +48,8 @@ app.get('/api/awx/hosts', async (req, res) => {
             // Obtener grupos de cada host
             const groupsResponse = await get(`${awxApiUrl}${hostId}/groups/`, {
                 auth: {
-                    username: 'segmayer',
-                    password: 'APACHE03.'
+                    username: username,
+                    password: password
                 }
             });
             const groups = groupsResponse.data.results;
