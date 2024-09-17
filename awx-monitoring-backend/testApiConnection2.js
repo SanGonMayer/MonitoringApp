@@ -23,6 +23,7 @@ const PORT = 3000;
 app.use(cors());
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
+const wstGroupID = 16108;
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
@@ -33,14 +34,9 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        awxResponse.data.results.forEach(host => {
-            console.log(`Host: ${host.name}`);
-            console.log(`Grupos:`, host.summary_fields.groups.results.map(group => group.name === 'wst'));
-        });
-
         const filteredHosts = awxResponse.data.results.filter(host => {
             if (host.summary_fields && host.summary_fields.groups && host.summary_fields.groups.results){
-            return host.summary_fields.groups.results.some(group => group.name === 'wst')
+            return host.summary_fields.groups.results.some(group => group.id === wstGroupID)
         }
         return false;
         });
