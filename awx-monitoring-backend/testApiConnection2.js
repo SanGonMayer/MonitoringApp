@@ -3,6 +3,7 @@ import cors from 'cors';  // Importa cors
 import axios from 'axios';
 import https from'https';
 import fs from 'fs';
+import { group } from 'console';
 
 const app = express();
 const PORT = 3000;
@@ -32,7 +33,16 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 10);
+        awxResponse.data.results.forEach(host => {
+            console.log(`Host: ${host.name}`);
+            console.log(`Grupos:`, host.summary_fields.groups.results.map(group => group.name === 'wst'));
+        });
+
+        const filteredHosts = awxResponse.data.results.filter(host => {
+            return host.summary_fields.groups.results.some(group => group.name === 'wst')
+        });
+
+        const limitedHosts = filteredHosts.slice(0, 10);
 
         res.json(limitedHosts);
     } catch (error) {
