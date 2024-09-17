@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { get } from 'axios';
+import axios from 'axios';
 import https from 'https';
 import fs from 'fs';
 
