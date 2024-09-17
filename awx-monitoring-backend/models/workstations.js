@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Importa la conexión a la base de datos
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/database.js'; // Importa la conexión a la base de datos
 
-const Workstation = sequelize.define('Workstation', {
+export const Workstation = sequelize.define('Workstation', {
   hostname: {
     type: DataTypes.STRING,
     allowNull: false
@@ -19,4 +19,4 @@ const Workstation = sequelize.define('Workstation', {
   timestamps: true, 
 });
 
-module.exports = Workstation;
+

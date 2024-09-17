@@ -1,7 +1,7 @@
-const express = require('express');
-const Workstation = require('../models/Workstation');  // Importa el modelo
+import express from 'express';
+import { Workstation } from '../models/Workstation';  // Importa el modelo
 
-const router = express.Router();
+export const router = express.Router();
 
 // Ruta para crear una nueva workstation
 router.post('/workstations', async (req, res) => {
@@ -45,5 +45,3 @@ router.get('/workstations', async (req, res) => {
   }
 });
 
-
-module.exports = router;
