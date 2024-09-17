@@ -3,6 +3,12 @@ import cors from 'cors';
 import axios from 'axios';
 import https from 'https';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const username = process.env.AWX_USER_TEST;
+const password = process.env.AWX_UAER_TEST_PASS;
 
 const app = express();
 const PORT = 3000;
@@ -27,8 +33,8 @@ app.get('/api/awx/hosts', async (req, res) => {
     try {
         const awxResponse = await get(awxApiUrl, {
             auth: {
-                username: 'segmayer',
-                password: 'APACHE03.'
+                username: username,
+                password: password
             }
         });
 
