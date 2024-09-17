@@ -35,7 +35,7 @@ app.get('/api/awx/hosts', async (req, res) => {
         const hosts = awxResponse.data.results;
 
         const wstHosts = hosts.filter(host => {
-            return host.summary_fields.group.results.some(group => group.name === 'wst')
+            return host.summary_fields.groups.results.some(group => group.name === 'wst')
         })
 
         res.json(wstHosts);
