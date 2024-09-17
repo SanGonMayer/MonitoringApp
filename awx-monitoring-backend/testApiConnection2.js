@@ -29,7 +29,7 @@ app.use(cors());
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 
-axios.get('/api/awx/hosts', async (req, res) => {
+app.get('/api/awx/hosts', async (req, res) => {
     try {
         const awxResponse = await get(awxApiUrl, {
             auth: {
@@ -46,7 +46,7 @@ axios.get('/api/awx/hosts', async (req, res) => {
             const hostId = host.id;
 
             // Obtener grupos de cada host
-            const groupsResponse = await get(`${awxApiUrl}${hostId}/groups/`, {
+            const groupsResponse = await axios.get(`${awxApiUrl}${hostId}/groups/`, {
                 auth: {
                     username: username,
                     password: password
