@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');  // Importa cors
-const axios = require('axios');
-const https = require('https');
-const fs = require('fs');
+import express from 'express';
+import cors from 'cors';
+import { get } from 'axios';
+import https from 'https';
+import fs from 'fs';
 
 const app = express();
 const PORT = 3000;
@@ -25,16 +25,42 @@ const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
-        const awxResponse = await axios.get(awxApiUrl, {
+        const awxResponse = await get(awxApiUrl, {
             auth: {
                 username: 'segmayer',
                 password: 'APACHE03.'
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 10);
+        const hosts = awxResponse.data.results;
+        const hostsInWstGroup = [];
 
-        res.json(limitedHosts);
+        // Iterar sobre los hosts para verificar si están en el grupo "wst"
+        for (const host of hosts) {
+            const hostId = host.id;
+
+            // Obtener grupos de cada host
+            const groupsResponse = await get(`${awxApiUrl}${hostId}/groups/`, {
+                auth: {
+                    username: 'segmayer',
+                    password: 'APACHE03.'
+                }
+            });
+            const groups = groupsResponse.data.results;
+
+            // Verificar si el host pertenece al grupo "wst"
+            const isInWstGroup = groups.some(group => group.id === 16108);
+
+            if (isInWstGroup) {
+                hostsInWstGroup.push(host);
+            }
+        }
+
+        // Limitar a los primeros 10 hosts en el grupo "wst" (si es necesario)
+        const limitedHostsInWstGroup = hostsInWstGroup.slice(0, 10);
+
+        // Devolver los hosts filtrados al frontend
+        res.json(limitedHostsInWstGroup);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
