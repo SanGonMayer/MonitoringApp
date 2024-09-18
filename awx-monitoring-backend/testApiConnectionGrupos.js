@@ -32,7 +32,7 @@ app.use(cors());
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22/groups'; 
 
-app.get('/api/awx/hosts', async (req, res) => {
+app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
         const awxResponse = await axios.get(awxApiUrl, {
             auth: {
