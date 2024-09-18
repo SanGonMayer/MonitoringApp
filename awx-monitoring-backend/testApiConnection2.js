@@ -36,12 +36,15 @@ app.get('/api/awx/hosts', async (req, res) => {
             auth: {
                 username: username,
                 password: password
+            },
+            params:{
+                page_size: 50
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 50);
+        //const limitedHosts = awxResponse.data.results.slice(0, 50);
 
-        res.json(limitedHosts);
+        res.json(awxResponse.data.results);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
