@@ -39,7 +39,7 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 30);
+        const limitedHosts = awxResponse.data.results.slice(0, 50);
 
         res.json(limitedHosts);
     } catch (error) {
