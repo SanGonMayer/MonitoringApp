@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = `
           <tr>
             <td>${host.name}</td>
-            <td>${hostname}</td>
-            <td>${filial}</td>
+            <td>${host.id}</td>
+            <td>${host.description}</td>
             <td>${host.inventory}</td>
           </tr>
         `;
