@@ -14,17 +14,6 @@ const password = process.env.AWX_USER_TEST_PASS;
 const app = express();
 const PORT = 3000;
 
-//cargo certificado ssl
-//const options = {
-//    key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
-//    cert: fs.readFileSync('/etc/nginx/ssl/sncl7001lx.bancocredicoop.coop.crt')
-//};
-
-// iniciar servidor https
-//https.createServer(options, app).listen(PORT, () => {
-//    console.log('Servidor https escuchando en el ', PORT);
-//});
-
 // Configura CORS para aceptar solicitudes de cualquier origen (para pruebas) no hacerlo en produccion
 app.use(cors());
 
@@ -39,7 +28,7 @@ app.get('/api/awx/hosts', async (req, res) => {
             }
         });
 
-        const limitedHosts = awxResponse.data.results.slice(0, 30);
+        const limitedHosts = awxResponse.data.results.slice(0, 10);
 
         res.json(limitedHosts);
     } catch (error) {
