@@ -44,32 +44,34 @@ app.get('/api/awx/hosts', async (req, res) => {
         const hosts = awxResponse.data.results;
         const hostsInWstGroup = [];
 
-        // Iterar sobre los hosts para verificar si están en el grupo "wst"
+        // Iterar sobre los hosts para verificar si están en el grupo con ID 16108
         for (const host of hosts) {
             const hostId = host.id;
 
-            // Obtener grupos de cada host
-            const groupsResponse = await axios.get(`${awxApiUrl}${hostId}/groups/`, {
-                auth: {
-                    username: username,
-                    password: password
+            try {
+                // Obtener los grupos de cada host utilizando su ID
+                const groupsResponse = await axios.get(`${awxApiUrl}${hostId}/groups/`, {
+                    auth: {
+                        username: username,
+                        password: password
+                    }
+                });
+
+                const groups = groupsResponse.data.results;
+
+                // Verificar si el host pertenece al grupo con ID 16108
+                const isInWstGroup = groups.some(group => group.id === 16108);
+
+                if (isInWstGroup) {
+                    hostsInWstGroup.push(host);
                 }
-            });
-            const groups = groupsResponse.data.results;
-
-            // Verificar si el host pertenece al grupo "wst"
-            const isInWstGroup = groups.some(group => group.id === 16108);
-
-            if (isInWstGroup) {
-                hostsInWstGroup.push(host);
+            } catch (groupError) {
+                console.error(`Error al obtener los grupos para el host ${hostId}:`, groupError.message);
             }
         }
 
-        // Limitar a los primeros 10 hosts en el grupo "wst" (si es necesario)
-        const limitedHostsInWstGroup = hostsInWstGroup.slice(0, 10);
-
-        // Devolver los hosts filtrados al frontend
-        res.json(limitedHostsInWstGroup);
+        // Devolver los hosts filtrados al front-end
+        res.json(hostsInWstGroup);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
