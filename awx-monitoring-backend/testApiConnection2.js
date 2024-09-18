@@ -10,9 +10,6 @@ dotenv.config();
 const username = process.env.AWX_USER_TEST;
 const password = process.env.AWX_USER_TEST_PASS;
 
-console.log('Username:', username);
-console.log('Password:', password);
-
 const app = express();
 const PORT = 3000;
 
@@ -42,6 +39,7 @@ app.get('/api/awx/hosts', async (req, res) => {
         });
 
         const hosts = awxResponse.data.results;
+        console.log(hosts);
         const hostsInWstGroup = [];
 
         // Iterar sobre los hosts para verificar si están en el grupo con ID 16108
