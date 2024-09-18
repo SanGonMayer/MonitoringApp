@@ -32,7 +32,7 @@ const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/';
 
 app.get('/api/awx/hosts', async (req, res) => {
     try {
-        const awxResponse = await get(awxApiUrl, {
+        const awxResponse = await axios.get(awxApiUrl, {
             auth: {
                 username: username,
                 password: password
