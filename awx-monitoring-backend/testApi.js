@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
-import https from 'https';
-import fs from 'fs';
 import dotenv from 'dotenv';
+//import { requestLoggerMiddleware } from './middlewares/solicitudes';
 
 dotenv.config();
 
@@ -14,19 +13,9 @@ const password = process.env.AWX_USER_TEST_PASS;
 const app = express();
 const PORT = 3000;
 
-//cargo certificado ssl
-//const options = {
-//    key: fs.readFileSync('/etc/nginx/ssl/nginx.key'),
-//    cert: fs.readFileSync('/etc/nginx/ssl/sncl7001lx.bancocredicoop.coop.crt')
-//};
-
-// iniciar servidor https
-//https.createServer(options, app).listen(PORT, () => {
-//    console.log('Servidor https escuchando en el ', PORT);
-//});
-
-// Configura CORS para aceptar solicitudes de cualquier origen (para pruebas) no hacerlo en produccion
 app.use(cors());
+app.disable('x-powered-by')
+//app.use(requestLoggerMiddleware())
 
 const awxApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/'; 
 
