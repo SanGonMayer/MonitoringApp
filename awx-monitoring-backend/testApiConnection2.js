@@ -45,6 +45,7 @@ app.get('/api/awx/hosts', async (req, res) => {
         // Iterar sobre los hosts para verificar si están en el grupo con ID 16108
         for (const host of hosts) {
             const hostId = host.id;
+            console.log(host.id);
 
             try {
                 // Obtener los grupos de cada host utilizando su ID
