@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <tr>
             <td>${host.name}</td>
             <td>${host.id}</td>
-            <td>${host.description}</td>
-            <td>${host.inventory}</td>
+            <td>${hostname}</td>
+            <td>${filial}</td>
           </tr>
         `;
         tableBody.innerHTML += row;
