@@ -15,6 +15,7 @@ app.use(cors());
 
 // URL base para obtener grupos e hosts
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22';
+const hostsApiUrl= 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
 
 // Ruta para obtener las filiales (grupos)
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
@@ -48,7 +49,7 @@ app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
     
     try {
         // Obtener la lista de hosts para el grupo especificado
-        const awxResponse = await axios.get(`${baseApiUrl}/groups/${groupId}/hosts/`, {
+        const awxResponse = await axios.get(`${hostsApiUrl}/${groupId}/hosts/`, {
             auth: {
                 username: username,
                 password: password
