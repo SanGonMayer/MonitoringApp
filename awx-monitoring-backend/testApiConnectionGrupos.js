@@ -40,7 +40,16 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
                 password: password
             }
         });
-        console.log(awxResponse.data);
+                // Verifica el tipo de contenido que está recibiendo de la API
+        console.log('Content-Type:', awxResponse.headers['content-type']);
+        console.log('Data:', awxResponse.data);
+
+        // Verificar si la respuesta es un objeto
+        if (typeof awxResponse.data === 'object') {
+            console.log('La respuesta es un objeto (JSON)');
+        } else {
+            console.log('La respuesta no es un objeto');
+        }
 
 //        const hosts = awxResponse.data.results;
 //        console.log(hosts);
@@ -74,7 +83,7 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
 //        }
 
         // Devolver los hosts filtrados al front-end
-        res.json(awxResponse);
+        res.json(awxResponse.data);
     } catch (error) {
         console.error('Error al conectar a la API de AWX: ', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
