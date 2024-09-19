@@ -47,39 +47,58 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  async function fetchWorkstations() {
+  async function fetchFiliales() {
     try {
-      //  apuntar al backend con la ruta correcta
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups');
-      const data = await response.json();  // Transformar la respuesta en JSON
+        // Obtener la lista de filiales (grupos)
+        const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups');
+        const groups = await response.json();
 
-      console.log(data) //muestro lo que recibe
+        // Limpiar el contenedor de filiales (grupos)
+        const filialContainer = document.querySelector('#filialContainer');
+        filialContainer.innerHTML = '';
 
-      const tableBody = document.querySelector('#workstationsTable tbody');
-
-      // Limpiar el contenido anterior de la tabla (por si se actualiza)
-      tableBody.innerHTML = '';
-
-      // Iterar sobre los datos y agregarlos a la tabla
-      data.forEach(host => {
-        const row = `
-          <tr>
-            <td>${host.name}</td>
-            <td>${host.id}</td>
-            <td>${host.description}</td>
-            <td>${host.inventory}</td>
-            <td>${host.groups}</td>
-
-
-          </tr>
-        `;
-        tableBody.innerHTML += row;
-      });
+        // Crear un botón para cada filial
+        groups.forEach(group => {
+            const button = document.createElement('button');
+            button.textContent = group.name;
+            button.onclick = () => fetchHosts(group.id); // Al hacer clic, obtener los hosts
+            filialContainer.appendChild(button);
+        });
 
     } catch (error) {
-      console.error('Error obteniendo las workstations:', error);
+        console.error('Error obteniendo las filiales:', error);
+    }
+}
+
+async function fetchHosts(groupId) {
+    try {
+        // Obtener la lista de hosts para la filial seleccionada
+        const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups/${groupId}/hosts`);
+        const hosts = await response.json();
+
+        const tableBody = document.querySelector('#workstationsTable tbody');
+
+        // Limpiar el contenido anterior de la tabla
+        tableBody.innerHTML = '';
+
+        // Iterar sobre los hosts y agregarlos a la tabla
+        hosts.forEach(host => {
+            const row = `
+                <tr>
+                    <td>${host.name}</td>
+                    <td>${host.id}</td>
+                    <td>${host.description}</td>
+                    <td>${host.inventory}</td>
+                    <td>${host.groups}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+    } catch (error) {
+        console.error('Error obteniendo los hosts:', error);
     }
 }
 
 // Llamar a la función al cargar la página
-window.onload = fetchWorkstations;
+window.onload = fetchFiliales;
