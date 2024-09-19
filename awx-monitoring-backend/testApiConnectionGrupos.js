@@ -40,6 +40,7 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
                 password: password
             }
         });
+        console.log(awxResponse.data);
 
 //        const hosts = awxResponse.data.results;
 //        console.log(hosts);
