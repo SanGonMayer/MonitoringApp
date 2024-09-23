@@ -14,14 +14,41 @@ const PORT = 3000;
 app.use(cors());
 
 // URL base para obtener grupos e hosts
-const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22';
+const wstApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22';
+const cctvApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/347';
 const hostsApiUrl= 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
 
 // Ruta para obtener las filiales (grupos)
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
         // Obtener la lista de grupos
-        const awxResponse = await axios.get(`${baseApiUrl}/groups/`, {
+        const awxResponse = await axios.get(`${wstApiUrl}/groups/`, {
+            auth: {
+                username: username,
+                password: password
+            }
+        });
+
+        // Filtrar solo 5 grupos para el test
+        const groups = awxResponse.data.results.slice(0, 5).map(group => ({
+            id: group.id,
+            name: group.name,
+            description: group.description,
+            hostsUrl: group.related.hosts // URL para obtener los hosts de este grupo
+        }));
+
+        res.json(groups);
+    } catch (error) {
+        console.error('Error al conectar a la API de AWX:', error.message);
+        res.status(500).json({ error: 'Error al conectar a la API de AWX' });
+    }
+});
+
+// Ruta para obtener las filiales (grupos)
+app.get('/api/awx/inventories/347/groups', async (req, res) => {
+    try {
+        // Obtener la lista de grupos
+        const awxResponse = await axios.get(`${cctvApiUrl}/groups/`, {
             auth: {
                 username: username,
                 password: password
@@ -45,6 +72,28 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
 
 // Ruta para obtener los hosts de un grupo específico
 app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
+    const groupId = req.params.groupId;
+    
+    try {
+        // Obtener la lista de hosts para el grupo especificado
+        const awxResponse = await axios.get(`${hostsApiUrl}/${groupId}/hosts/`, {
+            auth: {
+                username: username,
+                password: password
+            }
+        });
+
+        const hosts = awxResponse.data.results;
+
+        res.json(hosts);
+    } catch (error) {
+        console.error('Error al obtener los hosts:', error.message);
+        res.status(500).json({ error: 'Error al obtener los hosts' });
+    }
+});
+
+// Ruta para obtener los hosts de un grupo específico
+app.get('/api/awx/inventories/347/groups/:groupId/hosts', async (req, res) => {
     const groupId = req.params.groupId;
     
     try {
