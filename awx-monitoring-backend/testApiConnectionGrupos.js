@@ -23,11 +23,16 @@ async function fetchAllPages(apiUrl, authConfig) {
     let allResults = [];
     let currentPage = apiUrl;
 
-    // Mientras haya una página siguiente, hago peticiones
+    // Mientras haya una página siguiente, hacemos peticiones
     while (currentPage) {
-        const response = await axios.get(currentPage, authConfig);
-        allResults = allResults.concat(response.data.results); // Agregar los resultados de la página actual
-        currentPage = response.data.next; // `next` contiene la URL de la siguiente página, o `null` si no hay más
+        try {
+            const response = await axios.get(currentPage, authConfig);
+            allResults = allResults.concat(response.data.results); // Agregar los resultados de la página actual
+            currentPage = response.data.next; // `next` contiene la URL de la siguiente página o `null` si no hay más
+        } catch (error) {
+            console.error(`Error al conectar a la API en la página ${currentPage}:`, error.message);
+            throw new Error('Error al conectar a la API');
+        }
     }
 
     return allResults;
