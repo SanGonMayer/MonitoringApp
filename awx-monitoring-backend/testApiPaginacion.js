@@ -13,6 +13,10 @@ const PORT = 3000;
 
 app.use(cors());
 
+// Verificar que las credenciales estén correctamente cargadas
+console.log('AWX User:', username);
+console.log('AWX Password:', password);
+
 // URL base para todas las llamadas a la API de AWX
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2';
 const wstApiUrl = `${baseApiUrl}/inventories/22/groups`; // URL para obtener los grupos del inventario 22
@@ -27,6 +31,17 @@ const authConfig = {
     }
 };
 
+// Probar autenticación con AWX
+app.get('/test-auth', async (req, res) => {
+    try {
+        const testResponse = await axios.get(`${baseApiUrl}/me/`, authConfig);
+        res.json({ success: true, data: testResponse.data });
+    } catch (error) {
+        console.error('Error en autenticación:', error.response.status, error.response.data);
+        res.status(401).json({ success: false, error: error.message });
+    }
+});
+
 /**
  * Función para obtener todos los resultados paginados de la API de AWX.
  * Si el campo `next` es una URL relativa, la convertimos en una URL absoluta.
@@ -38,6 +53,7 @@ async function fetchAllPages(apiUrl, authConfig) {
     // Mientras haya una página siguiente, hacemos peticiones
     while (currentPage) {
         try {
+            console.log(`Obteniendo datos de la página: ${currentPage}`);
             const response = await axios.get(currentPage, authConfig);
 
             // Concatenar los resultados
@@ -52,7 +68,7 @@ async function fetchAllPages(apiUrl, authConfig) {
                 currentPage = null; // No hay más páginas
             }
         } catch (error) {
-            console.error(`Error al conectar a la API en la página ${currentPage}:`, error.message);
+            console.error(`Error al conectar a la API en la página ${currentPage}:`, error.response?.status || error.message);
             throw new Error('Error al conectar a la API');
         }
     }
@@ -63,7 +79,6 @@ async function fetchAllPages(apiUrl, authConfig) {
 // Ruta para obtener todos los grupos del inventario 22
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
-        // Usar la función para obtener todas las páginas de grupos del inventario 22
         const allGroups = await fetchAllPages(wstApiUrl, authConfig);
 
         // Filtrar y preparar los datos de los grupos
@@ -78,57 +93,6 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
     } catch (error) {
         console.error('Error al conectar a la API de AWX:', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
-    }
-});
-
-// Ruta para obtener todos los grupos del inventario 347
-app.get('/api/awx/inventories/347/groups', async (req, res) => {
-    try {
-        // Usar la función para obtener todas las páginas de grupos del inventario 347
-        const allGroups = await fetchAllPages(cctvApiUrl, authConfig);
-
-        // Filtrar y preparar los datos de los grupos
-        const groups = allGroups.map(group => ({
-            id: group.id,
-            name: group.name,
-            description: group.description,
-            hostsUrl: group.related.hosts // URL para obtener los hosts
-        }));
-
-        res.json(groups);
-    } catch (error) {
-        console.error('Error al conectar a la API de AWX:', error.message);
-        res.status(500).json({ error: 'Error al conectar a la API de AWX' });
-    }
-});
-
-// Ruta para obtener todos los hosts de un grupo específico en el inventario 22
-app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
-    const groupId = req.params.groupId;
-
-    try {
-        // Usar la función para obtener todas las páginas de hosts del grupo
-        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
-
-        res.json(allHosts);
-    } catch (error) {
-        console.error('Error al obtener los hosts:', error.message);
-        res.status(500).json({ error: 'Error al obtener los hosts' });
-    }
-});
-
-// Ruta para obtener todos los hosts de un grupo específico en el inventario 347
-app.get('/api/awx/inventories/347/groups/:groupId/hosts', async (req, res) => {
-    const groupId = req.params.groupId;
-
-    try {
-        // Usar la función para obtener todas las páginas de hosts del grupo
-        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
-
-        res.json(allHosts);
-    } catch (error) {
-        console.error('Error al obtener los hosts:', error.message);
-        res.status(500).json({ error: 'Error al obtener los hosts' });
     }
 });
 
