@@ -14,21 +14,37 @@ const PORT = 3000;
 app.use(cors());
 
 // URL base para obtener grupos e hosts
+const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2';
+
 const wstApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22';
 const cctvApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/347';
 const hostsApiUrl= 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
 
-// obtener todos los resultados paginados desde la API de AWX
+// obtener todos los resultados paginados de la API de AWX
 async function fetchAllPages(apiUrl, authConfig) {
     let allResults = [];
     let currentPage = apiUrl;
 
-    // Mientras haya una página siguiente, hacemos peticiones
+    // Mientras haya una página siguiente, se pide
     while (currentPage) {
         try {
             const response = await axios.get(currentPage, authConfig);
-            allResults = allResults.concat(response.data.results); // Agregar los resultados de la página actual
-            currentPage = response.data.next; // `next` contiene la URL de la siguiente página o `null` si no hay más
+
+            // Concatenar los resultados
+            allResults = allResults.concat(response.data.results);
+
+            // Verificar si `next` es una URL completa o relativa
+            if (response.data.next) {
+                const nextUrl = response.data.next;
+                if (!nextUrl.startsWith('http')) {
+                    // Si `next` es relativa, añadimos la URL base
+                    currentPage = `${baseApiUrl}${nextUrl}`;
+                } else {
+                    currentPage = nextUrl; // Si es completa, la usamos directamente
+                }
+            } else {
+                currentPage = null; // No hay más páginas
+            }
         } catch (error) {
             console.error(`Error al conectar a la API en la página ${currentPage}:`, error.message);
             throw new Error('Error al conectar a la API');
@@ -49,7 +65,7 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
         };
 
         // Usar la función para obtener todas las páginas de grupos
-        const allGroups = await fetchAllPages(`${wstApiUrl}/groups/`, authConfig);
+        const allGroups = await fetchAllPages(`${baseApiUrl}/inventories/22/groups/`, authConfig);
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
@@ -77,7 +93,7 @@ app.get('/api/awx/inventories/347/groups', async (req, res) => {
         };
 
         // Usar la función para obtener todas las páginas de grupos
-        const allGroups = await fetchAllPages(`${cctvApiUrl}/groups/`, authConfig);
+        const allGroups = await fetchAllPages(`${baseApiUrl}/inventories/347/groups/`, authConfig);
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
@@ -93,6 +109,7 @@ app.get('/api/awx/inventories/347/groups', async (req, res) => {
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
     }
 });
+
 
 
 // obtener todos los hosts de un grupo específico en el inventario 22
