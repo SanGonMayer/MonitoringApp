@@ -31,17 +31,6 @@ const authConfig = {
     }
 };
 
-// Probar autenticación con AWX
-app.get('/test-auth', async (req, res) => {
-    try {
-        const testResponse = await axios.get(`${baseApiUrl}/me/`, authConfig);
-        res.json({ success: true, data: testResponse.data });
-    } catch (error) {
-        console.error('Error en autenticación:', error.response.status, error.response.data);
-        res.status(401).json({ success: false, error: error.message });
-    }
-});
-
 /**
  * Función para obtener todos los resultados paginados de la API de AWX.
  * Si el campo `next` es una URL relativa, la convertimos en una URL absoluta.
@@ -56,6 +45,9 @@ async function fetchAllPages(apiUrl, authConfig) {
             console.log(`Obteniendo datos de la página: ${currentPage}`);
             const response = await axios.get(currentPage, authConfig);
 
+            // Verificar la respuesta
+            console.log('Datos recibidos:', response.data);
+
             // Concatenar los resultados
             allResults = allResults.concat(response.data.results);
 
@@ -68,7 +60,11 @@ async function fetchAllPages(apiUrl, authConfig) {
                 currentPage = null; // No hay más páginas
             }
         } catch (error) {
-            console.error(`Error al conectar a la API en la página ${currentPage}:`, error.response?.status || error.message);
+            // Registrar más detalles sobre el error
+            console.error(`Error al conectar a la API en la página ${currentPage}:`, error.message);
+            if (error.response) {
+                console.error('Detalles del error:', error.response.data);
+            }
             throw new Error('Error al conectar a la API');
         }
     }
@@ -80,6 +76,12 @@ async function fetchAllPages(apiUrl, authConfig) {
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
         const allGroups = await fetchAllPages(wstApiUrl, authConfig);
+
+        // Verificar si la respuesta es válida antes de enviar al frontend
+        if (!Array.isArray(allGroups)) {
+            console.error('Error: la respuesta de grupos no es un array:', allGroups);
+            return res.status(500).json({ error: 'La respuesta de grupos no es válida' });
+        }
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
