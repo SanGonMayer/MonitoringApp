@@ -13,19 +13,29 @@ const PORT = 3000;
 
 app.use(cors());
 
-// URL base para obtener grupos e hosts
+// URL base para todas las llamadas a la API de AWX
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2';
+const wstApiUrl = `${baseApiUrl}/inventories/22/groups`; // URL para obtener los grupos del inventario 22
+const cctvApiUrl = `${baseApiUrl}/inventories/347/groups`; // URL para obtener los grupos del inventario 347
+const groupHostsUrl = (groupId) => `${baseApiUrl}/groups/${groupId}/hosts`; // URL para obtener los hosts de un grupo
 
-const wstApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/22';
-const cctvApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories/347';
-const hostsApiUrl= 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
+// Configuración de autenticación
+const authConfig = {
+    auth: {
+        username: username,
+        password: password
+    }
+};
 
-// obtener todos los resultados paginados de la API de AWX
+/**
+ * Función para obtener todos los resultados paginados de la API de AWX.
+ * Si el campo `next` es una URL relativa, la convertimos en una URL absoluta.
+ */
 async function fetchAllPages(apiUrl, authConfig) {
     let allResults = [];
     let currentPage = apiUrl;
 
-    // Mientras haya una página siguiente, se pide
+    // Mientras haya una página siguiente, hacemos peticiones
     while (currentPage) {
         try {
             const response = await axios.get(currentPage, authConfig);
@@ -34,14 +44,10 @@ async function fetchAllPages(apiUrl, authConfig) {
             allResults = allResults.concat(response.data.results);
 
             // Verificar si `next` es una URL completa o relativa
-            if (response.data.next) {
-                const nextUrl = response.data.next;
-                if (!nextUrl.startsWith('http')) {
-                    // Si `next` es relativa, añadimos la URL base
-                    currentPage = `${baseApiUrl}${nextUrl}`;
-                } else {
-                    currentPage = nextUrl; // Si es completa, la usamos directamente
-                }
+            const nextUrl = response.data.next;
+            if (nextUrl) {
+                // Si `next` es relativa, añadir la URL base
+                currentPage = nextUrl.startsWith('http') ? nextUrl : `${baseApiUrl}${nextUrl}`;
             } else {
                 currentPage = null; // No hay más páginas
             }
@@ -54,18 +60,11 @@ async function fetchAllPages(apiUrl, authConfig) {
     return allResults;
 }
 
-// obtener todos los grupos del inventario 22
+// Ruta para obtener todos los grupos del inventario 22
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
-        const authConfig = {
-            auth: {
-                username: username,
-                password: password
-            }
-        };
-
-        // Usar la función para obtener todas las páginas de grupos
-        const allGroups = await fetchAllPages(`${baseApiUrl}/inventories/22/groups/`, authConfig);
+        // Usar la función para obtener todas las páginas de grupos del inventario 22
+        const allGroups = await fetchAllPages(wstApiUrl, authConfig);
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
@@ -82,18 +81,11 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
     }
 });
 
-// obtener todos los grupos del inventario 347
+// Ruta para obtener todos los grupos del inventario 347
 app.get('/api/awx/inventories/347/groups', async (req, res) => {
     try {
-        const authConfig = {
-            auth: {
-                username: username,
-                password: password
-            }
-        };
-
-        // Usar la función para obtener todas las páginas de grupos
-        const allGroups = await fetchAllPages(`${baseApiUrl}/inventories/347/groups/`, authConfig);
+        // Usar la función para obtener todas las páginas de grupos del inventario 347
+        const allGroups = await fetchAllPages(cctvApiUrl, authConfig);
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
@@ -110,20 +102,13 @@ app.get('/api/awx/inventories/347/groups', async (req, res) => {
     }
 });
 
-// obtener todos los hosts de un grupo específico en el inventario 22
+// Ruta para obtener todos los hosts de un grupo específico en el inventario 22
 app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
     const groupId = req.params.groupId;
 
     try {
-        const authConfig = {
-            auth: {
-                username: username,
-                password: password
-            }
-        };
-
-        // Usar la función para obtener todas las páginas de hosts
-        const allHosts = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`, authConfig);
+        // Usar la función para obtener todas las páginas de hosts del grupo
+        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
 
         res.json(allHosts);
     } catch (error) {
@@ -132,20 +117,13 @@ app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
     }
 });
 
-// obtener todos los hosts de un grupo específico en el inventario 347
+// Ruta para obtener todos los hosts de un grupo específico en el inventario 347
 app.get('/api/awx/inventories/347/groups/:groupId/hosts', async (req, res) => {
     const groupId = req.params.groupId;
 
     try {
-        const authConfig = {
-            auth: {
-                username: username,
-                password: password
-            }
-        };
-
-        // Usar la función para obtener todas las páginas de hosts
-        const allHosts = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`, authConfig);
+        // Usar la función para obtener todas las páginas de hosts del grupo
+        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
 
         res.json(allHosts);
     } catch (error) {
@@ -155,5 +133,5 @@ app.get('/api/awx/inventories/347/groups/:groupId/hosts', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log('Servidor escuchando en el puerto', PORT);
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
