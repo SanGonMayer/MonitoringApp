@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import base64 from 'base-64';  // Para codificar en base64
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ app.use(cors());
 
 // Verificar que las credenciales estén correctamente cargadas
 console.log('AWX User:', username);
-console.log('AWX Password:', password);
+console.log('AWX Password:', password ? 'Password loaded' : 'No password');
 
 // URL base para todas las llamadas a la API de AWX
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2';
@@ -23,13 +24,23 @@ const wstApiUrl = `${baseApiUrl}/inventories/22/groups`; // URL para obtener los
 const cctvApiUrl = `${baseApiUrl}/inventories/347/groups`; // URL para obtener los grupos del inventario 347
 const groupHostsUrl = (groupId) => `${baseApiUrl}/groups/${groupId}/hosts`; // URL para obtener los hosts de un grupo
 
-// Configuración de autenticación
+// Configuración del encabezado de autenticación
 const authConfig = {
-    auth: {
-        username: username,
-        password: password
+    headers: {
+        'Authorization': `Basic ${base64.encode(`${username}:${password}`)}`
     }
 };
+
+// Probar autenticación con AWX
+app.get('/test-auth', async (req, res) => {
+    try {
+        const testResponse = await axios.get(`${baseApiUrl}/me/`, authConfig);
+        res.json({ success: true, data: testResponse.data });
+    } catch (error) {
+        console.error('Error en autenticación:', error.response ? error.response.data : error.message);
+        res.status(401).json({ success: false, error: error.message });
+    }
+});
 
 /**
  * Función para obtener todos los resultados paginados de la API de AWX.
@@ -76,12 +87,6 @@ async function fetchAllPages(apiUrl, authConfig) {
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
         const allGroups = await fetchAllPages(wstApiUrl, authConfig);
-
-        // Verificar si la respuesta es válida antes de enviar al frontend
-        if (!Array.isArray(allGroups)) {
-            console.error('Error: la respuesta de grupos no es un array:', allGroups);
-            return res.status(500).json({ error: 'La respuesta de grupos no es válida' });
-        }
 
         // Filtrar y preparar los datos de los grupos
         const groups = allGroups.map(group => ({
