@@ -19,7 +19,7 @@ console.log('AWX User:', username);
 console.log('AWX Password:', password ? 'Password loaded' : 'No password');
 
 // URL base para todas las llamadas a la API de AWX
-const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2';
+const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop';
 const wstApiUrl = `${baseApiUrl}/inventories/22/groups`; // URL para obtener los grupos del inventario 22
 const cctvApiUrl = `${baseApiUrl}/inventories/347/groups`; // URL para obtener los grupos del inventario 347
 const groupHostsUrl = (groupId) => `${baseApiUrl}/groups/${groupId}/hosts`; // URL para obtener los hosts de un grupo
@@ -56,7 +56,7 @@ async function fetchAllPages(apiUrl, authConfig) {
             if (nextUrl) {
                 if (nextUrl.startsWith('/')) {
                     // Si `next` es una ruta relativa, añadir la URL base
-                    currentPage = `${baseApiUrl}${nextUrl}`;
+                    currentPage = `${baseApiUrl}/api/v2/${nextUrl}`;
                 } else {
                     // Si `next` es una URL completa, usarla tal cual
                     currentPage = nextUrl;
