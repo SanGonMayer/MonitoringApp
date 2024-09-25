@@ -56,7 +56,7 @@ async function fetchAllPages(apiUrl, authConfig) {
             if (nextUrl) {
                 if (nextUrl.startsWith('/')) {
                     // Si `next` es una ruta relativa, añadir la URL base
-                    currentPage = `${baseApiUrl}/api/v2/${nextUrl}`;
+                    currentPage = `${baseApiUrl}${nextUrl}`;
                 } else {
                     // Si `next` es una URL completa, usarla tal cual
                     currentPage = nextUrl;
