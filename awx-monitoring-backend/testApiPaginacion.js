@@ -54,12 +54,12 @@ async function fetchAllPages(apiUrl, authConfig) {
             // Verificar si `next` es una URL completa o relativa
             const nextUrl = response.data.next;
             if (nextUrl) {
-                if (nextUrl.startsWith('http')) {
+                if (nextUrl.startsWith('/')) {
+                    // Si `next` es una ruta relativa, añadir la URL base
+                    currentPage = `${baseApiUrl}${nextUrl}`;
+                } else {
                     // Si `next` es una URL completa, usarla tal cual
                     currentPage = nextUrl;
-                } else {
-                    // Si `next` es relativa, añadir la URL base
-                    currentPage = `${baseApiUrl}${nextUrl}`;
                 }
             } else {
                 currentPage = null; // No hay más páginas
