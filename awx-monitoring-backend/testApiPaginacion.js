@@ -31,17 +31,6 @@ const authConfig = {
     }
 };
 
-// Probar autenticación con AWX
-app.get('/test-auth', async (req, res) => {
-    try {
-        const testResponse = await axios.get(`${baseApiUrl}/me/`, authConfig);
-        res.json({ success: true, data: testResponse.data });
-    } catch (error) {
-        console.error('Error en autenticación:', error.response ? error.response.data : error.message);
-        res.status(401).json({ success: false, error: error.message });
-    }
-});
-
 /**
  * Función para obtener todos los resultados paginados de la API de AWX.
  * Si el campo `next` es una URL relativa, la convertimos en una URL absoluta.
@@ -65,8 +54,13 @@ async function fetchAllPages(apiUrl, authConfig) {
             // Verificar si `next` es una URL completa o relativa
             const nextUrl = response.data.next;
             if (nextUrl) {
-                // Si `next` es relativa, añadir la URL base
-                currentPage = nextUrl.startsWith('http') ? nextUrl : `${baseApiUrl}${nextUrl}`;
+                if (nextUrl.startsWith('http')) {
+                    // Si `next` es una URL completa, usarla tal cual
+                    currentPage = nextUrl;
+                } else {
+                    // Si `next` es relativa, añadir la URL base
+                    currentPage = `${baseApiUrl}${nextUrl}`;
+                }
             } else {
                 currentPage = null; // No hay más páginas
             }
