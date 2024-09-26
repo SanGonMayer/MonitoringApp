@@ -14,12 +14,11 @@ const PORT = 3000;
 
 app.use(cors());
 
-// Verificar que las credenciales estén correctamente cargadas
+// Verifica que las credenciales sean correctas
 console.log('AWX User:', username);
 console.log('AWX Password:', password ? 'Password loaded' : 'No password');
 
-// URL base para todas las llamadas a la API de AWX
-const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop';
+const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop'; // URL base para todas las llamadas a la API de AWX
 const wstApiUrl = `${baseApiUrl}/api/v2/inventories/22/groups`; // URL para obtener los grupos del inventario 22
 const cctvApiUrl = `${baseApiUrl}/api/v2/inventories/347/groups`; // URL para obtener los grupos del inventario 347
 const groupHostsUrl = (groupId) => `${baseApiUrl}/api/v2/groups/${groupId}/hosts`; // URL para obtener los hosts de un grupo
@@ -77,6 +76,21 @@ async function fetchAllPages(apiUrl, authConfig) {
     return allResults;
 }
 
+/**
+ * Función para obtener los hosts de un grupo.
+ * Utiliza `fetchAllPages` para obtener todos los hosts en caso de paginación.
+ */
+async function fetchHostsForGroup(group) {
+    try {
+        console.log(`Obteniendo hosts para el grupo: ${group.name}`);
+        const hosts = await fetchAllPages(group.hostsUrl, authConfig);
+        return hosts;
+    } catch (error) {
+        console.error(`Error al obtener los hosts para el grupo ${group.name}:`, error.message);
+        return [];
+    }
+}
+
 // Ruta para obtener todos los grupos del inventario 22
 app.get('/api/awx/inventories/22/groups', async (req, res) => {
     try {
@@ -94,6 +108,56 @@ app.get('/api/awx/inventories/22/groups', async (req, res) => {
     } catch (error) {
         console.error('Error al conectar a la API de AWX:', error.message);
         res.status(500).json({ error: 'Error al conectar a la API de AWX' });
+    }
+});
+
+// Ruta para obtener todos los grupos del inventario 347
+app.get('/api/awx/inventories/347/groups', async (req, res) => {
+    try {
+        const allGroups = await fetchAllPages(cctvApiUrl, authConfig);
+
+        // Filtrar y preparar los datos de los grupos
+        const groups = allGroups.map(group => ({
+            id: group.id,
+            name: group.name,
+            description: group.description,
+            hostsUrl: group.related.hosts // URL para obtener los hosts
+        }));
+
+        res.json(groups);
+    } catch (error) {
+        console.error('Error al conectar a la API de AWX:', error.message);
+        res.status(500).json({ error: 'Error al conectar a la API de AWX' });
+    }
+});
+
+// Ruta para obtener los hosts de un grupo específico en el inventario 22
+app.get('/api/awx/inventories/22/groups/:groupId/hosts', async (req, res) => {
+    const groupId = req.params.groupId;
+    
+    try {
+        // Obtener todos los hosts para el grupo especificado con paginación
+        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
+
+        res.json(allHosts);
+    } catch (error) {
+        console.error('Error al obtener los hosts:', error.message);
+        res.status(500).json({ error: 'Error al obtener los hosts' });
+    }
+});
+
+// Ruta para obtener los hosts de un grupo específico en el inventario 347
+app.get('/api/awx/inventories/347/groups/:groupId/hosts', async (req, res) => {
+    const groupId = req.params.groupId;
+    
+    try {
+        // Obtener todos los hosts para el grupo especificado con paginación
+        const allHosts = await fetchAllPages(groupHostsUrl(groupId), authConfig);
+
+        res.json(allHosts);
+    } catch (error) {
+        console.error('Error al obtener los hosts:', error.message);
+        res.status(500).json({ error: 'Error al obtener los hosts' });
     }
 });
 
