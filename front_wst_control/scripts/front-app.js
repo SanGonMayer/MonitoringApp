@@ -82,7 +82,7 @@ async function fetchFiliales(inventoryId) {
 
       console.log(`Llamando a la API para el inventoryId: ${inventoryId}`);
       // Obtener la lista de filiales (grupos)
-      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups`);
+      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3001/api/awx/inventories/${inventoryId}/groups`);
       const groups = await response.json();
 
       // Limpiar el contenedor de filiales (grupos)
@@ -109,7 +109,7 @@ async function fetchFiliales(inventoryId) {
 async function fetchHosts(groupId, inventoryId) {
   try {
       // Obtener la lista de hosts para la filial seleccionada
-      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
+      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3001/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
       const hosts = await response.json();
 
       const tableBody = document.querySelector('#workstationsTable tbody');
