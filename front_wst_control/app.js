@@ -47,57 +47,56 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  async function fetchFiliales() {
-    try {
-        // Obtener la lista de filiales (grupos)
-        const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups');
-        const groups = await response.json();
+// Manejador de eventos para obtener grupos de CCTV (Inventario 347)
+document.getElementById('cctvButton').addEventListener('click', async () => {
+  await fetchGroups(347);
+});
 
-        // Limpiar el contenedor de filiales (grupos)
-        const filialContainer = document.querySelector('#filialContainer');
-        filialContainer.innerHTML = '';
+// Manejador de eventos para obtener grupos de WST (Inventario 22)
+document.getElementById('wstButton').addEventListener('click', async () => {
+  await fetchGroups(22);
+});
 
-        // Crear un botón para cada filial
-        groups.forEach(group => {
-            const button = document.createElement('button');
-            button.textContent = group.name;
-            button.onclick = () => fetchHosts(group.id); // Al hacer clic, obtener los hosts
-            filialContainer.appendChild(button);
-        });
+// Función para obtener los grupos (filiales) según el inventario
+async function fetchGroups(inventoryId) {
+  try {
+      const response = await fetch(`/api/awx/inventories/${inventoryId}/groups`);
+      const groups = await response.json();
 
-    } catch (error) {
-        console.error('Error obteniendo las filiales:', error);
-    }
+      // Mostrar las filiales en el contenedor
+      const groupsContainer = document.getElementById('groupsContainer');
+      groupsContainer.innerHTML = ''; // Limpiar contenido previo
+      groups.forEach(group => {
+          const groupElement = document.createElement('div');
+          groupElement.innerHTML = `
+              <button onclick="fetchHosts(${inventoryId}, ${group.id})">
+                  ${group.name} - ${group.description}
+              </button>
+          `;
+          groupsContainer.appendChild(groupElement);
+      });
+  } catch (error) {
+      console.error('Error obteniendo los grupos:', error);
+  }
 }
 
-async function fetchHosts(groupId) {
-    try {
-        // Obtener la lista de hosts para la filial seleccionada
-        const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups/${groupId}/hosts`);
-        const hosts = await response.json();
+// Función para obtener los hosts de un grupo específico
+async function fetchHosts(inventoryId, groupId) {
+  try {
+      const response = await fetch(`/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
+      const hosts = await response.json();
 
-        const tableBody = document.querySelector('#workstationsTable tbody');
-
-        // Limpiar el contenido anterior de la tabla
-        tableBody.innerHTML = '';
-
-        // Iterar sobre los hosts y agregarlos a la tabla
-        hosts.forEach(host => {
-            const row = `
-                <tr>
-                    <td>${host.name}</td>
-                    <td>${host.id}</td>
-                    <td>${host.description}</td>
-                    <td>${host.inventory}</td>
-                    <td>${host.groups}</td>
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
-
-    } catch (error) {
-        console.error('Error obteniendo los hosts:', error);
-    }
+      // Mostrar los hosts en el contenedor
+      const hostsContainer = document.getElementById('hostsContainer');
+      hostsContainer.innerHTML = ''; // Limpiar contenido previo
+      hosts.forEach(host => {
+          const hostElement = document.createElement('div');
+          hostElement.textContent = `Host: ${host.name}`;
+          hostsContainer.appendChild(hostElement);
+      });
+  } catch (error) {
+      console.error('Error obteniendo los hosts:', error);
+  }
 }
 
 // Llamar a la función al cargar la página
