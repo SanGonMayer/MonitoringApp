@@ -1,183 +1,178 @@
 /* Reset básico */
 body, h1, h2, h3, p, div, input, button {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    display: flex;
-    height: 100vh;
-    background-color: #f4f4f9;
-    justify-content: center;
-  }
-  
-  .container {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  /* Estilos para el navbar */
-  .navbar {
-    width: 80px; /* Ancho inicial reducido */
-    background-color: #837c7c;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 0;
-    transition: width 0.3s ease;
-    overflow: hidden; /* Oculta el texto inicialmente */
-    position: relative;
-  }
-  
-  .navbar:hover {
-    width: 220px; /* Ancho expandido aumentado */
-  }
-  
-  .navbar-header {
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
-  
-  .menu-icon {
-    font-size: 24px; /* Tamaño aumentado para mejor visibilidad */
-    margin-bottom: 20px;
-  }
-  
-  .navbar-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 0 10px; /* Añade padding para espaciar mejor */
-  }
-  
-  .navbar-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #fff;
-    margin-bottom: 15px; /* Espacio entre los elementos */
-    padding: 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s, width 0.3s;
-    width: 100%;
-    justify-content: center; /* Centra los íconos al estar colapsado */
-    overflow: hidden;
-  }
-  
-  .navbar:hover .navbar-link {
-   justify-content: flex-start; /* Al expandirse, alinea el texto a la izquierda */
-  }
-  
-  .navbar-link:hover {
-    background-color: #f35309;
-    transform: translateX(10px);
-  }
-  
-  .navbar-link img {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    transition: margin-right 0.3s ease;
-  }
-  
-  .link-text {
-    opacity: 0; /* Oculta el texto inicialmente */
-    white-space: nowrap;
-    transition: opacity 0.3s ease, margin-left 0.3s ease;
-    margin-left: -70px; /* Inicialmente fuera de vista */
-  }
-  
-  .navbar:hover .link-text {
-    opacity: 1; /* Muestra el texto al pasar el mouse */
-    margin-left: 10px; /* Texto al lado del ícono cuando el navbar está expandido */
-  }
-  
-  .navbar:hover .navbar-link img {
-    margin-right: 10px; /* Agrega margen derecho a los íconos cuando el navbar está expandido */
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-  .submenu {
-    display: none; /* Oculto por defecto */
-    flex-direction: column;
-    margin-left: 30px; /* Mueve el submenu hacia la derecha */
-  }
-  
-  .submenu-link {
-    text-decoration: none;
-    color: #fff;
-    padding: 5px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #f4f4f9;
+  justify-content: center;
+}
 
-  .submenu-link img {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    transition: margin-right 0.3s ease;
-  }
-  
-  
-  .submenu-link:hover {
-    background-color: #f35309; /* Cambia el color de fondo al pasar el mouse */
-  }
-  
-  /* Mostrar el submenu cuando se haga hover sobre "Terminales" */
-  .navbar-link:hover + .submenu {
-    display: flex;
-  }
-  
-  .navbar:hover .navbar-link img {
-    margin-right: 10px;
-    transition: margin-right 0.3s ease;
-  }
-  
-  /* Mostrar el submenu cuando se haga hover sobre el contenedor "navbar-item" */
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Estilos para el navbar */
+.navbar {
+  width: 80px; /* Ancho inicial reducido */
+  background-color: #837c7c;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+  transition: width 0.3s ease;
+  overflow: hidden; /* Oculta el texto inicialmente */
+  position: relative;
+}
+
+.navbar:hover {
+  width: 220px; /* Ancho expandido aumentado */
+}
+
+.navbar-header {
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.menu-icon {
+  font-size: 24px; /* Tamaño aumentado para mejor visibilidad */
+  margin-bottom: 20px;
+}
+
+.navbar-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px; /* Añade padding para espaciar mejor */
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  margin-bottom: 15px; /* Espacio entre los elementos */
+  padding: 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.3s, width 0.3s;
+  width: 100%;
+  justify-content: center; /* Centra los íconos al estar colapsado */
+  overflow: hidden;
+}
+
+.navbar:hover .navbar-link {
+  justify-content: flex-start; /* Al expandirse, alinea el texto a la izquierda */
+}
+
+.navbar-link:hover {
+  background-color: #f35309;
+  transform: translateX(10px);
+}
+
+.navbar-link img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  transition: margin-right 0.3s ease;
+}
+
+.link-text {
+  opacity: 0; /* Oculta el texto inicialmente */
+  white-space: nowrap;
+  transition: opacity 0.3s ease, margin-left 0.3s ease;
+  margin-left: -70px; /* Inicialmente fuera de vista */
+}
+
+.navbar:hover .link-text {
+  opacity: 1; /* Muestra el texto al pasar el mouse */
+  margin-left: 10px; /* Texto al lado del ícono cuando el navbar está expandido */
+}
+
+.navbar:hover .navbar-link img {
+  margin-right: 10px; /* Agrega margen derecho a los íconos cuando el navbar está expandido */
+}
+
+.submenu {
+  display: none; /* Oculto por defecto */
+  flex-direction: column;
+  margin-left: 30px; /* Mueve el submenu hacia la derecha */
+}
+
+.submenu-link {
+  text-decoration: none;
+  color: #fff;
+  padding: 5px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.submenu-link img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  transition: margin-right 0.3s ease;
+}
+
+.submenu-link:hover {
+  background-color: #f35309; /* Cambia el color de fondo al pasar el mouse */
+}
+
+/* Mostrar el submenu cuando se haga hover sobre "Terminales" */
+.navbar-link:hover + .submenu {
+  display: flex;
+}
+
 .navbar-item:hover .submenu {
   display: flex;
 }
-  /* Estilos para el contenido principal */
-  .main-content {
-    flex-grow: 1;
-    padding: 20px;
-  }
-  
-  header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  h1 {
-    color: #333;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
 
-.status-section {
+/* Estilos para el contenido principal */
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* .status-section {
   position: relative;
   padding: 20px;
   width: 100%;
   text-align: center;
 }
-
+ */
+ 
 /* Ajustes para los círculos interactivos */
 .circle {
   display: flex;
@@ -237,37 +232,25 @@ body, h1, h2, h3, p, div, input, button {
   flex-grow: 1;
   text-align: center;
 }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-  }
-  
-  .terminal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .updated {
-    background-color: #28a745;
-  }
-  
-  .outdated {
-    background-color: #dc3545;
-  }
-  
-  .warning {
-    background-color: #ffc107;
-  }
-  
-  .unknown {
-    background-color: #6c757d;
-  }
-  
+
+
+#workstationsTable td, #workstationsTable th {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.custom-button {
+  background-color: #4CAF50; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  margin: 3px;
+  cursor: pointer;
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.custom-button:hover {
+  background-color: rgb(77, 107, 197); /* Cambiar el color al pasar el mouse */
+}
