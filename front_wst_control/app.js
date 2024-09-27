@@ -47,67 +47,58 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-// Manejador de eventos para obtener grupos de CCTV (Inventario 347)
-document.getElementById('cctvButton').addEventListener('click', async () => {
-  await fetchGroups(347);
-});
+async function fetchFiliales() {
+    try {
+        // Obtener la lista de filiales (grupos)
+        const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups');
+        const groups = await response.json();
 
-// Manejador de eventos para obtener grupos de WST (Inventario 22)
-document.getElementById('wstButton').addEventListener('click', async () => {
-  await fetchGroups(22);
-});
+        // Limpiar el contenedor de filiales (grupos)
+        const filialContainer = document.querySelector('#filialContainer');
+        filialContainer.innerHTML = '';
 
-// Función para obtener los grupos (filiales) según el inventario
-async function fetchGroups(inventoryId) {
-  try {
-      // Hacer una solicitud al backend para obtener los grupos
-      const response = await fetch(`/api/awx/inventories/${inventoryId}/groups`);
-      const groups = await response.json();
+        // Crear un botón para cada filial
+        groups.forEach(group => {
+            const button = document.createElement('button');
+            button.textContent = group.name;
+            button.onclick = () => fetchHosts(group.id); // Al hacer clic, obtener los hosts
+            filialContainer.appendChild(button);
+        });
 
-      // Obtener el contenedor donde se mostrarán los botones de filiales
-      const groupsContainer = document.getElementById('filialContainer');
-      groupsContainer.innerHTML = ''; // Limpiar los botones previos
-
-      // Generar los botones de las filiales
-      groups.forEach(group => {
-          const button = document.createElement('button');
-          button.textContent = `${group.name} - ${group.description}`;
-          button.addEventListener('click', () => fetchHosts(inventoryId, group.id));
-          groupsContainer.appendChild(button);
-      });
-
-      // Limpiar la tabla de hosts cuando se cambie de inventario
-      const tableBody = document.querySelector('#workstationsTable tbody');
-      tableBody.innerHTML = ''; // Limpiar el contenido previo de la tabla
-  } catch (error) {
-      console.error('Error obteniendo los grupos:', error);
-  }
+    } catch (error) {
+        console.error('Error obteniendo las filiales:', error);
+    }
 }
 
-// Función para obtener los hosts de un grupo específico
-async function fetchHosts(inventoryId, groupId) {
-  try {
-      // Hacer una solicitud al backend para obtener los hosts del grupo seleccionado
-      const response = await fetch(`/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
-      const hosts = await response.json();
+async function fetchHosts(groupId) {
+    try {
+        // Obtener la lista de hosts para la filial seleccionada
+        const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/22/groups/${groupId}/hosts`);
+        const hosts = await response.json();
 
-      // Obtener el cuerpo de la tabla donde se mostrarán los hosts
-      const tableBody = document.querySelector('#workstationsTable tbody');
-      tableBody.innerHTML = ''; // Limpiar el contenido previo de la tabla
+        const tableBody = document.querySelector('#workstationsTable tbody');
 
-      // Añadir filas a la tabla con los datos de los hosts
-      hosts.forEach(host => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-              <td>${host.name}</td>
-              <td>${host.id}</td>
-              <td>${host.description || 'Sin descripción'}</td>
-              <td>${inventoryId}</td>
-              <td>${host.groups ? host.groups.join(', ') : 'Sin grupos'}</td>
-          `;
-          tableBody.appendChild(row);
-      });
-  } catch (error) {
-      console.error('Error obteniendo los hosts:', error);
-  }
+        // Limpiar el contenido anterior de la tabla
+        tableBody.innerHTML = '';
+
+        // Iterar sobre los hosts y agregarlos a la tabla
+        hosts.forEach(host => {
+            const row = `
+                <tr>
+                    <td>${host.name}</td>
+                    <td>${host.id}</td>
+                    <td>${host.description}</td>
+                    <td>${host.inventory}</td>
+                    <td>${host.groups}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+    } catch (error) {
+        console.error('Error obteniendo los hosts:', error);
+    }
 }
+
+// Llamar a la función al cargar la página
+window.onload = fetchFiliales;
