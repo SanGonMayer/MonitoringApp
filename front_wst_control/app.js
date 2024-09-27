@@ -75,6 +75,10 @@ async function fetchGroups(inventoryId) {
           button.addEventListener('click', () => fetchHosts(inventoryId, group.id));
           groupsContainer.appendChild(button);
       });
+
+      // Limpiar la tabla de hosts cuando se cambie de inventario
+      const tableBody = document.querySelector('#workstationsTable tbody');
+      tableBody.innerHTML = ''; // Limpiar el contenido previo de la tabla
   } catch (error) {
       console.error('Error obteniendo los grupos:', error);
   }
