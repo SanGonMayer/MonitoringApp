@@ -60,21 +60,20 @@ document.getElementById('wstButton').addEventListener('click', async () => {
 // Función para obtener los grupos (filiales) según el inventario
 async function fetchGroups(inventoryId) {
   try {
+      // Hacer una solicitud al backend para obtener los grupos
       const response = await fetch(`/api/awx/inventories/${inventoryId}/groups`);
       const groups = await response.json();
 
-      // Mostrar las filiales en el contenedor
-      const groupsContainer = document.getElementById('groupsContainer');
-      groupsContainer.innerHTML = ''; // Limpiar contenido previo
+      // Obtener el contenedor donde se mostrarán los botones de filiales
+      const groupsContainer = document.getElementById('filialContainer');
+      groupsContainer.innerHTML = ''; // Limpiar los botones previos
 
+      // Generar los botones de las filiales
       groups.forEach(group => {
-          const groupElement = document.createElement('div');
           const button = document.createElement('button');
           button.textContent = `${group.name} - ${group.description}`;
-          button.classList.add('group-button'); // Añadir una clase para estilos
           button.addEventListener('click', () => fetchHosts(inventoryId, group.id));
-          groupElement.appendChild(button);
-          groupsContainer.appendChild(groupElement);
+          groupsContainer.appendChild(button);
       });
   } catch (error) {
       console.error('Error obteniendo los grupos:', error);
@@ -84,23 +83,13 @@ async function fetchGroups(inventoryId) {
 // Función para obtener los hosts de un grupo específico
 async function fetchHosts(inventoryId, groupId) {
   try {
+      // Hacer una solicitud al backend para obtener los hosts del grupo seleccionado
       const response = await fetch(`/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
       const hosts = await response.json();
 
-      // Mostrar los hosts en el contenedor (tabla)
-      const hostsContainer = document.getElementById('hostsContainer');
-      hostsContainer.innerHTML = ''; // Limpiar contenido previo
-
-      // Crear una tabla para mostrar los hosts
-      const table = document.createElement('table');
-      table.classList.add('hosts-table'); // Añadir una clase para estilos
-      const headerRow = document.createElement('tr');
-      headerRow.innerHTML = `
-          <th>Nombre</th>
-          <th>ID</th>
-          <th>Descripción</th>
-      `;
-      table.appendChild(headerRow);
+      // Obtener el cuerpo de la tabla donde se mostrarán los hosts
+      const tableBody = document.querySelector('#workstationsTable tbody');
+      tableBody.innerHTML = ''; // Limpiar el contenido previo de la tabla
 
       // Añadir filas a la tabla con los datos de los hosts
       hosts.forEach(host => {
@@ -109,11 +98,11 @@ async function fetchHosts(inventoryId, groupId) {
               <td>${host.name}</td>
               <td>${host.id}</td>
               <td>${host.description || 'Sin descripción'}</td>
+              <td>${inventoryId}</td>
+              <td>${host.groups ? host.groups.join(', ') : 'Sin grupos'}</td>
           `;
-          table.appendChild(row);
+          tableBody.appendChild(row);
       });
-
-      hostsContainer.appendChild(table);
   } catch (error) {
       console.error('Error obteniendo los hosts:', error);
   }
