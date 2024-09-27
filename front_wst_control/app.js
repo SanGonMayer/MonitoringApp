@@ -66,13 +66,14 @@ async function fetchGroups(inventoryId) {
       // Mostrar las filiales en el contenedor
       const groupsContainer = document.getElementById('groupsContainer');
       groupsContainer.innerHTML = ''; // Limpiar contenido previo
+
       groups.forEach(group => {
           const groupElement = document.createElement('div');
-          groupElement.innerHTML = `
-              <button onclick="fetchHosts(${inventoryId}, ${group.id})">
-                  ${group.name} - ${group.description}
-              </button>
-          `;
+          const button = document.createElement('button');
+          button.textContent = `${group.name} - ${group.description}`;
+          button.classList.add('group-button'); // Añadir una clase para estilos
+          button.addEventListener('click', () => fetchHosts(inventoryId, group.id));
+          groupElement.appendChild(button);
           groupsContainer.appendChild(groupElement);
       });
   } catch (error) {
@@ -86,18 +87,34 @@ async function fetchHosts(inventoryId, groupId) {
       const response = await fetch(`/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
       const hosts = await response.json();
 
-      // Mostrar los hosts en el contenedor
+      // Mostrar los hosts en el contenedor (tabla)
       const hostsContainer = document.getElementById('hostsContainer');
       hostsContainer.innerHTML = ''; // Limpiar contenido previo
+
+      // Crear una tabla para mostrar los hosts
+      const table = document.createElement('table');
+      table.classList.add('hosts-table'); // Añadir una clase para estilos
+      const headerRow = document.createElement('tr');
+      headerRow.innerHTML = `
+          <th>Nombre</th>
+          <th>ID</th>
+          <th>Descripción</th>
+      `;
+      table.appendChild(headerRow);
+
+      // Añadir filas a la tabla con los datos de los hosts
       hosts.forEach(host => {
-          const hostElement = document.createElement('div');
-          hostElement.textContent = `Host: ${host.name}`;
-          hostsContainer.appendChild(hostElement);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td>${host.name}</td>
+              <td>${host.id}</td>
+              <td>${host.description || 'Sin descripción'}</td>
+          `;
+          table.appendChild(row);
       });
+
+      hostsContainer.appendChild(table);
   } catch (error) {
       console.error('Error obteniendo los hosts:', error);
   }
 }
-
-// Llamar a la función al cargar la página
-window.onload = fetchFiliales;
