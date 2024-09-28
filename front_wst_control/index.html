@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitoreo de Terminales</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="searchbar.css">
+  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/searchbar.css">
   <!-- Incluye Chart.js desde un CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -16,22 +16,22 @@
       <div class="nvbar-links">
         <div class="navbar-item">
           <a href="#terminales" class="navbar-link">
-            <img src="pc-svgrepo-com.svg" alt="Terminales">
+            <img src="images/pc-svgrepo-com.svg" alt="Terminales">
             <span class="link-text">Terminales</span>
           </a>
           <div class="submenu">
             <a href="#cctv" class="submenu-link" onclick="buscar('cctv');">
-              <img src="2cctv-svgrepo-com.svg" alt="CCTV">
+              <img src="images/2cctv-svgrepo-com.svg" alt="CCTV">
               <span class="link-text">CCTV</span>
             </a>
             <a href="#wst" class="submenu-link" onclick="buscar('wst');">
-              <img src="pc-svgrepo-com.svg" alt="WST">
+              <img src="images/pc-svgrepo-com.svg" alt="WST">
               <span class="link-text">WST</span>
             </a>
           </div>
         </div>
         <a href="#servidores" class="navbar-link">
-          <img src="server-svgrepo-com.svg" alt="Servidores">
+          <img src="images/server-svgrepo-com.svg" alt="Servidores">
           <span class="link-text">Servidores</span>
         </a>
       </div>
@@ -52,7 +52,7 @@
               <label for="search">Buscar</label>
               <input id="search" type="search" placeholder="Buscar plantilla..." autofocus required />
               <button type="submit" class="search-button">
-                <img src="search-svgrepo-com.svg" alt="Buscar" />
+                <img src="images/search-svgrepo-com.svg" alt="Buscar" />
               </button>
             </form>
           </div>
@@ -115,6 +115,6 @@
       </main>
     </div>
   </div>
-  <script src="app.js"></script>
+  <script src="scripts/app.js"></script>
 </body>
 </html>
