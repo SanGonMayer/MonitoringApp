@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 app.use(requestLoggerMiddleware());
 
+
 // URL base para obtener grupos e hosts
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories'; // Parte base de la URL para los inventarios
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups'; 
@@ -34,7 +35,6 @@ app.get('/api/awx/inventories/:inventoryId/groups', async (req, res) => {
             description: group.description,
             hostsUrl: group.related.hosts // URL para obtener los hosts de este grupo
         }));
-
         res.json(groups);
     } catch (error) {
         console.error('Error al conectar a la API de AWX:', error.message);
@@ -42,8 +42,8 @@ app.get('/api/awx/inventories/:inventoryId/groups', async (req, res) => {
     }
 });
 
-// Ruta para obtener los hosts de un grupo específico dentro de un inventario
 
+// Funcion para obtener lo de las demas paginas 1,2,3,4,etc
 async function fetchAllPages(apiUrl) {
   let page = 1;
   let allData = [];
@@ -58,10 +58,8 @@ async function fetchAllPages(apiUrl) {
             password: password
         }
       });
-
       // Evaluamos si la API nos devolvió el error de página inválida en el JSON
       if (response.data.detail === "Página inválida.") {
-        console.log(`Invalid page ${page}. No more pages available.`);
         morePages = false; // Terminamos el bucle
       } else {
         // Suponiendo que los datos están en response.data.results
@@ -70,7 +68,6 @@ async function fetchAllPages(apiUrl) {
         allData = allData.concat(data); // Agregamos los datos a la lista
         page++; // Pasamos a la siguiente página
       }
-      
     } catch (error) {
       console.error(`Error fetching page ${page}:`, error.message);
       morePages = false; // Detenemos el bucle por cualquier otro error inesperado
@@ -79,15 +76,15 @@ async function fetchAllPages(apiUrl) {
   return allData;
 }
 
+
+// Ruta para obtener los hosts de un grupo específico dentro de un inventario
 app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, res) => {
-  const inventoryId = req.params.inventoryId; // Obtener inventoryId dinámicamente desde la URL
   const groupId = req.params.groupId;         // Obtener groupId dinámicamente desde la URL
 
   try {
       // Obtener la lista de hosts para el grupo especificado dentro del inventario
       const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
       const hosts = awxResponse; // el awxResponde, debido a que dentro de la funcion fetchAllPages ya te entrega la lista de host, quiero el result de aca
-
       res.json(hosts);
   } catch (error) {
       console.error('Error al obtener los hosts:', error.message);
