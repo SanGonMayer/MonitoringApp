@@ -1,8 +1,6 @@
 import cors from 'cors'
 
-const ACCEPTED_ORIGINS = [
-  'http://sncl7001lx.bancocredicoop.coop'
-]
+const ACCEPTED_ORIGINS = ['http://sncl7001lx.bancocredicoop.coop']
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => cors({
   origin: (origin, callback) => {

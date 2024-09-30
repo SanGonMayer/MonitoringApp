@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
@@ -12,7 +11,6 @@ const password = process.env.AWX_USER_TEST_PASS;
 const PORT = process.env.PORT;
 
 app.use(express.json()); 
-app.use(cors());
 app.use(requestLoggerMiddleware());
 
 
@@ -64,12 +62,12 @@ async function fetchAllPages(apiUrl) {
       } else {
         // Suponiendo que los datos están en response.data.results
         const data = response.data.results;
-        console.log(data);
+        //console.log(data);
         allData = allData.concat(data); // Agregamos los datos a la lista
         page++; // Pasamos a la siguiente página
       }
     } catch (error) {
-      console.error(`Error fetching page ${page}:`, error.message);
+      //console.error(`Error fetching page ${page}:`, error.message);
       morePages = false; // Detenemos el bucle por cualquier otro error inesperado
     }
   }
