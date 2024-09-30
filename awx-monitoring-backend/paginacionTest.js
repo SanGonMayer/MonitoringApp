@@ -2,6 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
+import { corsMiddleware } from './middlewares/cors.js';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json()); 
 app.use(requestLoggerMiddleware());
+app.use(corsMiddleware())
 
 
 // URL base para obtener grupos e hosts
