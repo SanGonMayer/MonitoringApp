@@ -1,7 +1,5 @@
-// app.js
-
 // Espera a que el DOM esté completamente cargado
-/* document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Configuración de datos para el gráfico
   const data = {
     labels: ['Bien', 'Pendientes', 'Error'], // Etiquetas para cada barra
@@ -45,7 +43,8 @@
     document.getElementById('myChart'),
     config
   );
-}); */
+});
+
 
 
 /* function buscar(){
@@ -105,41 +104,47 @@ async function fetchFiliales(inventoryId) {
   }
 }
 
+const TEMPLATE_NAME = 'wst_upd_v1.7.19';
+
 // Modificar fetchHosts para aceptar inventoryId como argumento
 async function fetchHosts(groupId, inventoryId) {
-  try {
-      // Obtener la lista de hosts para la filial seleccionada
-      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
-      const hosts = await response.json();
+    try {
+        // Obtener la lista de hosts para la filial seleccionada
+        const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
+        const hosts = await response.json();
 
-      const tableBody = document.querySelector('#workstationsTable tbody');
+        const tableBody = document.querySelector('#workstationsTable tbody');
 
-      // Limpiar el contenido anterior de la tabla
-      tableBody.innerHTML = '';
+        // Limpiar el contenido anterior de la tabla
+        tableBody.innerHTML = '';
 
-      // Iterar sobre los hosts y agregarlos a la tabla
-      hosts.forEach(host => {
-          const descripcion = host.description.split(' ');
-          const hostname = descripcion[0];
-          const filial = host.summary_fields.groups.results[0].name;
+        // Iterar sobre los hosts y verificar la plantilla
+        hosts.forEach(host => {
+            const descripcion = host.description ? host.description.split(' ')[0] : 'Sin descripción';
+            const filial = host.inventory || 'Desconocida';
 
-          console.log(host);
+            // Verificar si el `last_job` coincide con la plantilla y si fue "successful"
+            const lastJob = host.summary_fields.last_job;
+            let status = 'No ejecutado';
+            if (lastJob && lastJob.name === TEMPLATE_NAME) {
+                status = lastJob.status === 'successful' ? 'Actualizado' : 'Fallido';
+            }
 
-          const row = `
-              <tr>
-                  <td>${host.name}</td>
-                  <td>${host.id}</td>
-                  <td>${hostname}</td>
-                  <td>${filial}</td>
-                  <td>${host.inventory}</td>
-              </tr>
-          `;
-          tableBody.innerHTML += row;
-      });
-
-  } catch (error) {
-      console.error('Error obteniendo los hosts:', error);
-  }
+            // Crear la fila para la tabla
+            const row = `
+                <tr>
+                    <td>${host.name}</td>
+                    <td>${host.id}</td>
+                    <td>${descripcion}</td>
+                    <td>${filial}</td>
+                    <td>${status}</td> <!-- Mostrar el estado de la verificación -->
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    } catch (error) {
+        console.error('Error obteniendo los hosts:', error);
+    }
 }
 
 
