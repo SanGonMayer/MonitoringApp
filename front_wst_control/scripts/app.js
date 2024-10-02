@@ -106,6 +106,7 @@ async function fetchFiliales(inventoryId) {
           button.style.alignItems = 'center';
           button.style.justifyContent = 'center';
           button.style.fontSize = '10px'; 
+          button style.margin = '5px';
           button.onclick = () => fetchHosts(group.id, inventoryId); // Al hacer clic, obtener los hosts
           filialContainer.appendChild(button);
           allButtons.push(button);
