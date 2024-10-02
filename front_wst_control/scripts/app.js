@@ -121,7 +121,7 @@ async function fetchHosts(groupId, inventoryId) {
       // Iterar sobre los hosts y agregar las filas a la tabla
       hosts.forEach(host => {
           const name = host.name || 'Nombre no identificado';
-          const name = host.id || 'ID no identificado';
+          const id = host.id || 'ID no identificado';
           const descripcion = host.description ? host.description.split(' ')[0] : 'Sin descripción';
           const filial = host.inventory || 'Desconocida';
           const status = host.status || 'No ejecutado';
