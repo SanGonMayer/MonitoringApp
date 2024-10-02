@@ -104,7 +104,7 @@ async function fetchFiliales(inventoryId) {
   }
 }
 
-const TEMPLATE_NAME = 'wst_upd_v1.7.19';
+//const TEMPLATE_NAME = 'wst_upd_v1.7.19';
 
 // Modificar fetchHosts para aceptar inventoryId como argumento
 async function fetchHosts(groupId, inventoryId) {
@@ -140,8 +140,6 @@ async function fetchHosts(groupId, inventoryId) {
       console.error('Error obteniendo los hosts:', error);
   }
 }
-
-
 
 function filtrando() {
   const filial = document.getElementById('search').value;

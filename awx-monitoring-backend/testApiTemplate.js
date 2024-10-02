@@ -3,6 +3,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 import { corsMiddleware } from './middlewares/cors.js';
+import base64 from 'base-64';  // Para codificar en base64
 
 dotenv.config();
 
@@ -10,6 +11,12 @@ const app = express();
 const username = process.env.AWX_USER_TEST;
 const password = process.env.AWX_USER_TEST_PASS;
 const PORT = process.env.PORT;
+
+const authConfig = {
+    headers: {
+        'Authorization': `Basic ${base64.encode(`${username}:${password}`)}`
+    }
+};
 
 app.use(express.json()); 
 app.use(requestLoggerMiddleware());
@@ -52,12 +59,7 @@ async function fetchAllPages(apiUrl) {
   while (morePages) {
     try {
       // Realizamos la solicitud a la API con el número de página actual
-      const response = await axios.get(`${apiUrl}?page=${page}`, {
-        auth: {
-            username: username,
-            password: password
-        }
-      });
+      const response = await axios.get(`${apiUrl}?page=${page}`, authConfig);
       // Evaluamos si la API nos devolvió el error de página inválida en el JSON
       if (response.data.detail === "Página inválida.") {
         morePages = false; // Terminamos el bucle
@@ -94,20 +96,18 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                 let status = 'No ejecutado';
                 try {
                     // Obtener los resúmenes de trabajos desde la URL
-                    const jobSummaries = await fetchAllPages(jobSummariesUrl, {
-                        auth: {
-                            username: username,
-                            password: password
-                        }
-                    });
+                    const jobSummaries = await fetchAllPages(jobSummariesUrl, authConfig);
                     console.log(`Trabajos obtenidos para ${host.name}:`, JSON.stringify(jobSummaries, null, 2)); // Depuración
 
-                    // Verificar si hay algún trabajo con el nombre de la plantilla y que esté en estado "successful"
+                    // Recorrer todos los trabajos y verificar si alguno coincide con el nombre y estado "successful"
                     const matchingJob = jobSummaries.find(job => {
-                        console.log(`Verificando trabajo: ${job.summary_fields.job.name}, estado: ${job.summary_fields.job.status}`);
-                        return job.summary_fields.job.name === templateName && job.summary_fields.job.status === 'successful';
+                        const jobName = job.summary_fields.job.name;
+                        const jobStatus = job.summary_fields.job.status;
+                        console.log(`Verificando trabajo: ${jobName}, estado: ${jobStatus}`);
+                        return jobName === templateName && jobStatus === 'successful';
                     });
 
+                    // Actualizar el estado si encontramos un trabajo que coincide
                     if (matchingJob) {
                         status = 'Actualizado';
                     } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName)) {
@@ -133,6 +133,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
         res.status(500).json({ error: 'Error al obtener los hosts' });
     }
 });
+
 
 
 
