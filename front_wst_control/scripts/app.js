@@ -94,6 +94,9 @@ async function fetchFiliales(inventoryId) {
           const button = document.createElement('button');
           button.textContent = group.name;
           button.classList.add('custom-button'); 
+          button.style.flex = '0 1 calc(100% / 15 - 10px)'; 
+          button.style.maxWidth = 'calc(100% / 15 - 10px)'; 
+          button.style.padding = '10px';
           button.onclick = () => fetchHosts(group.id, inventoryId); // Al hacer clic, obtener los hosts
           filialContainer.appendChild(button);
           allButtons.push(button);
