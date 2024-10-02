@@ -95,8 +95,17 @@ async function fetchFiliales(inventoryId) {
           button.textContent = group.name;
           button.classList.add('custom-button'); 
           button.style.flex = '0 1 calc(100% / 15 - 10px)'; 
-          button.style.maxWidth = 'calc(100% / 15 - 10px)'; 
+          button.style.maxWidth = '60px'; 
+          button.style.height = '60px'; 
+          button.style.borderRadius = '50%';
           button.style.padding = '10px';
+          button.style.overflow = 'hidden'; 
+          button.style.textOverflow = 'ellipsis';
+          button.style.whiteSpace = 'nowrap'; 
+          button.style.display = 'flex'; 
+          button.style.alignItems = 'center';
+          button.style.justifyContent = 'center';
+          button.style.fontSize = '10px'; 
           button.onclick = () => fetchHosts(group.id, inventoryId); // Al hacer clic, obtener los hosts
           filialContainer.appendChild(button);
           allButtons.push(button);
