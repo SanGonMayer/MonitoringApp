@@ -100,13 +100,17 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                             password: password
                         }
                     });
-                    console.log(`Trabajos obtenidos para ${host.name}:`, jobSummaries); // Depuración
+                    console.log(`Trabajos obtenidos para ${host.name}:`, JSON.stringify(jobSummaries, null, 2)); // Depuración
 
                     // Verificar si hay algún trabajo con el nombre de la plantilla y que esté en estado "successful"
-                    const matchingJob = jobSummaries.find(job => job.name === templateName && job.status === 'successful');
+                    const matchingJob = jobSummaries.find(job => {
+                        console.log(`Verificando trabajo: ${job.summary_fields.job.name}, estado: ${job.summary_fields.job.status}`);
+                        return job.summary_fields.job.name === templateName && job.summary_fields.job.status === 'successful';
+                    });
+
                     if (matchingJob) {
                         status = 'Actualizado';
-                    } else if (jobSummaries.some(job => job.name === templateName)) {
+                    } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName)) {
                         status = 'Fallido';
                     }
                 } catch (error) {
@@ -129,6 +133,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
         res.status(500).json({ error: 'Error al obtener los hosts' });
     }
 });
+
 
 
 ////////////////////////////////////////////////////////////
