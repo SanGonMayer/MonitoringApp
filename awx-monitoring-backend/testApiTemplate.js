@@ -80,16 +80,41 @@ async function fetchAllPages(apiUrl) {
 // Ruta para obtener los hosts de un grupo específico dentro de un inventario
 app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, res) => {
   const groupId = req.params.groupId;         // Obtener groupId dinámicamente desde la URL
+  const templateName = 'wst_upd_v1.7.19'; // Nombre de la plantilla a verificar
 
   try {
-      // Obtener la lista de hosts para el grupo especificado dentro del inventario
-      const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
-      const hosts = awxResponse; // el awxResponde, debido a que dentro de la funcion fetchAllPages ya te entrega la lista de host, quiero el result de aca
-      res.json(hosts);
-  } catch (error) {
-      console.error('Error al obtener los hosts:', error.message);
-      res.status(500).json({ error: 'Error al obtener los hosts' });
-  }
+    // Obtener la lista de hosts para el grupo especificado dentro del inventario
+    const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
+    const hosts = await Promise.all(
+        awxResponse.map(async host => {
+            // Obtener el resumen de trabajos para este host
+            const jobSummariesUrl = `${baseApiUrl}${host.related.job_host_summaries}`;
+            const jobSummaries = await fetchAllPages(jobSummariesUrl);
+
+            // Verificar si hay algún trabajo con el nombre de la plantilla y que esté en estado "successful"
+            let status = 'No ejecutado';
+            const matchingJob = jobSummaries.find(job => job.name === templateName && job.status === 'successful');
+            if (matchingJob) {
+                status = 'Actualizado';
+            } else if (jobSummaries.some(job => job.name === templateName)) {
+                status = 'Fallido';
+            }
+
+            return {
+                id: host.id,
+                name: host.name,
+                description: host.description,
+                inventory: host.inventory,
+                status: status
+            };
+        })
+    );
+
+    res.json(hosts);
+} catch (error) {
+    console.error('Error al obtener los hosts:', error.message);
+    res.status(500).json({ error: 'Error al obtener los hosts' });
+}
 });
 
 ////////////////////////////////////////////////////////////
