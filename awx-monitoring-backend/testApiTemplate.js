@@ -87,14 +87,19 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
         const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
         const hosts = await Promise.all(
             awxResponse.map(async host => {
-                // Obtener la URL de job_host_summaries para este host
-                const jobSummariesUrl = `${baseApiUrl}${host.related.job_host_summaries}`;
+                // Construir la URL de job_host_summaries para este host
+                const jobSummariesUrl = `http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/${host.id}/job_host_summaries/`;
                 console.log(`Obteniendo trabajos para el host ${host.name} desde: ${jobSummariesUrl}`); // Depuración
 
                 let status = 'No ejecutado';
                 try {
                     // Obtener los resúmenes de trabajos desde la URL
-                    const jobSummaries = await fetchAllPages(jobSummariesUrl);
+                    const jobSummaries = await fetchAllPages(jobSummariesUrl, {
+                        auth: {
+                            username: username,
+                            password: password
+                        }
+                    });
                     console.log(`Trabajos obtenidos para ${host.name}:`, jobSummaries); // Depuración
 
                     // Verificar si hay algún trabajo con el nombre de la plantilla y que esté en estado "successful"
