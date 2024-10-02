@@ -239,18 +239,18 @@ button:hover {
   border: 1px solid #ddd;
 }
 
-.custom-button {
-  background-color: #4CAF50; /* Color de fondo */
-  color: white; /* Color del texto */
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  font-size: 16px;
-  margin: 3px;
-  cursor: pointer;
-  border-radius: 5px; /* Bordes redondeados */
-}
-
-.custom-button:hover {
-  background-color: rgb(77, 107, 197); /* Cambiar el color al pasar el mouse */
-}
+/*.custom-button {
+/*  background-color: #4CAF50; /* Color de fondo */
+/*  color: white; /* Color del texto */
+/*  border: none;
+/*  padding: 10px 20px;
+/*  text-align: center;
+/*  font-size: 16px;
+/*  margin: 3px;
+/*  cursor: pointer;
+/*  border-radius: 5px; /* Bordes redondeados */
+/*}
+/*
+/*.custom-button:hover {
+/*  background-color: rgb(77, 107, 197); /* Cambiar el color al pasar el mouse */
+/*}
