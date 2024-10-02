@@ -94,10 +94,13 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                 console.log(`Obteniendo trabajos para el host ${host.name} desde: ${jobSummariesUrl}`); // Depuración
 
                 let status = 'No ejecutado';
+                let jobNames = []; 
                 try {
                     // Obtener los resúmenes de trabajos desde la URL
                     const jobSummaries = await fetchAllPages(jobSummariesUrl, authConfig);
                     console.log(`Trabajos obtenidos para ${host.name}:`, JSON.stringify(jobSummaries, null, 2)); // Depuración
+
+                    jobNames = jobSummaries.map(job => job.summary_fields.job.name);
 
                     // Recorrer todos los trabajos y verificar si alguno coincide con el nombre y estado "successful"
                     const matchingJob = jobSummaries.find(job => {
@@ -122,7 +125,8 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                     name: host.name,
                     description: host.description,
                     inventory: host.inventory,
-                    status: status
+                    status: status,
+                    jobNames: jobNames
                 };
             })
         );

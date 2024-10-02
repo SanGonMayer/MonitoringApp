@@ -120,18 +120,23 @@ async function fetchHosts(groupId, inventoryId) {
 
       // Iterar sobre los hosts y agregar las filas a la tabla
       hosts.forEach(host => {
+          const name = host.name || 'Nombre no identificado';
+          const name = host.id || 'ID no identificado';
           const descripcion = host.description ? host.description.split(' ')[0] : 'Sin descripción';
           const filial = host.inventory || 'Desconocida';
-          const status = host.status || 'No ejecutado'; // Utilizar el campo `status` proporcionado por el backend
+          const status = host.status || 'No ejecutado';
+          const jobNames = host.jobNames.join(', ');
+
 
           // Crear la fila para la tabla
           const row = `
               <tr>
-                  <td>${host.name}</td>
-                  <td>${host.id}</td>
+                  <td>${name}</td>
+                  <td>${id}</td>
                   <td>${descripcion}</td>
                   <td>${filial}</td>
                   <td>${status}</td> <!-- Mostrar el estado de la verificación -->
+                  <td>${jobNames}</td> <!-- Mostrar los jobs -->
               </tr>
           `;
           tableBody.innerHTML += row;
