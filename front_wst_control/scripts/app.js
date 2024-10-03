@@ -79,6 +79,11 @@ function buscar(tipoTerminal){
 async function fetchFiliales(inventoryId) {
   try {
 
+      totalFiliales = 0;
+      actualizadas = 0;
+      pendientes = 0;
+      fallidas = 0;
+
       console.log(`Llamando a la API para el inventoryId: ${inventoryId}`);
       // Obtener la lista de filiales (grupos)
       const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups`);
@@ -105,6 +110,10 @@ async function fetchFiliales(inventoryId) {
 }
 
 //const TEMPLATE_NAME = 'wst_upd_v1.7.19';
+let totalFiliales = 0;
+let actualizadas = 0;
+let pendientes = 0;
+let fallidas = 0;
 
 // Modificar fetchHosts para aceptar inventoryId como argumento
 async function fetchHosts(groupId, inventoryId) {
@@ -118,6 +127,10 @@ async function fetchHosts(groupId, inventoryId) {
       // Limpiar el contenido anterior de la tabla
       tableBody.innerHTML = '';
 
+      let hayPendientes = false;
+      let hayFallidas = false;
+      let todasActualizadas = true;
+
       // Iterar sobre los hosts y agregar las filas a la tabla
       hosts.forEach(host => {
           const name = host.name || 'Nombre no identificado';
@@ -126,6 +139,15 @@ async function fetchHosts(groupId, inventoryId) {
           const filial = host.inventory || 'Desconocida';
           const status = host.status || 'No ejecutado';
           const jobNames = host.jobNames.join(', ');
+
+          if (status === 'No ejecutado') {
+            hayPendientes = true;
+        } else if (status === 'Fallido') {
+            hayFallidas = true;
+            todasActualizadas = false;
+        } else if (status !== 'Actualizado') {
+            todasActualizadas = false;
+        }
 
 
           // Crear la fila para la tabla
@@ -141,9 +163,35 @@ async function fetchHosts(groupId, inventoryId) {
           `;
           tableBody.innerHTML += row;
       });
+
+      totalFiliales++;
+      if (hasFailed) {
+          fallidas++;
+      } else if (hasPending) {
+          pendientes++;
+      } else if (allUpdated) {
+          actualizadas++;
+      }
+
+      // Calcular y actualizar los porcentajes
+      actualizarPorcentajes();
+
   } catch (error) {
       console.error('Error obteniendo los hosts:', error);
   }
+}
+
+function actualizarPorcentajes() {
+  if (totalFiliales === 0) return; // Evitar divisiones por cero
+
+  const porcentajeActualizadas = Math.round((actualizadas / totalFiliales) * 100);
+  const porcentajePendientes = Math.round((pendientes / totalFiliales) * 100);
+  const porcentajeFallidas = Math.round((fallidas / totalFiliales) * 100);
+
+  // Actualizar los elementos del DOM
+  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${porcentajeActualizadas}%`;
+  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${porcentajePendientes}%`;
+  document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${porcentajeFallidas}%`;
 }
 
 function filtrando() {
