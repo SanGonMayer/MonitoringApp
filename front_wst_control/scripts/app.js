@@ -16,5 +16,5 @@ function buscar(tipoTerminal) {
   } else if (tipoTerminal.includes('cctv')) {
     inventoryId = 347;
   }
-  fetchFiliales(inventoryId);
+  fetchFiliales(inventoryId, fetchHosts);
 }
