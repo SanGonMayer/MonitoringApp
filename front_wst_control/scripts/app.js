@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('myChart'),
     config
   );
-});
+
 
 
 
@@ -223,3 +223,4 @@ function filtrando() {
 }
 // Llamar a la función al cargar la página con el valor por defecto (22)
 // window.onload = () => fetchFiliales(347);
+});
