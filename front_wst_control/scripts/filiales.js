@@ -1,7 +1,7 @@
-let totalFiliales = 0;
-let actualizadas = 0;
-let pendientes = 0;
-let fallidas = 0;
+export let totalFiliales = 0;
+export let actualizadas = 0;
+export let pendientes = 0;
+export let fallidas = 0;
 
 let allButtons = [];
 
