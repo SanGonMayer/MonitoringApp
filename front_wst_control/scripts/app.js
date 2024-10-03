@@ -1,5 +1,17 @@
 console.log('El script se está cargando correctamente');
 
+function buscar(tipoTerminal){
+
+  if (tipoTerminal.includes('wst')) {
+      inventoryId = 22;
+  } else if (tipoTerminal.includes('cctv')) {
+      inventoryId = 347;
+  }
+
+  // Llamar a fetchFiliales con el nuevo inventoryId
+  fetchFiliales(inventoryId);
+};
+
 // Espera a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
   // Configuración de datos para el gráfico
@@ -69,17 +81,6 @@ let actualizadas = 0;
 let pendientes = 0;
 let fallidas = 0;
 
-function buscar(tipoTerminal){
-
-  if (tipoTerminal.includes('wst')) {
-      inventoryId = 22;
-  } else if (tipoTerminal.includes('cctv')) {
-      inventoryId = 347;
-  }
-
-  // Llamar a fetchFiliales con el nuevo inventoryId
-  fetchFiliales(inventoryId);
-}
 
 // Modificar fetchFiliales para aceptar inventoryId como argumento
 async function fetchFiliales(inventoryId) {
