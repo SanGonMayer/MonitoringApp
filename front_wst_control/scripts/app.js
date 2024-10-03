@@ -1,10 +1,20 @@
-import { fetchFiliales, buscar } from '/scripts/filiales.js';
-import { fetchHosts } from '/scripts/hosts.js';
+import { fetchFiliales } from './filiales.js';
+import { fetchHosts } from './hosts.js';
 
-window.buscar = (tipoTerminal) => buscar(tipoTerminal, fetchFiliales);
-window.fetchFiliales = (inventoryId) => fetchFiliales(inventoryId, fetchHosts);
-window.fetchHosts = fetchHosts;
+console.log('El script se está cargando correctamente');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Ahora puedes configurar eventos, etc.
+  window.buscar = buscar;
+  window.fetchFiliales = fetchFiliales;
+  window.fetchHosts = fetchHosts;
 });
+
+function buscar(tipoTerminal) {
+  let inventoryId;
+  if (tipoTerminal.includes('wst')) {
+    inventoryId = 22;
+  } else if (tipoTerminal.includes('cctv')) {
+    inventoryId = 347;
+  }
+  fetchFiliales(inventoryId);
+}
