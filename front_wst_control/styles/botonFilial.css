@@ -1,0 +1,14 @@
+.estado-actualizado {
+    background-color: green;
+    color: white;
+}
+
+.estado-pendiente {
+    background-color: yellow;
+    color: black;
+}
+
+.estado-fallido {
+    background-color: red;
+    color: white;
+}
