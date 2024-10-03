@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
 } */
 
 let allButtons = [];
+let totalFiliales = 0;
+let actualizadas = 0;
+let pendientes = 0;
+let fallidas = 0;
 
 function buscar(tipoTerminal){
 
@@ -110,10 +114,7 @@ async function fetchFiliales(inventoryId) {
 }
 
 //const TEMPLATE_NAME = 'wst_upd_v1.7.19';
-let totalFiliales = 0;
-let actualizadas = 0;
-let pendientes = 0;
-let fallidas = 0;
+
 
 // Modificar fetchHosts para aceptar inventoryId como argumento
 async function fetchHosts(groupId, inventoryId) {
@@ -140,8 +141,9 @@ async function fetchHosts(groupId, inventoryId) {
           const status = host.status || 'No ejecutado';
           const jobNames = host.jobNames.join(', ');
 
-          if (status === 'No ejecutado') {
+        if (status === 'No ejecutado') {
             hayPendientes = true;
+            todasActualizadas = false;
         } else if (status === 'Fallido') {
             hayFallidas = true;
             todasActualizadas = false;
@@ -157,19 +159,19 @@ async function fetchHosts(groupId, inventoryId) {
                   <td>${id}</td>
                   <td>${descripcion}</td>
                   <td>${filial}</td>
-                  <td>${status}</td> <!-- Mostrar el estado de la verificación -->
-                  <td>${jobNames}</td> <!-- Mostrar los jobs -->
+                  <td>${status}</td> 
+                  <td>${jobNames}</td> 
               </tr>
           `;
           tableBody.innerHTML += row;
       });
 
       totalFiliales++;
-      if (hasFailed) {
+      if (hayFallidas) {
           fallidas++;
-      } else if (hasPending) {
+      } else if (hayPendientes) {
           pendientes++;
-      } else if (allUpdated) {
+      } else if (todasActualizadas) {
           actualizadas++;
       }
 
