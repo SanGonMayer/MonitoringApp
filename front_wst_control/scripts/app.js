@@ -179,6 +179,11 @@ async function fetchHosts(groupId, inventoryId) {
   } catch (error) {
       console.error('Error obteniendo los hosts:', error);
   }
+  console.log('Total Filiales:', totalFiliales);
+  console.log('Filiales Actualizadas:', actualizadas);
+  console.log('Filiales Pendientes:', pendientes);
+  console.log('Filiales Fallidas:', fallidas);
+
 }
 
 function actualizarPorcentajes() {
@@ -188,10 +193,18 @@ function actualizarPorcentajes() {
   const porcentajePendientes = Math.round((pendientes / totalFiliales) * 100);
   const porcentajeFallidas = Math.round((fallidas / totalFiliales) * 100);
 
+  // Verificar que los porcentajes estén siendo calculados
+  console.log('Porcentaje Actualizadas:', porcentajeActualizadas);
+  console.log('Porcentaje Pendientes:', porcentajePendientes);
+  console.log('Porcentaje Fallidas:', porcentajeFallidas);
+
   // Actualizar los elementos del DOM
   document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${porcentajeActualizadas}%`;
   document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${porcentajePendientes}%`;
   document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${porcentajeFallidas}%`;
+
+  // Verificar que los elementos DOM se están encontrando
+  console.log('Actualizado el DOM con los porcentajes');
 }
 
 function filtrando() {
