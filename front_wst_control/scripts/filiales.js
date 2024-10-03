@@ -1,3 +1,8 @@
+let totalFiliales = 0;
+let actualizadas = 0;
+let pendientes = 0;
+let fallidas = 0;
+
 // Funciones relacionadas con las filiales
 export function inicializarEstados() {
     totalFiliales = 0;
