@@ -87,8 +87,10 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
     try {
         // Obtener la lista de hosts para el grupo especificado dentro del inventario
         const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
+        const enabledHosts = awxResponse.filter(host => host.enabled);
+
         const hosts = await Promise.all(
-            awxResponse.map(async host => {
+            enabledHosts.map(async host => {
                 // Construir la URL de job_host_summaries para este host
                 const jobSummariesUrl = `http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/${host.id}/job_host_summaries/`;
                 console.log(`Obteniendo trabajos para el host ${host.name} desde: ${jobSummariesUrl}`); // Depuración
