@@ -1,7 +1,13 @@
 async function fetchHostsFromAPI(groupId, inventoryId) {
     const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
     const hosts = await response.json();
-    const filteredHosts = hosts.filter(host => host.enabled === "true")
+    console.log(`Hosts recibidos para el grupo ${groupId}:`, hosts);
+
+    const filteredHosts = hosts.filter(host => {
+        console.log(`Host: ${host.name}, Enabled: ${host.enabled}`); // Log individual de cada host
+        return host.enabled === true;
+    });
+
     console.log(`Hosts habilitados en el grupo ${groupId}:`, filteredHosts);
     return filteredHosts;
 }
