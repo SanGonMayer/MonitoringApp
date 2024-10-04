@@ -86,7 +86,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
 
     try {
         // Obtener la lista de hosts para el grupo especificado dentro del inventario
-        const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/?enabled=true`);
+        const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
         const hosts = await Promise.all(
             awxResponse.map(async host => {
                 // Construir la URL de job_host_summaries para este host
@@ -126,6 +126,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                     description: host.description,
                     inventory: host.inventory,
                     status: status,
+                    enabled: host.enabled,
                     jobNames: jobNames
                 };
             })
