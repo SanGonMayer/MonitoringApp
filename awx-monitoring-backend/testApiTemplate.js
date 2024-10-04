@@ -80,7 +80,7 @@ async function fetchAllPages(apiUrl) {
 
 
 // Ruta para obtener los hosts de un grupo específico dentro de un inventario
-app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts?enabled=true', async (req, res) => {
+app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, res) => {
     const groupId = req.params.groupId; // Obtener groupId dinámicamente desde la URL
     const templateName = 'wst_upd_v1.7.19'; // Nombre de la plantilla a verificar
 
