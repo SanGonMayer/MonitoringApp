@@ -1,14 +1,8 @@
-let allButtons = [];
-let totalFiliales = 0;
-let actualizadas = 0;
-let pendientes = 0;
-let fallidas = 0;
-
 function inicializarEstados() {
-    totalFiliales = 0;
-    actualizadas = 0;
-    pendientes = 0;
-    fallidas = 0;
+    window.totalFiliales = 0;
+    window.actualizadas = 0;
+    window.pendientes = 0;
+    window.fallidas = 0;
 }
 
 async function fetchGroupsFromAWX(inventoryId) {
@@ -19,7 +13,7 @@ async function fetchGroupsFromAWX(inventoryId) {
 function clearFilialContainer() {
     const filialContainer = document.querySelector('#filialContainer');
     filialContainer.innerHTML = '';
-    allButtons = [];
+    window.allButtons = [];
 }
 
 function createFilialButtons(groups, inventoryId) {
@@ -31,7 +25,7 @@ function createFilialButtons(groups, inventoryId) {
         button.classList.add('custom-button');
         button.onclick = () => fetchHosts(group.id, inventoryId); // Asigna el evento de clic para cada botón
         filialContainer.appendChild(button);
-        allButtons.push(button);
+        window.allButtons.push(button);
     });
 }
 
@@ -57,4 +51,3 @@ async function fetchFiliales(inventoryId) {
 
 // Exportar funciones globales
 window.fetchFiliales = fetchFiliales;
-window.allButtons = allButtons;

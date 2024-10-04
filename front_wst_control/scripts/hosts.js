@@ -1,3 +1,5 @@
+// hosts.js
+
 async function fetchHostsFromAPI(groupId, inventoryId) {
     const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
     return await response.json();
@@ -52,13 +54,13 @@ function calculateStatus(hosts) {
         }
     });
 
-    totalFiliales++;
+    window.totalFiliales++;
     if (hayFallidas) {
-        fallidas++;
+        window.fallidas++;
     } else if (hayPendientes) {
-        pendientes++;
+        window.pendientes++;
     } else if (todasActualizadas) {
-        actualizadas++;
+        window.actualizadas++;
     }
 
     // Calcular y actualizar los porcentajes
@@ -66,11 +68,11 @@ function calculateStatus(hosts) {
 }
 
 function updatePorcentajes() {
-    if (totalFiliales === 0) return; // Evitar divisiones por cero
+    if (window.totalFiliales === 0) return; // Evitar divisiones por cero
 
-    const porcentajeActualizadas = Math.round((actualizadas / totalFiliales) * 100);
-    const porcentajePendientes = Math.round((pendientes / totalFiliales) * 100);
-    const porcentajeFallidas = Math.round((fallidas / totalFiliales) * 100);
+    const porcentajeActualizadas = Math.round((window.actualizadas / window.totalFiliales) * 100);
+    const porcentajePendientes = Math.round((window.pendientes / window.totalFiliales) * 100);
+    const porcentajeFallidas = Math.round((window.fallidas / window.totalFiliales) * 100);
 
     // Actualizar los elementos del DOM
     document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${porcentajeActualizadas}%`;
@@ -90,10 +92,10 @@ async function fetchHosts(groupId, inventoryId) {
         updateTableBody(hosts); // Actualizar la tabla con los hosts
         calculateStatus(hosts); // Evaluar los estados de los hosts
 
-        console.log('Total Filiales:', totalFiliales);
-        console.log('Filiales Actualizadas:', actualizadas);
-        console.log('Filiales Pendientes:', pendientes);
-        console.log('Filiales Fallidas:', fallidas);
+        console.log('Total Filiales:', window.totalFiliales);
+        console.log('Filiales Actualizadas:', window.actualizadas);
+        console.log('Filiales Pendientes:', window.pendientes);
+        console.log('Filiales Fallidas:', window.fallidas);
 
     } catch (error) {
         handleErrorHosts(error); // Maneja los errores
