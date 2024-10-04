@@ -1,5 +1,3 @@
-// hosts.js
-
 async function fetchHostsFromAPI(groupId, inventoryId) {
     const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
     return await response.json();
@@ -104,3 +102,4 @@ async function fetchHosts(groupId, inventoryId) {
 
 // Exportar funciones globales
 window.fetchHosts = fetchHosts;
+window.fetchHostsFromAPI = fetchHostsFromAPI;
