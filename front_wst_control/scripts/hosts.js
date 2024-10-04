@@ -1,7 +1,9 @@
 async function fetchHostsFromAPI(groupId, inventoryId) {
     const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
     const hosts = await response.json();
-    return hosts.filter(host => host.enabled === true);
+    const filteredHosts = hosts.filter(host => host.enabled === true)
+    console.log(`Hosts habilitados en el grupo ${groupId}:`, filteredHosts);
+    return filteredHosts;
 }
 
 function clearTableBody() {
