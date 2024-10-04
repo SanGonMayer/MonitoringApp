@@ -1,10 +1,6 @@
 async function fetchHostsFromAPI(groupId, inventoryId) {
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
-    const hosts =  await response.json();
-    const filteredHosts = hosts.filter(host => host.enabled === 'true');
-    console.log('Hosts filtrados:', filteredHosts);
-    return filteredHosts;
-
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts/`);
+    return await response.json();
 }
 
 function clearTableBody() {
@@ -91,10 +87,11 @@ function handleErrorHosts(error) {
 async function fetchHosts(groupId, inventoryId) {
     try {
         const hosts = await fetchHostsFromAPI(groupId, inventoryId);
+        const filteredHosts = hosts.filter(host => host.enabled); 
         
         clearTableBody(); // Limpiar la tabla antes de agregar nuevas filas
-        updateTableBody(hosts); // Actualizar la tabla con los hosts
-        calculateStatus(hosts); // Evaluar los estados de los hosts
+        updateTableBody(filteredHosts); // Actualizar la tabla con los hosts
+        calculateStatus(filteredHosts); // Evaluar los estados de los hosts
 
         console.log('Total Filiales:', window.totalFiliales);
         console.log('Filiales Actualizadas:', window.actualizadas);
