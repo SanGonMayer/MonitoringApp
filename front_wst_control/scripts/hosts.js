@@ -17,6 +17,7 @@ function updateTableBody(hosts) {
         const descripcion = host.description ? host.description.split(' ')[0] : 'Sin descripción';
         const filial = host.inventory || 'Desconocida';
         const status = host.status || 'No ejecutado';
+        const enabled = host.enabled || 'Desconocido';
         const jobNames = host.jobNames.join(', ');
 
         const row = `
@@ -26,6 +27,7 @@ function updateTableBody(hosts) {
                 <td>${descripcion}</td>
                 <td>${filial}</td>
                 <td>${status}</td>
+                <td>${enabled}</td>
                 <td>${jobNames}</td>
             </tr>
         `;
