@@ -1,5 +1,5 @@
 async function fetchHostsFromAPI(groupId, inventoryId) {
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts?enabled=true`);
     return await response.json();
 }
 
