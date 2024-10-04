@@ -1,16 +1,18 @@
 async function fetchHostsFromAPI(groupId, inventoryId) {
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts/`);
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/awx/inventories/${inventoryId}/groups/${groupId}/hosts`);
     const hosts = await response.json();
+
     console.log(`Hosts recibidos para el grupo ${groupId}:`, hosts);
 
     const filteredHosts = hosts.filter(host => {
-        console.log(`Host: ${host.name}, Enabled: ${host.enabled}`); // Log individual de cada host
+        console.log(`Host: ${host.name}, Enabled: ${host.hasOwnProperty('enabled') ? host.enabled : 'Propiedad no encontrada'}`);
         return host.enabled === true;
     });
 
     console.log(`Hosts habilitados en el grupo ${groupId}:`, filteredHosts);
     return filteredHosts;
 }
+
 
 function clearTableBody() {
     const tableBody = document.querySelector('#workstationsTable tbody');
