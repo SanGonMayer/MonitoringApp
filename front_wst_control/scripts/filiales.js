@@ -16,55 +16,17 @@ function clearFilialContainer() {
     window.allButtons = [];
 }
 
-async function evaluarEstadoHosts(groupId, inventoryId) {
-    try {
-        const hosts = await fetchHostsFromAPI(groupId, inventoryId);
-        let hayPendientes = false;
-        let hayFallidas = false;
-        let todasActualizadas = true;
-
-        hosts.forEach(host => {
-            const status = host.status || 'No ejecutado';
-
-            if (status === 'No ejecutado') {
-                hayPendientes = true;
-                todasActualizadas = false;
-            } else if (status === 'Fallido') {
-                hayFallidas = true;
-                todasActualizadas = false;
-            } else if (status !== 'Actualizado') {
-                todasActualizadas = false;
-            }
-        });
-
-        if (hayFallidas) {
-            return 'red'; 
-        } else if (hayPendientes) {
-            return 'yellow'; 
-        } else if (todasActualizadas) {
-            return 'green'; 
-        }
-    } catch (error) {
-        console.error('Error evaluando los hosts:', error);
-        return 'gray'; // En caso de error, devuelve un color por defecto
-    }
-}
-
-async function createFilialButtons(groups, inventoryId) {
+function createFilialButtons(groups, inventoryId) {
     const filialContainer = document.querySelector('#filialContainer');
     
-    for (const group of groups) {
+    groups.forEach(group => {
         const button = document.createElement('button');
         button.textContent = group.name;
         button.classList.add('custom-button');
-
-        const color = await evaluarEstadoHosts(group.id, inventoryId);
-        button.style.backgroundColor = color;
-
         button.onclick = () => fetchHosts(group.id, inventoryId); // Asigna el evento de clic para cada botón
         filialContainer.appendChild(button);
         window.allButtons.push(button);
-    }
+    });
 }
 
 function handleErrorFiliales(error) {
