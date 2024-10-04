@@ -98,7 +98,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                 try {
                     // Obtener los resúmenes de trabajos desde la URL
                     const jobSummaries = await fetchAllPages(jobSummariesUrl, authConfig);
-                    console.log(`Trabajos obtenidos para ${host.name}:`, JSON.stringify(jobSummaries, null, 2)); // Depuración
+                    //console.log(`Trabajos obtenidos para ${host.name}:`, JSON.stringify(jobSummaries, null, 2)); // Depuración
 
                     jobNames = jobSummaries.map(job => job.summary_fields.job.name);
 
