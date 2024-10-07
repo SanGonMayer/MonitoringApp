@@ -57,6 +57,11 @@ async function evaluarEstadoHosts(groupId, inventoryId) {
 function updatePorcentajes() {
     if (window.totalFiliales === 0) return; // Evitar divisiones por cero
 
+    console.log('Total Filiales:', window.totalFiliales);
+    console.log('Filiales Actualizadas:', window.actualizadas);
+    console.log('Filiales Pendientes:', window.pendientes);
+    console.log('Filiales Fallidas:', window.fallidas);
+
     const porcentajeActualizadas = Math.round((window.actualizadas / window.totalFiliales) * 100);
     const porcentajePendientes = Math.round((window.pendientes / window.totalFiliales) * 100);
     const porcentajeFallidas = Math.round((window.fallidas / window.totalFiliales) * 100);
@@ -94,7 +99,6 @@ function handleErrorFiliales(error) {
 
 async function fetchFiliales(inventoryId) {
     try {
-        inicializarEstados(); // Inicializa las variables de estado
         console.log(`Llamando a la API para el inventoryId: ${inventoryId}`);
         
         // Obtener la lista de filiales (grupos)
@@ -102,11 +106,6 @@ async function fetchFiliales(inventoryId) {
         
         clearFilialContainer(); // Limpia el contenedor de filiales
         createFilialButtons(groups, inventoryId); // Crea los botones para cada filial
-
-        console.log('Total Filiales:', window.totalFiliales);
-        console.log('Filiales Actualizadas:', window.actualizadas);
-        console.log('Filiales Pendientes:', window.pendientes);
-        console.log('Filiales Fallidas:', window.fallidas);
 
     } catch (error) {
         handleErrorFiliales(error); // Maneja los errores
