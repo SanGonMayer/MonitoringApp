@@ -103,6 +103,11 @@ async function fetchFiliales(inventoryId) {
         clearFilialContainer(); // Limpia el contenedor de filiales
         createFilialButtons(groups, inventoryId); // Crea los botones para cada filial
 
+        console.log('Total Filiales:', window.totalFiliales);
+        console.log('Filiales Actualizadas:', window.actualizadas);
+        console.log('Filiales Pendientes:', window.pendientes);
+        console.log('Filiales Fallidas:', window.fallidas);
+
     } catch (error) {
         handleErrorFiliales(error); // Maneja los errores
     }

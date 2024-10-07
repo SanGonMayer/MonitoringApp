@@ -92,11 +92,6 @@ async function fetchHosts(groupId, inventoryId) {
         updateTableBody(filteredHosts); // Actualizar la tabla con los hosts
         //calculateStatus(filteredHosts); // Evaluar los estados de los hosts
 
-        console.log('Total Filiales:', window.totalFiliales);
-        console.log('Filiales Actualizadas:', window.actualizadas);
-        console.log('Filiales Pendientes:', window.pendientes);
-        console.log('Filiales Fallidas:', window.fallidas);
-
     } catch (error) {
         handleErrorHosts(error); // Maneja los errores
     }
