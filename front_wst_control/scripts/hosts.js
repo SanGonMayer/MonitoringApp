@@ -86,7 +86,7 @@ function handleErrorHosts(error) {
 
 async function fetchHosts(groupId, inventoryId) {
     try {
-        const hosts = await fetchHostsFromAPI(groupId, inventoryId);
+        const filteredHosts = await fetchHostsFromAPI(groupId, inventoryId);
         
         clearTableBody(); // Limpiar la tabla antes de agregar nuevas filas
         updateTableBody(filteredHosts); // Actualizar la tabla con los hosts
