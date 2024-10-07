@@ -37,11 +37,15 @@ async function evaluarEstadoHosts(groupId, inventoryId) {
             }
         });
 
+        window.totalFiliales++;
         if (hayFallidas) {
+            window.fallidas++;
             return 'red'; 
         } else if (hayPendientes) {
+            window.pendientes++;
             return 'yellow'; 
         } else if (todasActualizadas) {
+            window.actualizadas++;
             return 'green'; 
         }
     } catch (error) {
@@ -49,6 +53,20 @@ async function evaluarEstadoHosts(groupId, inventoryId) {
         return 'gray'; // En caso de error, devuelve un color por defecto
     }
 }
+
+function updatePorcentajes() {
+    if (window.totalFiliales === 0) return; // Evitar divisiones por cero
+
+    const porcentajeActualizadas = Math.round((window.actualizadas / window.totalFiliales) * 100);
+    const porcentajePendientes = Math.round((window.pendientes / window.totalFiliales) * 100);
+    const porcentajeFallidas = Math.round((window.fallidas / window.totalFiliales) * 100);
+
+    // Actualizar los elementos del DOM
+    document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${porcentajeActualizadas}%`;
+    document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${porcentajePendientes}%`;
+    document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${porcentajeFallidas}%`;
+}
+
 
 async function createFilialButtons(groups, inventoryId) {
     const filialContainer = document.querySelector('#filialContainer');
@@ -65,6 +83,8 @@ async function createFilialButtons(groups, inventoryId) {
         filialContainer.appendChild(button);
         window.allButtons.push(button);
     }
+
+    updatePorcentajes(); // Actualiza los porcentajes en la interfaz
 }
 
 function handleErrorFiliales(error) {

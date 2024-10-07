@@ -90,7 +90,7 @@ async function fetchHosts(groupId, inventoryId) {
         
         clearTableBody(); // Limpiar la tabla antes de agregar nuevas filas
         updateTableBody(filteredHosts); // Actualizar la tabla con los hosts
-        calculateStatus(filteredHosts); // Evaluar los estados de los hosts
+        //calculateStatus(filteredHosts); // Evaluar los estados de los hosts
 
         console.log('Total Filiales:', window.totalFiliales);
         console.log('Filiales Actualizadas:', window.actualizadas);
