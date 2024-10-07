@@ -70,6 +70,7 @@ function updatePorcentajes() {
 
 async function createFilialButtons(groups, inventoryId) {
     const filialContainer = document.querySelector('#filialContainer');
+    inicializarEstados(); // Inicializa las variables de estado
     
     for (const group of groups) {
         const button = document.createElement('button');
