@@ -1,8 +1,15 @@
-function inicializarEstados() {
+function inicializarEstadosFiliales() {
     window.totalFiliales = 0;
     window.actualizadas = 0;
     window.pendientes = 0;
     window.fallidas = 0;
+}
+
+function inicializarEstadosHosts() {
+    window.totalHosts = 0;
+    window.hostsAtualizados = 0;
+    window.hostsPendientes = 0;
+    window.hostsFallidos = 0;
 }
 
 async function fetchGroupsFromAWX(inventoryId) {
@@ -24,15 +31,19 @@ async function evaluarEstadoHosts(groupId, inventoryId) {
         let todasActualizadas = true;
 
         hosts.forEach(host => {
+            window.totalHosts++;
             const status = host.status || 'No ejecutado';
 
             if (status === 'No ejecutado') {
+                window.hostsPendientes++;
                 hayPendientes = true;
                 todasActualizadas = false;
             } else if (status === 'Fallido') {
+                window.hostsFallidos++;
                 hayFallidas = true;
                 todasActualizadas = false;
             } else if (status !== 'Actualizado') {
+                window.hostsAtualizados++;
                 todasActualizadas = false;
             }
         });

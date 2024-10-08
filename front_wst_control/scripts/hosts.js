@@ -11,7 +11,7 @@ function clearTableBody() {
 function updateTableBody(hosts) {
     const tableBody = document.querySelector('#workstationsTable tbody');
     
-    hosts.forEach(host => {
+    hosts.forEach((host, index) => {
         const name = host.name || 'Nombre no identificado';
         const id = host.id || 'ID no identificado';
         const descripcion = host.description ? host.description.split(' ')[0] : 'Sin descripción';
@@ -22,6 +22,7 @@ function updateTableBody(hosts) {
 
         const row = `
             <tr>
+                <td>${index + 1}</td> <!-- Número de fila -->
                 <td>${name}</td>
                 <td>${id}</td>
                 <td>${descripcion}</td>
