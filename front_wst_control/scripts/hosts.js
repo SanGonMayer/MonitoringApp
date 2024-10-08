@@ -71,11 +71,14 @@ function calculateStatus(hosts) {
 function updatePorcentajes() {
     if (window.totalFiliales === 0) return; // Evitar divisiones por cero
 
+    calculaYAsignaPorcentajes();
+}
+
+function calculaYAsignaPorcentajes() {
     const porcentajeActualizadas = Math.round((window.actualizadas / window.totalFiliales) * 100);
     const porcentajePendientes = Math.round((window.pendientes / window.totalFiliales) * 100);
     const porcentajeFallidas = Math.round((window.fallidas / window.totalFiliales) * 100);
 
-    // Actualizar los elementos del DOM
     document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${porcentajeActualizadas}%`;
     document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${porcentajePendientes}%`;
     document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${porcentajeFallidas}%`;
