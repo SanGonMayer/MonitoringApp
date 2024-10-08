@@ -36,7 +36,7 @@ app.get('/api/awx/inventories/:inventoryId/groups', async (req, res) => {
         // Obtener la lista de grupos para el inventario específico
         const awxResponse = await fetchAllPages(`${baseApiUrl}/${inventoryId}/groups/`)
         // Filtrar solo 5 grupos para el test
-        const groups = awxResponse.filter(group => group.name.toLowerCase() !== 'wst')
+        const groups = awxResponse.filter(group => group.name.toLowerCase() !== 'wst' && group.name.toLowerCase() !== 'pve')
         .map(group => ({
             id: group.id,
             name: group.name,
