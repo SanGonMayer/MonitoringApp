@@ -7,7 +7,7 @@ function inicializarEstadosFiliales() {
 
 function inicializarEstadosHosts() {
     window.totalHosts = 0;
-    window.hostsAtualizados = 0;
+    window.hostsActualizados = 0;
     window.hostsPendientes = 0;
     window.hostsFallidos = 0;
 }
@@ -43,7 +43,7 @@ async function evaluarEstadoHosts(groupId, inventoryId) {
                 hayFallidas = true;
                 todasActualizadas = false;
             } else if (status !== 'Actualizado') {
-                window.hostsAtualizados++;
+                window.hostsActualizados++;
                 todasActualizadas = false;
             }
         });
