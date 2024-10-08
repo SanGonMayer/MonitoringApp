@@ -73,6 +73,11 @@ function updatePorcentajes() {
     console.log('Filiales Pendientes:', window.pendientes);
     console.log('Filiales Fallidas:', window.fallidas);
 
+    console.log('Total Hosts:', window.totalHosts);
+    console.log('Hosts Actualizados:', window.hostsAtualizados);
+    console.log('Hosts Pendientes:', window.hostsPendientes);
+    console.log('Hosts Fallidos:', window.hostsFallidos);
+
     const porcentajeActualizadas = Math.round((window.actualizadas / window.totalFiliales) * 100);
     const porcentajePendientes = Math.round((window.pendientes / window.totalFiliales) * 100);
     const porcentajeFallidas = Math.round((window.fallidas / window.totalFiliales) * 100);
@@ -86,7 +91,8 @@ function updatePorcentajes() {
 
 async function createFilialButtons(groups, inventoryId) {
     const filialContainer = document.querySelector('#filialContainer');
-    inicializarEstados(); // Inicializa las variables de estado
+    inicializarEstadosFiliales(); 
+    inicializarEstadosHosts();
     
     for (const group of groups) {
         const button = document.createElement('button');
