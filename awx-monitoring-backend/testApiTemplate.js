@@ -36,7 +36,8 @@ app.get('/api/awx/inventories/:inventoryId/groups', async (req, res) => {
         // Obtener la lista de grupos para el inventario específico
         const awxResponse = await fetchAllPages(`${baseApiUrl}/${inventoryId}/groups/`)
         // Filtrar solo 5 grupos para el test
-        const groups = awxResponse.map(group => ({
+        const groups = awxResponse.filter(group => group.name.toLowerCase() !== 'wst')
+        .map(group => ({
             id: group.id,
             name: group.name,
             description: group.description,
@@ -64,7 +65,7 @@ async function fetchAllPages(apiUrl) {
       if (response.data.detail === "Página inválida.") {
         morePages = false; // Terminamos el bucle
       } else {
-        // Suponiendo que los datos están en response.data.results
+        // los datos están en response.data.results
         const data = response.data.results;
         //console.log(data);
         allData = allData.concat(data); // Agregamos los datos a la lista
@@ -108,7 +109,7 @@ app.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', async (req, r
                     const matchingJob = jobSummaries.find(job => {
                         const jobName = job.summary_fields.job.name;
                         const jobStatus = job.summary_fields.job.status;
-                        console.log(`Verificando trabajo: ${jobName}, estado: ${jobStatus}`);
+                        //console.log(`Verificando trabajo: ${jobName}, estado: ${jobStatus}`);
                         return jobName === templateName && jobStatus === 'successful';
                     });
 
