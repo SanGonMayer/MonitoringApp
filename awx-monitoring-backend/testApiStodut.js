@@ -92,7 +92,7 @@ async function getJobSummaries(host, templateName) {
 
         const matchingJob = jobSummaries.find(job => {
             const jobName = job.summary_fields.job.name;
-            const jobStatus = job.summary_fields.failed;
+            const jobStatus = job.failed;
             return jobName === templateName && !jobStatus;
         });
 
