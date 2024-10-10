@@ -95,7 +95,7 @@ async function getJobSummaries(host, templateName) {
         if (matchingJob.failed) {
             status = 'Fallido';
         } else {
-            status = 'Fallido';
+            status = 'Actualizado';
         }
     } catch (error) {
         console.error(`Error al obtener trabajos para el host ${host.name}:`, error.message);
