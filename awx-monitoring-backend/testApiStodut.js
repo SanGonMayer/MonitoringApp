@@ -98,7 +98,7 @@ async function getJobSummaries(host, templateName) {
 
         if (matchingJob) {
             status = 'Actualizado';
-        } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName)) {
+        } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName && job.failed)) {
             status = 'Fallido';
         }
     } catch (error) {
