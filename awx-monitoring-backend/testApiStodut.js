@@ -90,15 +90,11 @@ async function getJobSummaries(host, templateName) {
         const jobSummaries = await fetchAllPages(jobSummariesUrl, authConfig);
         jobNames = jobSummaries.map(job => job.summary_fields.job.name);
 
-        const matchingJob = jobSummaries.find(job => {
-            const jobName = job.summary_fields.job.name;
-            const jobStatus = job.failed;
-            return jobName === templateName && !jobStatus;
-        });
+        const matchingJob = jobSummaries.find(job => job.summary_fields.job.name === templateName);
 
-        if (matchingJob) {
-            status = 'Actualizado';
-        } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName && job.failed)) {
+        if (matchingJob.failed) {
+            status = 'Fallido';
+        } else {
             status = 'Fallido';
         }
     } catch (error) {
