@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoreo de Terminales</title>
+  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/searchbar.css">
+  <link rel="stylesheet" href="styles/botonFilial.css">
+  <!-- Incluye Chart.js desde un CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Navbar a la izquierda -->
+    <aside class="navbar">
+      <div class="nvbar-links">
+        <div class="navbar-item">
+          <a href="/monitoria/" class="navbar-link">
+            <img src="images/pc-svgrepo-com.svg" alt="Terminales">
+            <span class="link-text">Terminales</span>
+          </a>
+          <div class="submenu">
+            <!-- <a href="cctv.html" class="submenu-link" onclick="buscar('cctv');"> -->
+            <a href="cctv.html" class="submenu-link">
+              <img src="images/2cctv-svgrepo-com.svg" alt="CCTV">
+              <span class="link-text">CCTV</span>
+            </a>
+            <!-- <a href="wst.html" class="submenu-link" onclick="buscar('wst');"> -->
+            <a href="wst.html" class="submenu-link">
+              <img src="images/pc-svgrepo-com.svg" alt="WST">
+              <span class="link-text">WST</span>
+            </a>
+          </div>
+        </div>
+        <a href="#servidores" class="navbar-link">
+          <img src="images/server-svgrepo-com.svg" alt="Servidores">
+          <span class="link-text">Servidores</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+      <header style="margin-top: 35px;">
+        <h1 style="font-size: 50px;">Monitoreo de Actualizaciones</h1>
+      </header>
+
+      <main>
+        <!-- Sección de estado -->
+        <section class="status-section" style="margin-top: 60px;">
+          <!-- Sección de tarjetas de estado -->
+          <div class="main-skills">
+            <div class="card">
+              <div class="card-content">
+                <h3>Actualizadas</h3>
+                <p>Alguna descripción.</p>
+              </div>
+              <!-- Círculo con el porcentaje convertido en botón -->
+              <div class="circle clickable">
+                <span>80%</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-content">
+                <h3>Pendientes</h3>
+                <p>Alguna descripción.</p>
+              </div>
+              <!-- Círculo con el porcentaje convertido en botón -->
+              <div class="circle clickable">
+                <span>10%</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-content">
+                <h3>Fallidas</h3>
+                <p>Alguna descripción.</p>
+              </div>
+              <!-- Círculo con el porcentaje convertido en botón -->
+              <div class="circle clickable">
+                <span>10%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div style="display: flex; justify-content: space-around; margin-top: 50px;">
+          <div style="width: 500px; text-align: center;">
+            <h1>CCTV</h1>
+            <canvas id="circularCctv" style="margin-top: 15px;"></canvas>
+          </div>
+          <div style="width: 500px; text-align: center;">
+            <h1>WST</h1>
+            <canvas id="circularWst" style="margin-top: 15px;"></canvas>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/filiales.js"></script>
+  <script src="scripts/hosts.js"></script>
+  <script src="scripts/graficos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</body>
+</html>

@@ -7,30 +7,33 @@ window.pendientes = 0;
 window.fallidas = 0;
 window.allButtons = [];
 
+
+function buscar(tipoTerminal) {
+    if (tipoTerminal === 'cctv.html') {
+        fetchFiliales(347);
+    } else if (tipoTerminal === 'wst.html') {
+        fetchFiliales(22);
+    } else if (tipoTerminal === ''){
+        crearGraficoCircular('#circularCctv','cctv.html');
+        crearGraficoCircular('#circularWst','wst.html');
+    }
+}
+
+function filtrando() {
+    const filial = document.getElementById('search').value.toLowerCase();
+
+    allButtons.forEach(button => {
+        const buttonText = button.textContent.toLowerCase();
+        button.style.display = buttonText.includes(filial) ? '' : 'none';
+    });
+}
+
 // Espera a que el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
-    function buscar(tipoTerminal) {
-        let inventoryId;
-        if (tipoTerminal.includes('wst')) {
-            inventoryId = 22;
-        } else if (tipoTerminal.includes('cctv')) {
-            inventoryId = 347;
-        }
-
-        // Llamar a fetchFiliales con el nuevo inventoryId
-        fetchFiliales(inventoryId);
-    }
-
-    function filtrando() {
-        const filial = document.getElementById('search').value.toLowerCase();
-
-        allButtons.forEach(button => {
-            const buttonText = button.textContent.toLowerCase();
-            button.style.display = buttonText.includes(filial) ? '' : 'none';
-        });
-    }
-
-    // Exportar funciones globales
-    window.buscar = buscar;
-    window.filtrando = filtrando;
+document.addEventListener('DOMContentLoaded', () => {    
+    const terminal = window.location.pathname.split('/').pop(); 
+    buscar(terminal);
 });
+
+// Exportar funciones globales
+window.buscar = buscar;
+window.filtrando = filtrando;

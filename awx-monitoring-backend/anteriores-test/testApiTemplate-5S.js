@@ -1,8 +1,8 @@
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
-import { corsMiddleware } from './middlewares/cors.js';
+import { requestLoggerMiddleware } from '../middlewares/solicitudes.js';
+import { corsMiddleware } from '../middlewares/cors.js';
 import base64 from 'base-64';  // Para codificar en base64
 app.set('view engine', 'ejs');
 
