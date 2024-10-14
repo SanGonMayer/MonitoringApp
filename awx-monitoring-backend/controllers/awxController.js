@@ -1,36 +1,46 @@
-import axios from 'axios';
-import { Workstation } from  '../models/Workstation';  // Importa el modelo Workstation
-const awxApiUrl = process.env.AWX_API_URL;  // Obtenido de las variables de entorno (.env)
+import { fetchAllPages, getJobSummaries } from '../services/awxService.js';
 
-// Controlador para obtener y guardar hosts de AWX en la base de datos
-exports.getAndSaveHostsFromAWX = async (req, res) => {
+const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
+const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
+
+// Obtener grupos de un inventario
+export const getGroups = async (req, res) => {
+  const inventoryId = req.params.inventoryId;
+
   try {
-    // Hacer una solicitud a la API de AWX para obtener los hosts
-    const response = await axios.get(`${awxApiUrl}/hosts/`, {
-      auth: {
-        username: process.env.AWX_USER,
-        password: process.env.AWX_PASSWORD
-      }
-    });
+    const awxResponse = await fetchAllPages(`${baseApiUrl}/${inventoryId}/groups/`);
+    const groups = awxResponse
+      .filter(group => group.name.toLowerCase() !== 'wst' && group.name.toLowerCase() !== 'pve')
+      .map(group => ({
+        id: group.id,
+        name: group.name,
+        description: group.description,
+        hostsUrl: group.related.hosts,
+      }));
 
-    const hosts = response.data.results;  // Los hosts están en la propiedad 'results' del JSON devuelto
-
-    // Guardar los hosts en la base de datos
-    const savedHosts = await Promise.all(hosts.map(async (host) => {
-      const [newHost, created] = await Workstation.findOrCreate({
-        where: { hostname: host.name },  // Evitar duplicados buscando por hostname
-        defaults: {
-          hostname: host.name,
-          lastVersionApplied: host.summary_fields.last_job.job_template_name,  // Suponiendo que esta es la última versión aplicada
-          status: host.summary_fields.last_job.status  // Suponiendo que esto es el estado
-        }
-      });
-      return newHost;
-    }));
-
-    res.status(200).json({ message: 'Hosts guardados en la base de datos', savedHosts });
+    res.json(groups);
   } catch (error) {
-    console.error('Error al guardar hosts de AWX:', error.message);
-    res.status(500).json({ message: 'Error al conectar con AWX' });
+    console.error('Error al conectar a la API de AWX:', error.message);
+    res.status(500).json({ error: 'Error al conectar a la API de AWX' });
+  }
+};
+
+// Obtener hosts y su estado
+export const getHosts = async (req, res) => {
+  const groupId = req.params.groupId;
+  const templateName = 'wst_upd_v1.7.19';
+
+  try {
+    const awxResponse = await fetchAllPages(`${hostsApiUrl}/${groupId}/hosts/`);
+    const enabledHosts = awxResponse.filter(host => host.enabled);
+
+    const hosts = await Promise.all(
+      enabledHosts.map(async (host) => await getJobSummaries(host, templateName))
+    );
+
+    res.json(hosts);
+  } catch (error) {
+    console.error('Error al obtener los hosts:', error.message);
+    res.status(500).json({ error: 'Error al obtener los hosts' });
   }
 };

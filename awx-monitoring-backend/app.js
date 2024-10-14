@@ -1,41 +1,25 @@
-import express, { json } from 'express';
-import { sequelize } from './config/database.js';        // Importa la conexión a la base de datos
-import Workstation from './models/Workstation';       // Importa el modelo
+import express from 'express';
+import dotenv from 'dotenv';
+import awxRoutes from './routes/awxRoutes.js';
+import sequelize from './config/database.js';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
+import { corsMiddleware } from './middlewares/cors.js';
 
-
-app.disable('x-powered-by')
-//app.use(corsMiddleware())
-app.use(requestLoggerMiddleware())
-
+dotenv.config();
 
 const app = express();
-app.use(express.json());  // Middleware para trabajar con JSON
+const PORT = process.env.PORT;
 
+app.use(express.json());
+app.use(requestLoggerMiddleware());
+app.use(corsMiddleware());
 
+// Usar las rutas de AWX
+app.use(awxRoutes);
 
-
-// Sincroniza los modelos con la base de datos
-sequelize.sync({ force: false })  // force: true -> reinicia las tablas cada vez que inicias la app (para desarrollo)
-  .then(() => {
-    console.log('Conexión y sincronización con la base de datos exitosa');
-  })
-  .catch((err) => {
-    console.error('Error al conectar a la base de datos:', err);
+// Sincronizar base de datos y correr servidor
+sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
   });
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.send('API funcionando');
 });
-
-// Levanta el servidor
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
-});
-
-
-//Rutas
-app.use('/api', workstationRoutes);
-
-app.listen(3000, () => { console.log('Servidor corriendo en http://localhost:3000');});
