@@ -4,7 +4,7 @@ import Filial from './filiales.js';
 import Inventory from './inventory.js';
 import JobHostSummary from './jobHostSummary.js';
 
-const Workstation = sequelize.define('Workstation', {
+const CCTV = sequelize.define('CCTV', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -35,6 +35,6 @@ const Workstation = sequelize.define('Workstation', {
   }
 });
 
-Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
+CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
 
-export default Workstation;
+export default CCTV;

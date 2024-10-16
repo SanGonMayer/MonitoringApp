@@ -13,7 +13,6 @@ const authConfig = {
   },
 };
 
-// Función para manejar la paginación y obtener todas las páginas de una API
 export async function fetchAllPages(apiUrl) {
   let page = 1;
   let allData = [];
@@ -38,7 +37,6 @@ export async function fetchAllPages(apiUrl) {
   return allData;
 }
 
-// Función para obtener el estado de los trabajos de un host
 export async function getJobSummaries(host, templateName) {
   const jobSummariesUrl = `http://sawx0001lx.bancocredicoop.coop/api/v2/hosts/${host.id}/job_host_summaries/`;
   console.log(`Obteniendo trabajos para el host ${host.name} desde: ${jobSummariesUrl}`);
@@ -47,15 +45,12 @@ export async function getJobSummaries(host, templateName) {
   let jobNames = [];
 
   try {
-    // Llamamos a fetchAllPages para obtener los resúmenes de trabajo
     const jobSummaries = await fetchAllPages(jobSummariesUrl);
     jobNames = jobSummaries.map(job => job.summary_fields.job.name);
 
-    // Buscar el trabajo que coincida con la plantilla (templateName)
     const matchingJob = jobSummaries.find(job => job.summary_fields.job.name === templateName);
 
     if (matchingJob) {
-      // Si existe el trabajo, verificamos si falló o no
       status = matchingJob.failed ? 'Fallido' : 'Actualizado';
     }
   } catch (error) {

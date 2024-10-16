@@ -1,13 +1,17 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config(); 
 
-// Conexión a PostgreSQL
-export const sequelize = new Sequelize('nombre_base_de_datos', 'usuario', 'password', {
-  host: 'localhost',  // Cambiar dependiendo en dónde este
-  dialect: 'postgres',
-  logging: false // Deshabilita los logs de SQL en la consola
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME,     
+  process.env.DB_USER,     
+  process.env.DB_PASSWORD, 
+  {
+    host: process.env.DB_HOST,
+    dialect: 'postgres',  
+    logging: false        
+  }
+);
 
 export default sequelize;
