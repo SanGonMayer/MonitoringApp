@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Workstation from './workstation.js';
+import Workstation from './workstations.js';
 import CCTV from './cctv.js';
 
 const Filial = sequelize.define('Filial', {
