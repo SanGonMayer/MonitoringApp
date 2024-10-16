@@ -20,7 +20,5 @@ const Inventory = sequelize.define('Inventory', {
   }
 });
 
-//Inventory.hasMany(Workstation, { foreignKey: 'inventory_id' });
-//Inventory.hasMany(CCTV, { foreignKey: 'inventory_id' });
 
 export default Inventory;

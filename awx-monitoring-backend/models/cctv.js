@@ -21,20 +21,11 @@ const CCTV = sequelize.define('CCTV', {
   },
   filial_id: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Filial,
-      key: 'id',
-    }
   },
   inventory_id: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Inventory,
-      key: 'id',
-    }
   }
 });
 
-//CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
 
 export default CCTV;

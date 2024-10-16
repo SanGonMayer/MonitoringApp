@@ -20,7 +20,5 @@ const Filial = sequelize.define('Filial', {
   }
 });
 
-Filial.hasMany(Workstation, { foreignKey: 'filial_id' });
-Filial.hasMany(CCTV, { foreignKey: 'filial_id' });
 
 export default Filial;

@@ -21,20 +21,11 @@ const Workstation = sequelize.define('Workstation', {
   },
   filial_id: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Filial,
-      key: 'id',
-    }
   },
   inventory_id: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Inventory,
-      key: 'id',
-    }
   }
 });
 
-//Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
 
 export default Workstation;
