@@ -7,7 +7,7 @@ const Filial = sequelize.define('Filial', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    allowNull: flase,
+    allowNull: false,
     unique: true,
   },
   name: {
