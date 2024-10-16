@@ -41,8 +41,8 @@ const JobHostSummary = sequelize.define('JobHostSummary', {
   }
 });
 
-JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id' });
-JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id' });
-JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
+//JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id' });
+//JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id' });
+//JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
 
 export default JobHostSummary;

@@ -4,12 +4,7 @@ import awxRoutes from './routes/awxRoutes.js';
 import sequelize from './config/database.js';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 import { corsMiddleware } from './middlewares/cors.js';
-import Filial from './models/filiales.js';
-import Inventory from './models/inventory.js';
-import Workstation from './models/workstations.js';
-import CCTV from './models/cctv.js';
-import Job from './models/jobs.js';
-import JobHostSummary from './models/jobHostSummary.js';
+import './models/index.js';
 
 dotenv.config();
 

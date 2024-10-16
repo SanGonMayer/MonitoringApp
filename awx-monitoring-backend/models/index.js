@@ -1,6 +1,6 @@
-import Sequelize from 'sequelize';
 import sequelize from '../config/database.js';
 
+// Importar todos los modelos
 import Filial from './filiales.js';
 import Inventory from './inventory.js';
 import Workstation from './workstations.js';
@@ -21,14 +21,14 @@ Workstation.belongsTo(Inventory, { foreignKey: 'inventory_id' });
 Inventory.hasMany(CCTV, { foreignKey: 'inventory_id' });
 CCTV.belongsTo(Inventory, { foreignKey: 'inventory_id' });
 
-Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
-JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id' });
-
-CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
-JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id' });
-
 Job.hasMany(JobHostSummary, { foreignKey: 'job_id' });
 JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
+
+Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
+JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', allowNull: true }); 
+
+CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
+JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
 
 
 export { sequelize, Filial, Inventory, Workstation, CCTV, Job, JobHostSummary };

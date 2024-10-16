@@ -35,6 +35,6 @@ const CCTV = sequelize.define('CCTV', {
   }
 });
 
-CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
+//CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
 
 export default CCTV;

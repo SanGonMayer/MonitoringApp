@@ -35,6 +35,6 @@ const Workstation = sequelize.define('Workstation', {
   }
 });
 
-Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
+//Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
 
 export default Workstation;
