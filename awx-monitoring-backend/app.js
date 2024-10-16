@@ -4,7 +4,7 @@ import awxRoutes from './routes/awxRoutes.js';
 import sequelize from './config/database.js';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 import { corsMiddleware } from './middlewares/cors.js';
-import './models/index.js';
+import './models/index.js'; 
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ app.use(corsMiddleware());
 
 app.use(awxRoutes);
 
-sequelize.sync({ alter: true }) 
+sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
     app.listen(PORT, () => {

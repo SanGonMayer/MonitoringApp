@@ -1,8 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Workstation from './workstations.js';
-import CCTV from './cctv.js';
-import Job from './jobs.js';
 
 const JobHostSummary = sequelize.define('JobHostSummary', {
   id: {
@@ -17,32 +14,17 @@ const JobHostSummary = sequelize.define('JobHostSummary', {
   },
   workstation_id: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: Workstation,
-      key: 'id',
-    },
+    allowNull: true, 
   },
   cctv_id: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: CCTV,
-      key: 'id',
-    },
+    allowNull: true, 
   },
   job_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: Job,
-      key: 'id',
-    },
   }
 });
 
-//JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id' });
-//JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id' });
-//JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
 
 export default JobHostSummary;
