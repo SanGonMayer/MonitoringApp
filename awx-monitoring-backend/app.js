@@ -5,6 +5,7 @@ import sequelize from './config/database.js';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 import { corsMiddleware } from './middlewares/cors.js';
 import './models/index.js'; 
+import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 
 dotenv.config();
 
