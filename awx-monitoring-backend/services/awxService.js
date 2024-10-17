@@ -21,16 +21,22 @@ export async function fetchAllPages(apiUrl) {
   while (morePages) {
     try {
       const response = await axios.get(`${apiUrl}?page=${page}`, authConfig);
-      if (response.status === 404 || response.data.detail === 'Página inválida.') {
-        morePages = false;
-      } else {
+
+      if (response.status === 200 && response.data.results.length > 0) {
         const data = response.data.results;
         allData = allData.concat(data);
         page++;
+      } else {
+        morePages = false;
       }
     } catch (error) {
-      console.error(`Error fetching page ${page}:`, error.message);
-      morePages = false;
+      if (error.response && error.response.status === 404) {
+        console.log(`Página ${page} no encontrada, finalizando la búsqueda.`);
+        morePages = false;
+      } else {
+        console.error(`Error fetching page ${page}:`, error.message);
+        morePages = false;
+      }
     }
   }
 
