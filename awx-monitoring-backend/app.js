@@ -17,9 +17,29 @@ app.use(corsMiddleware());
 
 app.use(awxRoutes);
 
+
+const startDataSync = async () => {
+  try {
+    await syncFiliales(); 
+
+    const filiales = await Filial.findAll();
+
+    for (const filial of filiales) {
+      await syncHostsFromInventory22(filial);  
+      await syncHostsFromInventory347(filial);  
+    }
+
+    console.log('Sincronización de datos completada.');
+  } catch (error) {
+    console.error('Error durante la sincronización de datos:', error.message);
+  }
+};
+
+
 sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
+    startDataSync();  
     app.listen(PORT, () => {
       console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
