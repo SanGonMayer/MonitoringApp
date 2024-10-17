@@ -21,7 +21,7 @@ export async function fetchAllPages(apiUrl) {
   while (morePages) {
     try {
       const response = await axios.get(`${apiUrl}?page=${page}`, authConfig);
-      if (response.data.detail === 'Página inválida.') {
+      if (response.status === 404 || response.data.detail === 'Página inválida.') {
         morePages = false;
       } else {
         const data = response.data.results;

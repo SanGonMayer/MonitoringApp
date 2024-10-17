@@ -25,7 +25,7 @@ export const syncFiliales = async () => {
       const uniqueGroups = Array.from(new Map(allGroups.map(group => [group.name, group])).values());
   
       for (const group of uniqueGroups) {
-        // Intentamos encontrar una filial ya existente por nombre
+        
         const [filial, created] = await Filial.findOrCreate({
           where: { name: group.name },
           defaults: {
@@ -34,12 +34,12 @@ export const syncFiliales = async () => {
         });
   
         if (groupsWST.some(g => g.name === group.name && g.id === group.id)) {
-          filial.awx_id_wst = group.id;
-        }
-  
-        if (groupsCCTV.some(g => g.name === group.name && g.id === group.id)) {
-          filial.awx_id_cctv = group.id;
-        }
+            filial.awx_id_wst = group.id; 
+          }
+          
+          if (groupsCCTV.some(g => g.name === group.name && g.id === group.id)) {
+            filial.awx_id_cctv = group.id; 
+          }
   
         await filial.save();
         console.log(`Filial ${group.name} sincronizada con IDs WST: ${filial.awx_id_wst}, CCTV: ${filial.awx_id_cctv}`);

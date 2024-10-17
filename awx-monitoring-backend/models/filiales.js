@@ -15,7 +15,7 @@ const Filial = sequelize.define('Filial', {
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: true, 
+    allowNull: true,
   },
   awx_id_wst: {
     type: DataTypes.INTEGER,
@@ -24,7 +24,7 @@ const Filial = sequelize.define('Filial', {
   awx_id_cctv: {
     type: DataTypes.INTEGER,
     allowNull: true,
-  }
+  },
 });
 
 export default Filial;
