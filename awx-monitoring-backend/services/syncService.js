@@ -1,7 +1,7 @@
 import { fetchAllPages } from './awxService.js';
 import Filial from '../models/filiales.js';
-import Workstation from './models/workstations.js';
-import CCTV from './models/cctv.js';
+import Workstation from '../models/workstations.js';
+import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
 import Job from './models/jobs.js';
 
