@@ -14,8 +14,6 @@ const gruposExcluidos = [
 ];
 
 
-import Filial from '../models/filiales.js';
-
 export const syncFiliales = async () => {
   try {
     const groupsWST = await fetchAllPages(`${baseApiUrl}/22/groups/`);
