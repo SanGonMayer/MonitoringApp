@@ -87,7 +87,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           name: host.name,
           description: host.description,
           inventory_id: 22, 
-          filial_id: filial.id, 
+          filial_id: filial.awx_id_wst, 
         });
         await syncJobHostSummaries(host.id, 22); 
       }
@@ -122,7 +122,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           name: host.name,
           description: host.description,
           inventory_id: 347,  
-          filial_id: filial.id,
+          filial_id: filial.awx_id_cctv,
         });
         await syncJobHostSummaries(host.id, 347);
       }
@@ -144,6 +144,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           workstation_id: inventoryId === 22 ? hostId : null,
           cctv_id: inventoryId === 347 ? hostId : null,
           job_id: summary.summary_fields.job.id,  
+          job_name: summary.summary_fields.job.name,
         });
       }
       console.log(`JobHostSummaries del host ${hostId} sincronizados.`);

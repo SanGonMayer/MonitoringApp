@@ -23,7 +23,11 @@ const JobHostSummary = sequelize.define('JobHostSummary', {
   job_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  }
+  },
+  job_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 
