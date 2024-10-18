@@ -69,6 +69,13 @@ export const syncHostsFromInventory22 = async (filial) => {
       console.log(`La filial ${filial.name} no tiene un ID de WST asociado.`);
       return;
     }
+
+    await Inventory.findOrCreate({
+        where: { id: 22 },
+        defaults: { name: 'WST' }
+      });
+    
+      console.log('Inventario CCTV sincronizado.');
   
     try {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
@@ -96,6 +103,13 @@ export const syncHostsFromInventory22 = async (filial) => {
       console.log(`La filial ${filial.name} no tiene un ID de CCTV asociado.`);
       return;
     }
+
+    await Inventory.findOrCreate({
+        where: { id: 347 },
+        defaults: { name: 'CCTV' }
+      });
+
+     console.log('Inventario CCTV sincronizado.');
   
     try {
 
