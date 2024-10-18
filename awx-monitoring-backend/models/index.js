@@ -31,4 +31,4 @@ CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
 JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
 
 
-export { sequelize, Filial, Inventory, Workstation, CCTV, Job, JobHostSummary };
+export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary };
