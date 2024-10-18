@@ -14,42 +14,56 @@ const gruposExcluidos = [
 ];
 
 
-export const syncFiliales = async () => {
-    try {
+import Filial from '../models/filiales.js';
 
-      const groupsWST = await fetchAllPages(`${baseApiUrl}/22/groups/`);
-      const groupsCCTV = await fetchAllPages(`${baseApiUrl}/347/groups/`);
-  
-      const allGroups = [...groupsWST, ...groupsCCTV].filter(group => !gruposExcluidos.includes(group.name.toLowerCase()));
-  
-      const uniqueGroups = Array.from(new Map(allGroups.map(group => [group.name, group])).values());
-  
-      for (const group of uniqueGroups) {
-        
-        const [filial, created] = await Filial.findOrCreate({
-          where: { name: group.name },
-          defaults: {
-            description: group.description,
-          }
+export const syncFiliales = async () => {
+  try {
+    const groupsWST = await fetchAllPages(`${baseApiUrl}/22/groups/`);
+    const groupsCCTV = await fetchAllPages(`${baseApiUrl}/347/groups/`);
+
+    const allGroups = [...groupsWST, ...groupsCCTV].filter(
+      group => !gruposExcluidos.includes(group.name.toLowerCase())
+    );
+
+    const uniqueGroups = new Map();
+
+    allGroups.forEach(group => {
+      if (!uniqueGroups.has(group.name)) {
+        uniqueGroups.set(group.name, {
+          name: group.name,
+          description: group.description,
+          awx_id_wst: null,
+          awx_id_cctv: null,
         });
-  
-        if (groupsWST.some(g => g.name === group.name && g.id === group.id)) {
-            filial.awx_id_wst = group.id; 
-          }
-          
-          if (groupsCCTV.some(g => g.name === group.name && g.id === group.id)) {
-            filial.awx_id_cctv = group.id; 
-          }
-  
-        await filial.save();
-        console.log(`Filial ${group.name} sincronizada con IDs WST: ${filial.awx_id_wst}, CCTV: ${filial.awx_id_cctv}`);
       }
-  
-      console.log('Sincronización de filiales completada');
-    } catch (error) {
-      console.error('Error al sincronizar filiales:', error.message);
+      
+      const filialData = uniqueGroups.get(group.name);
+      if (groupsWST.includes(group)) {
+        filialData.awx_id_wst = group.id;
+      }
+      if (groupsCCTV.includes(group)) {
+        filialData.awx_id_cctv = group.id;
+      }
+    });
+
+    for (const [, groupData] of uniqueGroups) {
+      await Filial.findOrCreate({
+        where: { name: groupData.name },
+        defaults: {
+          description: groupData.description,
+          awx_id_wst: groupData.awx_id_wst,
+          awx_id_cctv: groupData.awx_id_cctv,
+        }
+      });
+      console.log(`Filial ${groupData.name} sincronizada`);
     }
-  };
+
+    console.log('Sincronización de filiales completada');
+  } catch (error) {
+    console.error('Error al sincronizar filiales:', error.message);
+  }
+};
+
   
 
 export const syncHostsFromInventory22 = async (filial) => {
