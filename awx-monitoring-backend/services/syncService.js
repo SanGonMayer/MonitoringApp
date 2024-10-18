@@ -36,10 +36,10 @@ export const syncFiliales = async () => {
       }
       
       const filialData = uniqueGroups.get(group.name);
-      if (groupsWST.includes(group)) {
+      if (groupsWST.some(g => g.id === group.id)) {
         filialData.awx_id_wst = group.id;
       }
-      if (groupsCCTV.includes(group)) {
+      if (groupsCCTV.some(g => g.id === group.id)) {
         filialData.awx_id_cctv = group.id;
       }
     });
