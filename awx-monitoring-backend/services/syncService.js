@@ -83,7 +83,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           name: host.name,
           description: host.description,
           inventory_id: 22, 
-          filial_id: filial.awx_id_wst, 
+          filial_id: filial.id, 
         });
         await syncJobHostSummaries(host.id, 22); 
       }
@@ -118,7 +118,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           name: host.name,
           description: host.description,
           inventory_id: 347,  
-          filial_id: filial.awx_id_cctv,
+          filial_id: filial.id,
         });
         await syncJobHostSummaries(host.id, 347);
       }
