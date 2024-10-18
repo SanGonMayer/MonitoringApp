@@ -71,7 +71,7 @@ export const syncHostsFromInventory22 = async (filial) => {
     }
   
     try {
-      const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/?inventory=22`);
+      const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
   
       for (const host of hostsWST) {
         await Workstation.upsert({
@@ -99,7 +99,7 @@ export const syncHostsFromInventory22 = async (filial) => {
   
     try {
 
-      const hostsCCTV = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_cctv}/hosts/?inventory=347`);
+      const hostsCCTV = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_cctv}/hosts/`);
   
       for (const host of hostsCCTV) {
         await CCTV.upsert({
