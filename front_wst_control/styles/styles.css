@@ -21,7 +21,8 @@ body {
 
 /* Estilos para el navbar */
 .navbar {
-  width: 5%; /* Ancho inicial reducido */
+  width: 100px; /* Ancho inicial reducido */
+  height: 100vh; /* Hace que la barra lateral cubra toda la altura de la pantalla */
   background-color: #837c7c;
   color: #fff;
   display: flex;
@@ -29,13 +30,16 @@ body {
   align-items: center;
   padding: 15px 0;
   transition: width 0.3s ease;
-  overflow: hidden; /* Oculta el texto inicialmente */
-  position: relative;
+  overflow: hidden; /* Oculta el contenido cuando está en su tamaño reducido */
+  position: fixed; /* Fija la barra lateral */
+  top: 0; /* Fija la barra al inicio de la página */
+  left: 0; /* Fija la barra al lado izquierdo */
 }
 
 .navbar:hover {
-  width: 10%; /* Ancho expandido aumentado */
+  width: 170px; /* Ancho expandido aumentado al pasar el mouse */
 }
+
 
 .navbar-header {
   margin-bottom: 20px;
@@ -172,6 +176,16 @@ button:hover {
   text-align: center;
 }
  */
+
+
+.main-content {
+  margin-left: 100px;
+  transition: margin-left 0.3s ease;
+}
+
+.navbar:hover + .main-content {
+  margin-left: 170px; /* Ajusta el margen cuando la barra lateral se expande */
+}
  
 /* Ajustes para los círculos interactivos */
 .circle {
