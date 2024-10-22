@@ -7,7 +7,7 @@ import { corsMiddleware } from './middlewares/cors.js';
 import './models/index.js'; 
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 import Filial from './models/filiales.js';
-import path from './views/partials/navbar.ejs';
+import path from '../front_wst_control/views/partials/navbar.ejs';
 
 dotenv.config();
 
