@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import awxRoutes from './routes/awxRoutes.js';
 import sequelize from './config/database.js';
@@ -7,7 +9,6 @@ import { corsMiddleware } from './middlewares/cors.js';
 import './models/index.js'; 
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 import Filial from './models/filiales.js';
-import path from '../front_wst_control/views/partials/navbar.ejs';
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(requestLoggerMiddleware());
 app.use(corsMiddleware());
+
+app.use(express.static(path.join(__dirname, 'front_wst_control')));
 
 app.use(awxRoutes);
 
