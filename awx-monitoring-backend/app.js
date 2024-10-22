@@ -22,9 +22,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(requestLoggerMiddleware());
 app.use(corsMiddleware());
-
 app.use(express.static(path.join(__dirname, 'front_wst_control')));
-
 app.use(awxRoutes);
 
 app.set('view engine', 'ejs');

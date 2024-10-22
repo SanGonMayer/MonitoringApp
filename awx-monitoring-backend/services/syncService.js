@@ -8,7 +8,7 @@ import Inventory from '../models/inventory.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
-const gruposExcluidos = ['wst', 'pve'];
+const gruposExcluidos = ['wst', 'pve', 'cctv'];
 
 
 export const syncFiliales = async () => {
