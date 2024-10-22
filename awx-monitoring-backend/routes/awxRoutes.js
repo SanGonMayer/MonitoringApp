@@ -1,10 +1,8 @@
-import express from 'express';
-import { getGroups, getHosts } from '../controllers/awxController.js';
+import { Router } from 'express';
+import { GroupHostController } from '../controllers/awxController.js';
 
-const router = express.Router();
+export const awxRoutes = Router();
 
-router.get('/api/awx/inventories/:inventoryId/groups', getGroups);
+awxRoutes.get('/api/awx/inventories/:inventoryId/groups', GroupHostController.getGroups);
+awxRoutes.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', GroupHostController.getHosts);
 
-router.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', getHosts);
-
-export default router;
