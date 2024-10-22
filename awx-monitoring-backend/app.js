@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import awxRoutes from './routes/awxRoutes.js';
+import { awxRoutes } from './routes/awxRoutes.js';
 import sequelize from './config/database.js';
 import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
 import { corsMiddleware } from './middlewares/cors.js';
