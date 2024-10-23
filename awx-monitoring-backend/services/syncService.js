@@ -29,7 +29,7 @@ export const syncAllData = async () => {
         const hostsWST = await syncHostsFromInventory22(filial);
         const hostsCCTV = await syncHostsFromInventory347(filial);
   
-        if (!hostsWST || !hostsCCTV) {
+        if (!hostsWST) {
           throw new Error(`No se pudieron sincronizar los hosts de la filial ${filial.name}.`);
         }
   
@@ -44,6 +44,7 @@ export const syncAllData = async () => {
       console.log('Sincronización de datos completada.');
     } catch (error) {
       console.error('Error durante la sincronización de datos:', error.message);
+      throw error;
       // notif
     }
   };
@@ -78,9 +79,10 @@ export const syncFiliales = async () => {
         filialData.awx_id_cctv = group.id;
       }
     });
-
+    
+    const filialesCreadas = [];
     for (const [, groupData] of uniqueGroups) {
-      await Filial.findOrCreate({
+      const [filial] = await Filial.findOrCreate({
         where: { name: groupData.name },
         defaults: {
           description: groupData.description,
@@ -88,12 +90,11 @@ export const syncFiliales = async () => {
           awx_id_cctv: groupData.awx_id_cctv,
         }
       });
+      filialesCreadas.push(filial);
       console.log(`Filial ${groupData.name} sincronizada`);
     }
     
     console.log('Sincronización de filiales completada');
-
-    const fililesCreadas = await Filial.findAll();
     return fililesCreadas;
 
   } catch (error) {
@@ -106,7 +107,7 @@ export const syncFiliales = async () => {
 export const syncHostsFromInventory22 = async (filial) => {
     if (!filial.awx_id_wst) {
       console.log(`La filial ${filial.name} no tiene un ID de WST asociado.`);
-      return;
+      return [];
     }
 
     await Inventory.findOrCreate({
@@ -118,19 +119,22 @@ export const syncHostsFromInventory22 = async (filial) => {
   
     try {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
-  
+      const updatedWST = [];
       for (const host of hostsWST) {
-        await Workstation.upsert({
+        const [Workstation] = await Workstation.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 22, 
           filial_id: filial.id, 
         });
+        updatedHosts.push(Workstation);
         await syncJobHostSummaries(host.id, 22); 
       }
   
       console.log(`Hosts WST de la filial ${filial.name} sincronizados.`);
+      return updatedWST;
+
     } catch (error) {
       console.error(`Error al sincronizar hosts WST de la filial ${filial.name}:`, error.message);
     }
@@ -153,19 +157,28 @@ export const syncHostsFromInventory22 = async (filial) => {
     try {
 
       const hostsCCTV = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_cctv}/hosts/`);
+      
+      if (hostsCCTV.length === 0) {
+        console.log(`La filial ${filial.name} no tiene hosts CCTV. Continuando...`);
+        return [];
+      }
+      const updatedCCTV = [];
   
       for (const host of hostsCCTV) {
-        await CCTV.upsert({
+        const [CCTV] = await CCTV.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 347,  
           filial_id: filial.id,
         });
+        updatedCCTV.push(CCTV);
         await syncJobHostSummaries(host.id, 347);
       }
   
       console.log(`Hosts CCTV de la filial ${filial.name} sincronizados.`);
+      return updatedCCTV;
+
     } catch (error) {
       console.error(`Error al sincronizar hosts CCTV de la filial ${filial.name}:`, error.message);
       throw new Error(`Error al sincronizar los hosts de la filial ${filial.name}.`);
