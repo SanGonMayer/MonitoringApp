@@ -35,9 +35,9 @@ export const syncAllData = async () => {
         updatedHostsCCTV.push(...hostsCCTV);
       }
   
-      await Filial.bulkCreate(updatedFiliales, { updateOnDuplicate: ['name', 'description'] });
-      await Workstation.bulkCreate(updatedHostsWST, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
-      await CCTV.bulkCreate(updatedHostsCCTV, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
+      //await Filial.bulkCreate(updatedFiliales, { updateOnDuplicate: ['name', 'description'] });
+      //await Workstation.bulkCreate(updatedHostsWST, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
+      //await CCTV.bulkCreate(updatedHostsCCTV, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
   
       console.log('Sincronización de datos completada.');
     } catch (error) {
@@ -90,6 +90,7 @@ export const syncFiliales = async () => {
     }
 
     console.log('Sincronización de filiales completada');
+    return syncedFiliales;
   } catch (error) {
     console.error('Error al sincronizar filiales:', error.message);
   }
