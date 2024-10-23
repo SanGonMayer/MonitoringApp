@@ -7,7 +7,7 @@ export const awxRoutes = Router();
 awxRoutes.get('/api/awx/inventories/:inventoryId/groups', GroupHostController.getGroups);
 awxRoutes.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', GroupHostController.getHosts);
 
-router.post('/api/sync', async (req, res) => {
+awxRoutes.post('/api/sync', async (req, res) => {
     try {
       await syncAllData();
       res.status(200).json({ message: 'Sincronización de datos completada.' });
