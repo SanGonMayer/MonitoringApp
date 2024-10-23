@@ -82,6 +82,14 @@ export const syncFiliales = async () => {
     
     const filialesCreadas = [];
     for (const [, groupData] of uniqueGroups) {
+        
+        if (!groupData.name) {
+            console.error('Error: Se ha encontrado un grupo con un nombre nulo o vacío:', groupData);
+            continue; // Ignorar el grupo con nombre nulo o vacío
+          }
+    
+          console.log(`Sincronizando filial: ${groupData.name}`);
+
       const [filial, created] = await Filial.findOrCreate({
         where: { name: groupData.name },
         defaults: {
@@ -115,7 +123,7 @@ export const syncHostsFromInventory22 = async (filial) => {
         defaults: { name: 'WST' }
       });
     
-      console.log('Inventario CCTV sincronizado.');
+      console.log('Inventario WST sincronizado.');
   
     try {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
