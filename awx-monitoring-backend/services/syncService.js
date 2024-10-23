@@ -49,8 +49,6 @@ export const syncAllData = async () => {
   };
   
 
-
-
 export const syncFiliales = async () => {
   try {
     const groupsWST = await fetchAllPages(`${baseApiUrl}/22/groups/`);
@@ -92,8 +90,12 @@ export const syncFiliales = async () => {
       });
       console.log(`Filial ${groupData.name} sincronizada`);
     }
-
+    
     console.log('Sincronización de filiales completada');
+    
+    const fililesCreadas = await Filial.findAll();
+    return fililesCreadas;
+
   } catch (error) {
     console.error('Error al sincronizar filiales:', error.message);
   }
