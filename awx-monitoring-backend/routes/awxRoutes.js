@@ -15,7 +15,7 @@ awxRoutes.post('/api/sync', async (req, res) => {
         console.error('Error en la sincronización manual:', error.message);
         res.status(500).json({ error: 'Error en la sincronización manual: ' + error.message });
     }
-});z
+});
 
 export default awxRoutes;
 
