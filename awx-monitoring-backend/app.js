@@ -9,6 +9,7 @@ import { corsMiddleware } from './middlewares/cors.js';
 import './models/index.js'; 
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 import Filial from './models/filiales.js';
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -28,29 +29,16 @@ app.use(awxRoutes);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
-const startDataSync = async () => {
-  try {
-    await syncFiliales(); 
-
-    const filiales = await Filial.findAll();
-
-    for (const filial of filiales) {
-      await syncHostsFromInventory22(filial);  
-      await syncHostsFromInventory347(filial);  
-    }
-
-    console.log('Sincronización de datos completada.');
-  } catch (error) {
-    console.error('Error durante la sincronización de datos:', error.message);
-  }
-};
+cron.schedule('0 0 * * 0', () => {
+  console.log('Ejecutando cron job de sincronización...');
+  startDataSync();
+});
 
 
 sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
-    startDataSync();  
+    syncAllData(); 
     app.listen(PORT, () => {
       console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
