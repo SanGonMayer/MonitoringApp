@@ -3,11 +3,13 @@ import Filial from '../models/filiales.js';
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
+import Job from '../models/jobs.js';
 import Inventory from '../models/inventory.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
 const gruposExcluidos = ['wst', 'pve', 'cctv'];
+
 
 export const syncAllData = async () => {
     try {
@@ -35,16 +37,18 @@ export const syncAllData = async () => {
         updatedHostsCCTV.push(...hostsCCTV);
       }
   
-      //await Filial.bulkCreate(updatedFiliales, { updateOnDuplicate: ['name', 'description'] });
-      //await Workstation.bulkCreate(updatedHostsWST, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
-      //await CCTV.bulkCreate(updatedHostsCCTV, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
+      await Filial.bulkCreate(updatedFiliales, { updateOnDuplicate: ['name', 'description', 'awx_id_wst', 'awx_id_cctv'] });
+      await Workstation.bulkCreate(updatedHostsWST, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
+      await CCTV.bulkCreate(updatedHostsCCTV, { updateOnDuplicate: ['name', 'description', 'inventory_id', 'filial_id'] });
   
       console.log('Sincronización de datos completada.');
     } catch (error) {
       console.error('Error durante la sincronización de datos:', error.message);
-      // notifiar aca
+      // notif
     }
   };
+  
+
 
 
 export const syncFiliales = async () => {
@@ -90,7 +94,6 @@ export const syncFiliales = async () => {
     }
 
     console.log('Sincronización de filiales completada');
-    return syncedFiliales;
   } catch (error) {
     console.error('Error al sincronizar filiales:', error.message);
   }

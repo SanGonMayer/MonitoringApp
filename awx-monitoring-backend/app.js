@@ -29,16 +29,35 @@ app.use(awxRoutes);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-cron.schedule('0 0 * * 0', () => {
-  console.log('Ejecutando cron job de sincronización...');
-  startDataSync();
+
+//const startDataSync = async () => {
+//  try {
+//    await syncFiliales(); 
+//
+//    const filiales = await Filial.findAll();
+//
+//    for (const filial of filiales) {
+//      await syncHostsFromInventory22(filial);  
+//      await syncHostsFromInventory347(filial);  
+//    }
+//
+//    console.log('Sincronización de datos completada.');
+//  } catch (error) {
+//    console.error('Error durante la sincronización de datos:', error.message);
+//  }
+//};
+
+
+cron.schedule('0 0 * * *', async () => {
+  console.log('Ejecutando sincronización de datos programada a las 00:00...');
+  await syncAllData();
 });
 
 
 sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
-    syncAllData(); 
+    //startDataSync();  
     app.listen(PORT, () => {
       console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
