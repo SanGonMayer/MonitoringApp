@@ -144,7 +144,7 @@ export const syncHostsFromInventory22 = async (filial) => {
   export const syncHostsFromInventory347 = async (filial) => {
     if (!filial.awx_id_cctv) {
       console.log(`La filial ${filial.name} no tiene un ID de CCTV asociado.`);
-      return;
+      return [];
     }
 
     await Inventory.findOrCreate({
