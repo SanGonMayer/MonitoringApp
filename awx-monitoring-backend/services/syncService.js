@@ -82,7 +82,7 @@ export const syncFiliales = async () => {
     
     const filialesCreadas = [];
     for (const [, groupData] of uniqueGroups) {
-      const [filial] = await Filial.findOrCreate({
+      const [filial, created] = await Filial.findOrCreate({
         where: { name: groupData.name },
         defaults: {
           description: groupData.description,
@@ -121,14 +121,14 @@ export const syncHostsFromInventory22 = async (filial) => {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
       const updatedWST = [];
       for (const host of hostsWST) {
-        const [Workstation] = await Workstation.upsert({
+        const [workstation, created] = await Workstation.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 22, 
           filial_id: filial.id, 
         });
-        updatedHosts.push(Workstation);
+        updatedWST.push(workstation);
         await syncJobHostSummaries(host.id, 22); 
       }
   
@@ -165,14 +165,14 @@ export const syncHostsFromInventory22 = async (filial) => {
       const updatedCCTV = [];
   
       for (const host of hostsCCTV) {
-        const [CCTV] = await CCTV.upsert({
+        const [cctv, created] = await CCTV.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 347,  
           filial_id: filial.id,
         });
-        updatedCCTV.push(CCTV);
+        updatedCCTV.push(cctv);
         await syncJobHostSummaries(host.id, 347);
       }
   
