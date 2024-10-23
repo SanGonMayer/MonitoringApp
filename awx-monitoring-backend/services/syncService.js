@@ -95,7 +95,7 @@ export const syncFiliales = async () => {
     }
     
     console.log('Sincronización de filiales completada');
-    return fililesCreadas;
+    return filialesCreadas;
 
   } catch (error) {
     console.error('Error al sincronizar filiales:', error.message);
