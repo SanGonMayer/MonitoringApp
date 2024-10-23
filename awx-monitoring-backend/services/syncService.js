@@ -53,7 +53,9 @@ export const syncAllData = async () => {
 export const syncFiliales = async () => {
   try {
     const groupsWST = await fetchAllPages(`${baseApiUrl}/22/groups/`);
+    console.log('Grupos WST recibidos:', groupsWST.length);
     const groupsCCTV = await fetchAllPages(`${baseApiUrl}/347/groups/`);
+    console.log('Grupos CCTV recibidos:', groupsCCTV.length);
 
     const allGroups = [...groupsWST, ...groupsCCTV].filter(
       group => !gruposExcluidos.includes(group.name.toLowerCase())
@@ -82,10 +84,10 @@ export const syncFiliales = async () => {
     
     const filialesCreadas = [];
     for (const [, groupData] of uniqueGroups) {
-        
+
         if (!groupData.name) {
             console.error('Error: Se ha encontrado un grupo con un nombre nulo o vacío:', groupData);
-            continue; // Ignorar el grupo con nombre nulo o vacío
+            continue;
           }
     
           console.log(`Sincronizando filial: ${groupData.name}`);
