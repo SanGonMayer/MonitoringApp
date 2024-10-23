@@ -92,7 +92,7 @@ export const syncFiliales = async () => {
     }
     
     console.log('Sincronización de filiales completada');
-    
+
     const fililesCreadas = await Filial.findAll();
     return fililesCreadas;
 
@@ -168,6 +168,7 @@ export const syncHostsFromInventory22 = async (filial) => {
       console.log(`Hosts CCTV de la filial ${filial.name} sincronizados.`);
     } catch (error) {
       console.error(`Error al sincronizar hosts CCTV de la filial ${filial.name}:`, error.message);
+      throw new Error(`Error al sincronizar los hosts de la filial ${filial.name}.`);
     }
   };
 
