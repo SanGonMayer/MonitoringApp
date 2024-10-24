@@ -72,7 +72,7 @@ export const syncHostsFromInventory22 = async (filial) => {
         defaults: { name: 'WST' }
       });
     
-      console.log('Inventario CCTV sincronizado.');
+      console.log('Inventario WST sincronizado.');
   
     try {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
