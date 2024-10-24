@@ -65,3 +65,5 @@ sequelize.sync({ alter: true })
   .catch((error) => {
     console.error('Error al sincronizar la base de datos:', error.message);
   });
+
+  export { startDataSync };
