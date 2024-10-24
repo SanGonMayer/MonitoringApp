@@ -9,6 +9,7 @@ import { corsMiddleware } from './middlewares/cors.js';
 import './models/index.js'; 
 import Filial from './models/filiales.js';
 import cron from 'node-cron';
+import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 
 dotenv.config();
 
