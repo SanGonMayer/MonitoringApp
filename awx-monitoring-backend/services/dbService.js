@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
      * @returns {Promise<Array>}
      */
 
-export const getFiliales = async () => {
+export const getFilialesFromDB = async () => {
     try {
         
         const filiales = await Filial.findAll({
