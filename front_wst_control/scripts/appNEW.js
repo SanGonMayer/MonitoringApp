@@ -1,10 +1,13 @@
-function buscar(tipoTerminal) {
-    if (tipoTerminal === 'cctv.html') {
-        fetchFilialesFromDB('cctv.html');
-    } else if (tipoTerminal === 'wst.html') {
-        fetchFilialesFromDB('wst.html');
-    } else {
-        console.log('Página no reconocida.');
+async function buscarYCrear(tipoTerminal) {
+    try {
+        clearFilialContainer();
+
+        const filiales = await fetchFilialesFromDB(tipoTerminal);
+        
+        createFilialButtons(filiales);
+
+    } catch (error) {
+        console.error('Error al buscar las filiales:', error);
     }
 }
 
