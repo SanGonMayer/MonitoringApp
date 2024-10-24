@@ -89,20 +89,41 @@ function updatePorcentajes() {
 }
 
 
-async function createFilialButtons(groups, inventoryId) {
+//async function createFilialButtons(groups, inventoryId) {
+//    const filialContainer = document.querySelector('#filialContainer');
+//    inicializarEstadosFiliales(); 
+//    inicializarEstadosHosts();
+//    
+//    for (const group of groups) {
+//        const button = document.createElement('button');
+//        button.textContent = group.name;
+//        button.classList.add('custom-button');
+//
+//        const color = await evaluarEstadoHosts(group.id, inventoryId);
+//        button.style.backgroundColor = color;
+//
+//        button.onclick = () => fetchHosts(group.id, inventoryId); // Asigna el evento de clic para cada botón
+//        filialContainer.appendChild(button);
+//        window.allButtons.push(button);
+//    }
+//
+//    updatePorcentajes(); // Actualiza los porcentajes en la interfaz
+//}
+
+async function createFilialButtons(filiales) {
     const filialContainer = document.querySelector('#filialContainer');
     inicializarEstadosFiliales(); 
     inicializarEstadosHosts();
     
-    for (const group of groups) {
+    for (const filial of filiales) {
         const button = document.createElement('button');
-        button.textContent = group.name;
+        button.textContent = filial.name;
         button.classList.add('custom-button');
 
-        const color = await evaluarEstadoHosts(group.id, inventoryId);
-        button.style.backgroundColor = color;
-
-        button.onclick = () => fetchHosts(group.id, inventoryId); // Asigna el evento de clic para cada botón
+        // Asigna el evento de clic para cada botón.
+        // Aquí podrías definir qué hacer cuando se haga clic en una filial.
+        button.onclick = () => console.log(`Filial seleccionada: ${filial.name}`);
+        
         filialContainer.appendChild(button);
         window.allButtons.push(button);
     }
@@ -110,19 +131,44 @@ async function createFilialButtons(groups, inventoryId) {
     updatePorcentajes(); // Actualiza los porcentajes en la interfaz
 }
 
+
 function handleErrorFiliales(error) {
     console.error('Error obteniendo las filiales:', error);
 }
 
-async function fetchFiliales(inventoryId) {
+//async function fetchFiliales(inventoryId) {
+//    try {
+//        console.log(`Llamando a la API para el inventoryId: ${inventoryId}`);
+//        
+//        // Obtener la lista de filiales (grupos)
+//        const groups = await fetchGroupsFromAWX(inventoryId);
+//        
+//        clearFilialContainer(); // Limpia el contenedor de filiales
+//        createFilialButtons(groups, inventoryId); // Crea los botones para cada filial
+//
+//    } catch (error) {
+//        handleErrorFiliales(error); // Maneja los errores
+//    }
+//}
+
+async function fetchFiliales(tipoTerminal) {
     try {
-        console.log(`Llamando a la API para el inventoryId: ${inventoryId}`);
+        console.log('Llamando a la API para obtener todas las filiales desde la base de datos');
         
-        // Obtener la lista de filiales (grupos)
-        const groups = await fetchGroupsFromAWX(inventoryId);
-        
+        const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
+        const filiales = await response.json();
+
         clearFilialContainer(); // Limpia el contenedor de filiales
-        createFilialButtons(groups, inventoryId); // Crea los botones para cada filial
+
+        // Filtrar las filiales dependiendo de si es WST o CCTV.
+        let filialesFiltradas = [];
+        if (tipoTerminal === 'wst.html') {
+            filialesFiltradas = filiales.filter(filial => filial.hasWST);
+        } else if (tipoTerminal === 'cctv.html') {
+            filialesFiltradas = filiales.filter(filial => filial.hasCCTV);
+        }
+
+        createFilialButtons(filialesFiltradas); // Crea los botones para cada filial filtrada
 
     } catch (error) {
         handleErrorFiliales(error); // Maneja los errores

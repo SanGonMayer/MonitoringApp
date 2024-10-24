@@ -17,5 +17,15 @@ awxRoutes.post('/api/sync', async (req, res) => {
     }
 });
 
+awxRoutes.get('/api/db/filiales', async (req, res) => {
+    try {
+        const filiales = await getFiliales(); 
+        res.json(filiales); 
+    } catch (error) {
+        console.error('Error al obtener filiales desde la base de datos:', error.message);
+        res.status(500).json({ error: 'Error al obtener filiales desde la base de datos' });
+    }
+});
+
 export default awxRoutes;
 
