@@ -1,5 +1,3 @@
-import { clear } from "console";
-
 async function fetchFilialesFromDB(tipoTerminal) {
     try {
       console.log('Fetching filiales from the database:', tipoTerminal);
