@@ -50,6 +50,15 @@ export const syncFiliales = async () => {
           awx_id_cctv: groupData.awx_id_cctv,
         }
       });
+
+      if (!created) {
+        await filial.update({
+          description: groupData.description,
+          awx_id_wst: groupData.awx_id_wst,
+          awx_id_cctv: groupData.awx_id_cctv,
+        });
+      }
+      
       console.log(`Filial ${groupData.name} sincronizada`);
     }
 
