@@ -2,14 +2,13 @@ async function fetchFilialesFromDB(tipoTerminal) {
     try {
         console.log('Llamando a la API para obtener todas las filiales desde la base de datos');
         
-        // Cambiar la URL para tu entorno.
         const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
         const filiales = await response.json();
 
-        // Limpiar el contenedor de filiales.
+        console.log('Fetching filiales from the database:', tipoTerminal);
+
         clearFilialContainer();
 
-        // Filtrar las filiales dependiendo de si es WST o CCTV.
         let filialesFiltradas = [];
         if (tipoTerminal === 'wst.html') {
             filialesFiltradas = filiales.filter(filial => filial.hasWST);
@@ -17,7 +16,6 @@ async function fetchFilialesFromDB(tipoTerminal) {
             filialesFiltradas = filiales.filter(filial => filial.hasCCTV);
         }
 
-        // Crear los botones de filiales filtradas.
         createFilialButtons(filialesFiltradas);
     } catch (error) {
         console.error('Error obteniendo las filiales desde la base de datos:', error);
@@ -43,5 +41,5 @@ function createFilialButtons(filiales) {
     });
 }
 
-// Exportar la función global para poder usarla desde otros archivos.
+
 window.fetchFilialesFromDB = fetchFilialesFromDB;
