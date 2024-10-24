@@ -1,26 +1,28 @@
 async function fetchFilialesFromDB(tipoTerminal) {
     try {
-        console.log('Llamando a la API para obtener todas las filiales desde la base de datos');
-        
-        const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
-        const filiales = await response.json();
-
-        console.log('Fetching filiales from the database:', tipoTerminal);
-
-        clearFilialContainer();
-
-        let filialesFiltradas = [];
-        if (tipoTerminal === 'wst.html') {
-            filialesFiltradas = filiales.filter(filial => filial.hasWST);
-        } else if (tipoTerminal === 'cctv.html') {
-            filialesFiltradas = filiales.filter(filial => filial.hasCCTV);
-        }
-
-        createFilialButtons(filialesFiltradas);
+      console.log('Fetching filiales from the database:', tipoTerminal);
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
+      
+      if (!response.ok) {
+        throw new Error('Error al obtener filiales desde la base de datos');
+      }
+  
+      const filiales = await response.json();
+  
+      const filialesFiltradas = filiales.filter(filial => {
+        return (tipoTerminal === 'wst.html' && filial.hasWST) ||
+               (tipoTerminal === 'cctv.html' && filial.hasCCTV);
+      });
+  
+      console.log('Filiales filtradas:', filialesFiltradas);
+      return filialesFiltradas;
+  
     } catch (error) {
-        console.error('Error obteniendo las filiales desde la base de datos:', error);
+      console.error('Error obteniendo las filiales desde la base de datos:', error);
+      return [];
     }
-}
+  }
+  
 
 function clearFilialContainer() {
     const filialContainer = document.querySelector('#filialContainer');
