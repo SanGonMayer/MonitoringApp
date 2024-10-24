@@ -1,3 +1,5 @@
+import { clear } from "console";
+
 async function fetchFilialesFromDB(tipoTerminal) {
     try {
       console.log('Fetching filiales from the database:', tipoTerminal);
@@ -15,6 +17,11 @@ async function fetchFilialesFromDB(tipoTerminal) {
       });
   
       console.log('Filiales filtradas:', filialesFiltradas);
+      
+      clearFilialContainer();
+      
+      createFilialButtons(filialesFiltradas);
+
       return filialesFiltradas;
   
     } catch (error) {
@@ -45,3 +52,5 @@ function createFilialButtons(filiales) {
 
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
+window.clearFilialContainer = clearFilialContainer;
+window.createFilialButtons = createFilialButtons;
