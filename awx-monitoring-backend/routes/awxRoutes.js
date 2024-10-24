@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { GroupHostController } from '../controllers/awxController.js';
 import { startDataSync } from '../app.js';
+import Filial from '../models/filiales.js';
 
 export const awxRoutes = Router();
 
