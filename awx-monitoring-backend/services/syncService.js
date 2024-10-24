@@ -42,7 +42,7 @@ export const syncFiliales = async () => {
     });
 
     for (const [, groupData] of uniqueGroups) {
-      await Filial.findOrCreate({
+        const [filial, created] = await Filial.findOrCreate({
         where: { name: groupData.name },
         defaults: {
           description: groupData.description,
@@ -58,7 +58,7 @@ export const syncFiliales = async () => {
           awx_id_cctv: groupData.awx_id_cctv,
         });
       }
-      
+
       console.log(`Filial ${groupData.name} sincronizada`);
     }
 
