@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { GroupHostController } from '../controllers/awxController.js';
 import { startDataSync } from '../app.js';
-import Filial from '../models/filiales.js';
+//import Filial from '../models/filiales.js';
+import { getFilialesFromDB } from '../services/dbService.js';
 
 export const awxRoutes = Router();
 
@@ -20,7 +21,7 @@ awxRoutes.post('/api/sync', async (req, res) => {
 
 awxRoutes.get('/api/db/filiales', async (req, res) => {
     try {
-      const filiales = await Filial.findAll();
+      const filiales = await getFilialesFromDB();
       res.json(filiales);
     } catch (error) {
       console.error('Error al obtener filiales:', error.message);
