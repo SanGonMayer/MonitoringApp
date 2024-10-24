@@ -30,27 +30,27 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
-//const startDataSync = async () => {
-//  try {
-//    await syncFiliales(); 
-//
-//    const filiales = await Filial.findAll();
-//
-//    for (const filial of filiales) {
-//      await syncHostsFromInventory22(filial);  
-//      await syncHostsFromInventory347(filial);  
-//    }
-//
-//    console.log('Sincronización de datos completada.');
-//  } catch (error) {
-//    console.error('Error durante la sincronización de datos:', error.message);
-//  }
-//};
+const startDataSync = async () => {
+  try {
+    await syncFiliales(); 
+
+    const filiales = await Filial.findAll();
+
+    for (const filial of filiales) {
+      await syncHostsFromInventory22(filial);  
+      await syncHostsFromInventory347(filial);  
+    }
+
+    console.log('Sincronización de datos completada.');
+  } catch (error) {
+    console.error('Error durante la sincronización de datos:', error.message);
+  }
+};
 
 
 cron.schedule('0 0 * * *', async () => {
   console.log('Ejecutando sincronización de datos programada a las 00:00...');
-  await syncAllData();
+  await startDataSync();
 });
 
 

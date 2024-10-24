@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { GroupHostController } from '../controllers/awxController.js';
-import { syncAllData } from '../services/syncService.js';
+import { startDataSync } from '../services/app.js';
 
 export const awxRoutes = Router();
 
@@ -9,7 +9,7 @@ awxRoutes.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', GroupHo
 
 awxRoutes.post('/api/sync', async (req, res) => {
     try {
-        await syncAllData();
+        await startDataSync();
         res.status(200).json({ message: 'Sincronización de datos completada.' });
     } catch (error) {
         console.error('Error en la sincronización manual:', error.message);
