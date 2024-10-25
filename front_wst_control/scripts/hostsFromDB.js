@@ -29,9 +29,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${host.name}</td>
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
-          <td>${host.inventory_id}</td>
           <td>${host.status || 'Desconocido'}</td>
-          <td>${host.enabled ? 'Sí' : 'No'}</td>
 
         </tr>
       `;

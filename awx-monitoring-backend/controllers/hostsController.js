@@ -1,6 +1,6 @@
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
-// import JobHostSummary from '../models/jobHostSummary.js';
+import JobHostSummary from '../models/jobHostSummary.js';
 
 export const getHostsByFilial = async (req, res) => {
   try {
@@ -21,8 +21,35 @@ export const getHostsByFilial = async (req, res) => {
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
         where: { filial_id: filialIdInt },
-        
+        include: [
+            {
+                model: JobHostSummary,
+                where: { workstation_id: {$col: 'Workstation.id'} },
+                attributes: ['job_name', 'failed'],
+                required: false
+            }
+        ],
       });
+
+      const hostsWithStatus = hosts.map(host => {
+        const jobSummaries = host.JobHostSummaries || [];
+        const job = jobSummaries.find(summary => summary.job_name === 'wst_upd_v1.7.19');
+
+        let status = 'pendiente';
+        if (job) {
+          status = job.failed ? 'fallido' : 'actualizado';
+        }
+
+        return {
+          id: host.id,
+          name: host.name,
+          description: host.description,
+          status,  
+        };
+      });
+
+      return res.status(200).json(hostsWithStatus);
+
     } else if (tipo === 'cctv') {
       hosts = await CCTV.findAll({
         where: { filial_id: filialIdInt },
