@@ -7,7 +7,7 @@ export const getHostsByFilial = async (req, res) => {
     const { filialId } = req.params;
     const { tipo } = req.query; 
 
-    cconsole.log('Filial ID antes de convertir:', filialId);
+    console.log('Filial ID antes de convertir:', filialId);
     console.log('Tipo de terminal:', tipo);
 
 
