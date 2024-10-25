@@ -24,6 +24,7 @@ export const getHostsByFilial = async (req, res) => {
         include: [
             {
                 model: JobHostSummary,
+                as: 'JobHostSummaries',
                 where: { workstation_id: {$col: 'Workstation.id'} },
                 attributes: ['job_name', 'failed'],
                 required: false
