@@ -34,19 +34,27 @@ export const getHostsByFilial = async (req, res) => {
       const hostsWithStatus = hosts.map(host => {
         const jobSummaries = host.jobSummaries || [];
 
-        const job = jobSummaries.find(summary => summary.job_name === 'wst_upd_v1.7.19');
-        
-        console.log(`Host: ${host.name}`);
-        console.log('Trabajos ejecutados:', jobSummaries.map(j => j.job_name));
-        
-        let status = 'pendiente'; 
+        const lastIPAJobIndex = jobSummaries.findIndex(
+          summary => summary.job_name === 'wst_ipa_v1.7.10'
+        );
 
-        if (job) {
-          
-          status = job.failed ? 'fallido' : 'actualizado';
-          console.log(`El trabajo "${job.job_name}" fue encontrado. Estado: ${status}`);
-        } else {
-          console.log('El trabajo "wst_upd_v1.7.19" no se ejecutó. Estado: pendiente');
+        let status = 'pendiente';
+
+        if (lastIPAJobIndex !== -1) {
+          const relevantUpdateJob = jobSummaries.slice(0, lastIPAJobIndex).find(
+            summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed
+          );
+
+          if (relevantUpdateJob) {
+            status = 'actualizado';
+          } else {
+            const failedUpdateJob = jobSummaries.slice(0, lastIPAJobIndex).find(
+              summary => summary.job_name === 'wst_upd_v1.7.19' && summary.failed
+            );
+            if (failedUpdateJob) {
+              status = 'fallido';
+            }
+          }
         }
 
         return {
