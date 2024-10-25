@@ -42,7 +42,11 @@ function createFilialButtons(filiales) {
         button.textContent = filial.name;
         button.classList.add('custom-button');
         
-        button.onclick = () => console.log(`Filial seleccionada: ${filial.name}`);
+        button.onclick = async () => {
+            const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+            const hosts = await fetchHostsFromDB(filial.id, tipo);
+            displayHosts(hosts);
+        };
         
         filialContainer.appendChild(button);
     });

@@ -3,6 +3,7 @@ import { GroupHostController } from '../controllers/awxController.js';
 import { startDataSync } from '../app.js';
 //import Filial from '../models/filiales.js';
 import { getFilialesFromDB } from '../services/dbService.js';
+import { getHostsByFilial } from '../controllers/hostsController.js';
 
 export const awxRoutes = Router();
 
@@ -28,6 +29,8 @@ awxRoutes.get('/api/db/filiales', async (req, res) => {
       res.status(500).json({ error: 'Error al obtener filiales' });
     }
   });
+
+  awxRoutes.get('/api/db/filiales/:filialId/hosts', getHostsByFilial);
 
 export default awxRoutes;
 
