@@ -34,28 +34,62 @@ export const getHostsByFilial = async (req, res) => {
       const hostsWithStatus = hosts.map(host => {
         const jobSummaries = host.jobSummaries || [];
 
-        const lastIPAJobIndex = jobSummaries.findIndex(
+        console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos.`);
+
+        const lastIPAJob = jobSummaries.find(
           summary => summary.job_name === 'wst_ipa_v1.7.10'
         );
 
-        let status = 'pendiente';
-
-        if (lastIPAJobIndex !== -1) {
-          const relevantUpdateJob = jobSummaries.slice(0, lastIPAJobIndex).find(
-            summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed
-          );
-
-          if (relevantUpdateJob) {
-            status = 'actualizado';
-          } else {
-            const failedUpdateJob = jobSummaries.slice(0, lastIPAJobIndex).find(
-              summary => summary.job_name === 'wst_upd_v1.7.19' && summary.failed
-            );
-            if (failedUpdateJob) {
-              status = 'fallido';
-            }
-          }
+        if (!lastIPAJob) {
+          console.log(`Host ${host.id} - ${host.name} no tiene ningún "wst_ipa_v1.7.10". Marcado como pendiente.`);
+          return {
+            id: host.id,
+            name: host.name,
+            description: host.description,
+            status: 'pendiente',
+            enabled: host.enabled,
+          };
         }
+
+
+        const successfulUpdateJob = jobSummaries.find(
+          summary =>
+            summary.job_name === 'wst_upd_v1.7.19' &&
+            !summary.failed &&
+            jobSummaries.indexOf(summary) < jobSummaries.indexOf(lastIPAJob)
+        );
+
+        if (successfulUpdateJob) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.7.19" exitoso después del "wst_ipa_v1.7.10". Marcado como actualizado.`);
+          return {
+            id: host.id,
+            name: host.name,
+            description: host.description,
+            status: 'actualizado',
+            enabled: host.enabled,
+          };
+        }
+
+
+        const failedUpdateJob = jobSummaries.find(
+          summary =>
+            summary.job_name === 'wst_upd_v1.7.19' &&
+            summary.failed &&
+            jobSummaries.indexOf(summary) < jobSummaries.indexOf(lastIPAJob)
+        );
+
+        if (failedUpdateJob) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.7.19" fallido después del "wst_ipa_v1.7.10". Marcado como fallido.`);
+          return {
+            id: host.id,
+            name: host.name,
+            description: host.description,
+            status: 'fallido',
+            enabled: host.enabled,
+          };
+        }
+
+        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.7.19" después del "wst_ipa_v1.7.10".`);
 
         return {
           id: host.id,
