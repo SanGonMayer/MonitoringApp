@@ -7,6 +7,12 @@ export const getHostsByFilial = async (req, res) => {
     const { filialId } = req.params;
     const { tipo } = req.query; 
 
+    const filialIdInt = parseInt(filialId, 10);
+
+    if (isNaN(filialIdInt)) {
+      return res.status(400).json({ error: 'El ID de la filial debe ser un número válido.' });
+    }
+
     let hosts;
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
