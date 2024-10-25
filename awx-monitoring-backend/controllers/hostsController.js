@@ -7,11 +7,12 @@ export const getHostsByFilial = async (req, res) => {
     const { filialId } = req.params;
     const { tipo } = req.query; 
 
-    console.log('Filial ID recibido:', filialId);
+    cconsole.log('Filial ID antes de convertir:', filialId);
     console.log('Tipo de terminal:', tipo);
 
 
     const filialIdInt = parseInt(filialId, 10);
+    console.log('Filial ID después de convertir a entero:', filialIdInt);
 
     if (isNaN(filialIdInt)) {
       return res.status(400).json({ error: 'El ID de la filial debe ser un número válido.' });
@@ -20,7 +21,7 @@ export const getHostsByFilial = async (req, res) => {
     let hosts;
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
-        where: { filial_id: filialId },
+        where: { filial_id: filialIdInt },
         include: [
           {
             model: JobHostSummary,
@@ -33,7 +34,7 @@ export const getHostsByFilial = async (req, res) => {
       });
     } else if (tipo === 'cctv') {
       hosts = await CCTV.findAll({
-        where: { filial_id: filialId },
+        where: { filial_id: filialIdInt },
         include: [
           {
             model: JobHostSummary,
