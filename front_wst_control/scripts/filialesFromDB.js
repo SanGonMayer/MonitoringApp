@@ -18,7 +18,7 @@ async function fetchFilialesFromDB(tipoTerminal) {
       
       clearFilialContainer();
       
-      createFilialButtons(filialesFiltradas);
+      createFilialButtons(filialesFiltradas, tipoTerminal);
 
       return filialesFiltradas;
   
@@ -34,7 +34,7 @@ function clearFilialContainer() {
     filialContainer.innerHTML = '';
 }
 
-function createFilialButtons(filiales) {
+function createFilialButtons(filiales, tipoTerminal) {
     const filialContainer = document.querySelector('#filialContainer');
     
     filiales.forEach(filial => {
