@@ -62,6 +62,6 @@ export const getHostsByFilial = async (req, res) => {
     res.status(200).json(hostsWithJobs);
   } catch (error) {
     console.error('Error al obtener hosts:', error.message);
-    res.status(500).json({ error: 'Error al obtener hosts' });
+    res.status(500).json({ error: 'Error al obtener hosts', details: error });
   }
 };
