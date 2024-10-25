@@ -3,7 +3,6 @@ import Filial from '../models/filiales.js';
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
-import Job from '../models/jobs.js';
 import Inventory from '../models/inventory.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';

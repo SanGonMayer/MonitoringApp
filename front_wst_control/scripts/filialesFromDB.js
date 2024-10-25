@@ -1,3 +1,6 @@
+import { fetchHostsFromDB } from './hostsFromDB.js';
+
+
 async function fetchFilialesFromDB(tipoTerminal) {
     try {
       console.log('Fetching filiales from the database:', tipoTerminal);
