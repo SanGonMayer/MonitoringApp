@@ -7,6 +7,10 @@ export const getHostsByFilial = async (req, res) => {
     const { filialId } = req.params;
     const { tipo } = req.query; 
 
+    console.log('Filial ID recibido:', filialId);
+    console.log('Tipo de terminal:', tipo);
+
+
     const filialIdInt = parseInt(filialId, 10);
 
     if (isNaN(filialIdInt)) {
