@@ -21,7 +21,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     tableBody.innerHTML = ''; 
     
     hosts.forEach((host, index) => {
-        const jobNames = host.jobNames.join(', ');
+        //const jobNames = host.jobNames.join(', ');
 
       const row = `
         <tr>
@@ -32,7 +32,6 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${host.inventory_id}</td>
           <td>${host.status || 'Desconocido'}</td>
           <td>${host.enabled ? 'Sí' : 'No'}</td>
-          <td>${jobNames || 'Sin trabajos'}</td>
 
         </tr>
       `;
