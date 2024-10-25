@@ -25,7 +25,7 @@ CCTV.belongsTo(Inventory, { foreignKey: 'inventory_id' });
 //JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
 
 Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id', as: 'jobSummaries' });
-JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', allowNull: true }); 
+JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', as: 'workstation', allowNull: true }); 
 
 CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id', as: 'jobSummaries' });
 JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
