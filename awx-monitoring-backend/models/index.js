@@ -24,11 +24,11 @@ CCTV.belongsTo(Inventory, { foreignKey: 'inventory_id' });
 //Job.hasMany(JobHostSummary, { foreignKey: 'job_id' });
 //JobHostSummary.belongsTo(Job, { foreignKey: 'job_id' });
 
-Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id' });
-JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', allowNull: true }); 
+Workstation.hasMany(JobHostSummary, { foreignKey: 'workstation_id', as: 'jobSummaries' });
+JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', allowNull: true, as: 'workstation' }); 
 
-CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id' });
-JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
+CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id', as: 'jobSummaries' });
+JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true, as: 'cctv' }); 
 
 
 export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary };
