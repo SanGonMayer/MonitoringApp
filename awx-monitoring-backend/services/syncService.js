@@ -142,7 +142,7 @@ export const syncHostsFromInventory22 = async (filial) => {
         await syncJobHostSummaries(host.id, 347);
       }
 
-      await Workstation.destroy({
+      await CCTV.destroy({
         where: {
           filial_id: filial.id,
           id: { [Op.notIn]: enabledHostIdsFromAPI }  
