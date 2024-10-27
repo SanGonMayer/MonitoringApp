@@ -84,6 +84,7 @@ export const syncHostsFromInventory22 = async (filial) => {
   
     try {
       const hostsWST = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_wst}/hosts/`);
+      const enabledHostIdsFromAPI = hostsWST.map(host => host.id);
   
       for (const host of hostsWST) {
         await Workstation.upsert({
@@ -92,9 +93,17 @@ export const syncHostsFromInventory22 = async (filial) => {
           description: host.description,
           inventory_id: 22, 
           filial_id: filial.id, 
+          enabled: host.enabled
         });
         await syncJobHostSummaries(host.id, 22); 
       }
+
+      await Workstation.destroy({
+        where: {
+          filial_id: filial.id,
+          id: { [Op.notIn]: enabledHostIdsFromAPI }  
+        }
+      });
   
       console.log(`Hosts WST de la filial ${filial.name} sincronizados.`);
     } catch (error) {
@@ -119,6 +128,7 @@ export const syncHostsFromInventory22 = async (filial) => {
     try {
 
       const hostsCCTV = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_cctv}/hosts/`);
+      const enabledHostIdsFromAPI = hostsWST.map(host => host.id);
   
       for (const host of hostsCCTV) {
         await CCTV.upsert({
@@ -127,9 +137,17 @@ export const syncHostsFromInventory22 = async (filial) => {
           description: host.description,
           inventory_id: 347,  
           filial_id: filial.id,
+          enabled: host.enabled
         });
         await syncJobHostSummaries(host.id, 347);
       }
+
+      await Workstation.destroy({
+        where: {
+          filial_id: filial.id,
+          id: { [Op.notIn]: enabledHostIdsFromAPI }  
+        }
+      });
   
       console.log(`Hosts CCTV de la filial ${filial.name} sincronizados.`);
     } catch (error) {

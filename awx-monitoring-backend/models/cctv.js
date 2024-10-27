@@ -1,8 +1,4 @@
-import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-import Filial from './filiales.js';
-import Inventory from './inventory.js';
-import JobHostSummary from './jobHostSummary.js';
 
 const CCTV = sequelize.define('CCTV', {
   id: {
@@ -24,6 +20,11 @@ const CCTV = sequelize.define('CCTV', {
   },
   inventory_id: {
     type: DataTypes.INTEGER,
+  },
+  enabled: { 
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
   }
 });
 
