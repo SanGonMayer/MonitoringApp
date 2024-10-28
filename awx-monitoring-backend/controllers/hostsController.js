@@ -1,6 +1,7 @@
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
+import Filial from '../models/filiales.js';
 
 export const getHostsByFilial = async (req, res) => {
   try {
@@ -20,7 +21,7 @@ export const getHostsByFilial = async (req, res) => {
     let hosts;
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
-        where: { filial_id: filialIdInt },
+        where: { filial_id: filialIdInt, enabled: true },
         include: [
             {
                 model: JobHostSummary,
