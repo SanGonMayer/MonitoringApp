@@ -1,8 +1,11 @@
 function buscar(tipoTerminal) {
     if (tipoTerminal === 'cctv.html') {
-        fetchFilialesFromDB('cctv.html');
+        fetchFiliales(347);
     } else if (tipoTerminal === 'wst.html') {
-        fetchFilialesFromDB('wst.html');
+        fetchFiliales(22);
+    } else if (tipoTerminal === ''){
+        crearGraficoCircular('#circularCctv','cctv.html');
+        crearGraficoCircular('#circularWst','wst.html');
     } else {
         console.log('Página no reconocida.');
     }
