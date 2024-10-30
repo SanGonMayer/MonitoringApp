@@ -163,9 +163,13 @@ async function evaluarEstadoHosts(filialId, tipo) {
 
 function updateCantidadDeFiliales(){
   if (window.totalFiliales === 0) return;
+
+  console.log('cantidad de filiales actualizadas', window.actualizadas)
+  console.log('cantidad de filiales pendientes', window.pendientes)
+  console.log('cantidad de filiales fallidas', window.fallidas)
   
-  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${window.fallidas}`;
-  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.pendiente}`;
+  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${window.actualizadas}`;
+  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.pendientes}`;
   document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.fallidas}`;
 }
 /* ------------------------------------- */
