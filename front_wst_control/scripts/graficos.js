@@ -7,7 +7,7 @@ function crearGraficoCircular(canvaId, redirectUrl) {
     const data = {
         labels: labels,
         datasets: [{
-            data: [338, 12, 3],
+            data: [286, 0, 2],
             backgroundColor: colors
         }]
     };
