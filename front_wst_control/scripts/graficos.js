@@ -4,13 +4,39 @@ function crearGraficoCircular(canvaId, redirectUrl) {
   
     const graph = document.querySelector(canvaId);
   
-    const data = {
+    /* const data = {
         labels: labels,
         datasets: [{
             data: [267, 19, 2],
             backgroundColor: colors
         }]
-    };
+    }; */
+
+    /* ------------------------------ */
+    const actualizadasWst = window.actualizadas;
+    const pendientesWst = window.pendientes;
+    const fallidasWst = window.fallidas;
+
+    let data;
+    
+    if (canvaId == 'cctv.html') {
+        data = { // Asignar el valor a data
+            labels: labels,
+            datasets: [{
+                data: [34, 2, 2],
+                backgroundColor: colors
+            }]
+        };
+    } else if (canvaId == 'wst.html') {
+        data = { // Asignar el valor a data en el else
+            labels: labels,
+            datasets: [{
+                data: [actualizadasWst, pendientesWst, fallidasWst],
+                backgroundColor: colors
+            }]
+        };
+    }
+    /* ------------------------------ */
   
     const config = {
         type: 'pie',
