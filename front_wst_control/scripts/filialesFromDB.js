@@ -50,7 +50,7 @@ function clearFilialContainer() {
     filialContainer.innerHTML = '';
 }
 
-function createFilialButtons(filiales, tipoTerminal) {
+/* function createFilialButtons(filiales, tipoTerminal) {
     const filialContainer = document.querySelector('#filialContainer');
     
     filiales.forEach(filial => {
@@ -66,8 +66,109 @@ function createFilialButtons(filiales, tipoTerminal) {
         
         filialContainer.appendChild(button);
     });
+} */
+
+
+
+/* ------------------------------------- */
+
+window.totalFiliales = 0;
+window.actualizadas = 0;
+window.pendientes = 0;
+window.fallidas = 0;
+window.allButtons = [];
+
+
+
+function inicializarEstadosFiliales() {
+  window.totalFiliales = 0;
+  window.actualizadas = 0;
+  window.pendientes = 0;
+  window.fallidas = 0;
 }
 
+function inicializarEstadosHosts() {
+  window.totalHosts = 0;
+  window.hostsActualizados = 0;
+  window.hostsPendientes = 0;
+  window.hostsFallidos = 0;
+}
+
+
+async function createFilialButtons(filiales, tipoTerminal) {
+  const filialContainer = document.querySelector('#filialContainer');
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+
+  for (const filial of filiales) {
+      const button = document.createElement('button');
+      button.textContent = filial.name;
+      button.classList.add('custom-button');
+
+      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
+      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
+      button.style.backgroundColor = color;
+
+      // Asigna los hosts directamente al evento click sin volver a hacer fetch
+      button.onclick = () => {
+          displayHosts(hosts);
+      };
+
+      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+      window.allButtons.push(button);
+  }
+
+  updateCantidadDeFiliales();
+}
+
+
+async function evaluarEstadoHosts(filialId, tipo) {
+  try {
+      const hosts = await fetchHostsFromDB(filialId, tipo);
+      let hayPendientes = false;
+      let hayFallidas = false;
+      let todasActualizadas = true;
+      let color = '';
+
+      hosts.forEach(host => {
+          window.totalHosts++;
+          const status = host.status || 'pendiente';
+
+          if (status === 'pendiente') {
+              window.hostsPendientes++;
+              hayPendientes = true;
+              todasActualizadas = false;
+          } else if (status === 'fallido') {
+              window.hostsFallidos++;
+              hayFallidas = true;
+              todasActualizadas = false;
+          } else if (status !== 'actualizado') {
+              window.hostsActualizados++;
+              todasActualizadas = false;
+          }
+      });
+
+      window.totalFiliales++;
+      if (hayFallidas) {
+          window.fallidas++;
+          color = 'red'; 
+      } else if (hayPendientes) {
+          window.pendientes++;
+          color = '#ffc107'; 
+      } else if (todasActualizadas) {
+          window.actualizadas++;
+          color = 'green'; 
+      }
+      return { color , hosts };
+  } catch (error) {
+      console.error('Error evaluando los hosts:', error);
+      return 'gray'; // Para este caso de error, poder devolver color grey por defecto, o crear otro try catch arriba solo para cuando 
+                     // hace fetch de los hosts
+  }
+}
+
+/* ------------------------------------- */
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
 window.clearFilialContainer = clearFilialContainer;
