@@ -28,7 +28,7 @@ function crearGraficoCircular(canvaId, redirectUrl) {
                 backgroundColor: colors
             }]
         };
-    } else {
+    } else if (canvaId == 'wst.html') {
         data = { // Asignar el valor a data en el else
             labels: labels,
             datasets: [{
