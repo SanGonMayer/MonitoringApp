@@ -47,3 +47,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.buscar = buscar;
+window.filtrando = filtrando;
