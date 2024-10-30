@@ -39,7 +39,6 @@ function filtrando() {
     });
 }
 
-windows.filtrando = filtrando;
 /* ------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
