@@ -160,6 +160,14 @@ async function evaluarEstadoHosts(filialId, tipo) {
   }
 }
 
+
+function updateCantidadDeFiliales(){
+  if (window.totalFiliales === 0) return;
+  
+  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${window.fallidas}`;
+  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.pendiente}`;
+  document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.fallidas}`;
+}
 /* ------------------------------------- */
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
