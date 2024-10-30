@@ -14,7 +14,10 @@ function buscar(tipoTerminal) {
     } else if (tipoTerminal === 'wst.html') {
         fetchFilialesFromDB('wst.html');
     } else if (tipoTerminal === ''){
+        /* ------------------------------ */
         fetchFilialesFromDB('wst.html');
+        /* ------------------------------ */
+
         crearGraficoCircular('#circularCctv','cctv.html');
         crearGraficoCircular('#circularWst','wst.html');
     } else {

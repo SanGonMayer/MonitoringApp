@@ -18,16 +18,18 @@ function crearGraficoCircular(canvaId, redirectUrl) {
     const pendientesWst = window.pendientes;
     const fallidasWst = window.fallidas;
 
-    if (canvaId == 'cctv.html'){
-        const data = {
+    let data;
+
+    if (canvaId == 'cctv.html') {
+        data = { // Asignar el valor a data
             labels: labels,
             datasets: [{
                 data: [34, 2, 2],
                 backgroundColor: colors
             }]
         };
-    } else{
-        const data = {
+    } else {
+        data = { // Asignar el valor a data en el else
             labels: labels,
             datasets: [{
                 data: [actualizadasWst, pendientesWst, fallidasWst],
