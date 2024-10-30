@@ -72,14 +72,6 @@ function clearFilialContainer() {
 
 /* ------------------------------------- */
 
-window.totalFiliales = 0;
-window.actualizadas = 0;
-window.pendientes = 0;
-window.fallidas = 0;
-window.allButtons = [];
-
-
-
 function inicializarEstadosFiliales() {
   window.totalFiliales = 0;
   window.actualizadas = 0;

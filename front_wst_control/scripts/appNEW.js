@@ -21,6 +21,26 @@ function buscar(tipoTerminal) {
     }
 }
 
+/* ------------------------------------- */
+// Variables globales para el estado
+window.totalFiliales = 0;
+window.actualizadas = 0;
+window.pendientes = 0;
+window.fallidas = 0;
+window.allButtons = [];
+
+
+function filtrando() {
+    const filial = document.getElementById('search').value.toLowerCase();
+
+    allButtons.forEach(button => {
+        const buttonText = button.textContent.toLowerCase();
+        button.style.display = buttonText.includes(filial) ? '' : 'none';
+    });
+}
+
+/* ------------------------------------- */
+
 document.addEventListener('DOMContentLoaded', () => {
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
