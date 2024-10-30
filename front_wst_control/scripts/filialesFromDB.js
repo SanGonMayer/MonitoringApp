@@ -34,6 +34,8 @@ async function fetchFilialesFromDB(tipoTerminal) {
       
       clearFilialContainer();
       
+      console.log('rompe en clearFilialContainer')
+
       createFilialButtons(filialesFiltradas, tipoTerminal);
 
       return filialesFiltradas;
