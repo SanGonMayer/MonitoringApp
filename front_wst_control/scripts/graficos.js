@@ -1,7 +1,8 @@
-function crearGraficoCircular(canvaId, redirectUrl) {
+function crearGraficoCircular(canvaId, tipoTerminal) {
     const labels = ['Actualizadas', 'Desactualizadas', 'Fallidas'];
     const colors = ['rgb(26,194,23)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
-  
+    const redirectUrl = tipoTerminal;
+    
     const graph = document.querySelector(canvaId);
   
     const data = {

@@ -172,6 +172,61 @@ function updateCantidadDeFiliales(){
   document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.pendientes}`;
   document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.fallidas}`;
 }
+
+
+
+async function evaluarEstadoFiliales(filialId, tipo) {
+
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+  
+  try {
+      const hosts = await fetchHostsFromDB(filialId, tipo);
+      let hayPendientes = false;
+      let hayFallidas = false;
+      let todasActualizadas = true;
+
+      let filialesActualizadas = 0
+      let filialesPendientes = 0
+      let filialesFallidas = 0
+
+      hosts.forEach(host => {
+          window.totalHosts++;
+          const status = host.status || 'pendiente';
+
+          if (status === 'pendiente') {
+              window.hostsPendientes++;
+              hayPendientes = true;
+              todasActualizadas = false;
+          } else if (status === 'fallido') {
+              window.hostsFallidos++;
+              hayFallidas = true;
+              todasActualizadas = false;
+          } else if (status !== 'actualizado') {
+              window.hostsActualizados++;
+              todasActualizadas = false;
+          }
+      });
+
+      if (hayFallidas) {
+          window.fallidas++;
+      } else if (hayPendientes) {
+          window.pendientes++;
+      } else if (todasActualizadas) {
+          window.actualizadas++;
+      }
+
+      filialesActualizadas = window.actualizadas;
+      filialesPendientes = window.pendientes;
+      filialesFallidas = window.fallidas;
+      
+      return { filialesActualizadas, filialesPendientes, filialesFallidas};
+  } catch (error) {
+      console.error('Error evaluando los hosts:', error);
+      return 'gray'; // Para este caso de error, poder devolver color grey por defecto, o crear otro try catch arriba solo para cuando 
+                     // hace fetch de los hosts
+  }
+}
 /* ------------------------------------- */
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
