@@ -74,8 +74,8 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     if (tipoTerminal === 'wst.html') {
         ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
         console.log('Filiales actualizadas wst', filialesActualizadas);
-        console.log('Filiales actualizadas wst', filialesPendientes);
-        console.log('Filiales actualizadas wst', filialesFallidas);
+        console.log('Filiales pendientes wst', filialesPendientes);
+        console.log('Filiales fallidas wst', filialesFallidas);
 
     } else {
         ({ 
@@ -83,13 +83,13 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
             filialesPendientes, 
             filialesFallidas 
         } = { 
-            filialesActualizadas: 10, 
-            filialesPendientes: 34, 
+            filialesActualizadas: 34, 
+            filialesPendientes: 2, 
             filialesFallidas: 2 
         });
-        console.log('Filiales actualizadas wst', filialesActualizadas);
-        console.log('Filiales actualizadas wst', filialesPendientes);
-        console.log('Filiales actualizadas wst', filialesFallidas);
+        console.log('Filiales actualizadas cctv', filialesActualizadas);
+        console.log('Filiales pendientes cctv', filialesPendientes);
+        console.log('Filiales fallidas cctv', filialesFallidas);
     }
     
     const graph = document.querySelector(canvaId);
