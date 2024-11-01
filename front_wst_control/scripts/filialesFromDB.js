@@ -198,12 +198,12 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
     console.log('Filiales filtradas:', filialesFiltradas);
     
     
-    const {fActualizadas, fPendientes, fFallidas } = evaluarEstadoFiliales(filialesFiltradas, tipoTerminal)
+    const {fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal)
     return { fActualizadas, fPendientes, fFallidas };
 
   } catch (error) {
     console.error('Error obteniendo las filiales desde la base de datos:', error);
-    return [];
+    return { fActualizadas: 0, fPendientes: 0, fFallidas: 0 };
   }
 }
 
@@ -262,8 +262,7 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
       return { filialesActualizadas, filialesPendientes, filialesFallidas};
   } catch (error) {
       console.error('Error evaluando los hosts:', error);
-      return 'gray'; // Para este caso de error, poder devolver color grey por defecto, o crear otro try catch arriba solo para cuando 
-                     // hace fetch de los hosts
+      return { filialesActualizadas: 0, filialesPendientes: 0, filialesFallidas: 0 };
   }
 }
 /* ------------------------------------- */
