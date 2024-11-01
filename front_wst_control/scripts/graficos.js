@@ -87,6 +87,9 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
             filialesPendientes: 34, 
             filialesFallidas: 2 
         });
+        console.log('Filiales actualizadas wst', filialesActualizadas);
+        console.log('Filiales actualizadas wst', filialesPendientes);
+        console.log('Filiales actualizadas wst', filialesFallidas);
     }
     
     const graph = document.querySelector(canvaId);
