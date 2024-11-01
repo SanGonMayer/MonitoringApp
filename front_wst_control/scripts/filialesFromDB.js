@@ -198,7 +198,7 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
     console.log('Filiales filtradas:', filialesFiltradas);
     
     
-    const {fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal);
+    const { fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal);
     console.log('Filiales actualizadas fetch', fActualizadas);
     console.log('Filiales pendientes fetch', fPendientes);
     console.log('Filiales fallidas fetch', fFallidas);
@@ -266,7 +266,7 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
       console.log('Filiales pendientes EEF', filialesPendientes);
       console.log('Filiales fallidas EEF', filialesFallidas);
       
-      return { filialesActualizadas, filialesPendientes, filialesFallidas};
+      return { filialesActualizadas, filialesPendientes, filialesFallidas };
   } catch (error) {
       console.error('Error evaluando los hosts:', error);
       return { filialesActualizadas: 0, filialesPendientes: 0, filialesFallidas: 0 };
