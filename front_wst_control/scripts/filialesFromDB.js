@@ -261,6 +261,10 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
       filialesActualizadas = window.actualizadas;
       filialesPendientes = window.pendientes;
       filialesFallidas = window.fallidas;
+
+      console.log('Filiales actualizadas EEF', filialesActualizadas);
+      console.log('Filiales pendientes EEF', filialesPendientes);
+      console.log('Filiales fallidas EEF', filialesFallidas);
       
       return { filialesActualizadas, filialesPendientes, filialesFallidas};
   } catch (error) {
