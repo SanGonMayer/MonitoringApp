@@ -198,7 +198,7 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
     console.log('Filiales filtradas:', filialesFiltradas);
     
     
-    const {fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal)
+    const {fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal);
     console.log('Filiales actualizadas fetch', fActualizadas);
     console.log('Filiales pendientes fetch', fPendientes);
     console.log('Filiales fallidas fetch', fFallidas);
