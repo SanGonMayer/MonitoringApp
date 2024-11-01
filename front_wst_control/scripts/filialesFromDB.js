@@ -198,11 +198,11 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
     console.log('Filiales filtradas:', filialesFiltradas);
     
     
-    const { fActualizadas, fPendientes, fFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal);
-    console.log('Filiales actualizadas fetch', fActualizadas);
-    console.log('Filiales pendientes fetch', fPendientes);
+    const { filialesActualizadas, filialesPendientes, filialesFallidas } = await evaluarEstadoFiliales(filialesFiltradas, tipoTerminal);
+    console.log('Filiales actualizadas fetch', filialesActualizadas);
+    console.log('Filiales pendientes fetch', filialesPendientes);
     console.log('Filiales fallidas fetch', fFallidas);
-    return { fActualizadas, fPendientes, fFallidas };
+    return { filialesActualizadas, filialesPendientes, filialesFallidas };
 
   } catch (error) {
     console.error('Error obteniendo las filiales desde la base de datos:', error);

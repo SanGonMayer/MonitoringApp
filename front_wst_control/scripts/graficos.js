@@ -69,27 +69,27 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     const colors = ['rgb(26,194,23)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
     const redirectUrl = tipoTerminal;
 
-    let fGActualizadas, fGPendientes, fGFallidas;
+    let filialesActualizadas, filialesPendientes, filialesFallidas;
 
     if (tipoTerminal === 'wst.html') {
-        ({ fGActualizadas, fGPendientes, fGFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
-        console.log('Filiales actualizadas wst', fGActualizadas);
-        console.log('Filiales pendientes wst', fGPendientes);
-        console.log('Filiales fallidas wst', fGFallidas);
+        ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
+        console.log('Filiales actualizadas wst', filialesActualizadas);
+        console.log('Filiales pendientes wst', filialesPendientes);
+        console.log('Filiales fallidas wst', filialesFallidas);
 
     } else {
         ({ 
-            fGActualizadas, 
-            fGPendientes, 
-            fGFallidas 
+            filialesActualizadas, 
+            filialesPendientes, 
+            filialesFallidas 
         } = { 
-            fGActualizadas: 34, 
-            fGPendientes: 2, 
-            fGFallidas: 2 
+            filialesActualizadas: 34, 
+            filialesPendientes: 2, 
+            filialesFallidas: 2 
         });
-        console.log('Filiales actualizadas cctv', fGActualizadas);
-        console.log('Filiales pendientes cctv', fGPendientes);
-        console.log('Filiales fallidas cctv', fGFallidas);
+        console.log('Filiales actualizadas cctv', filialesActualizadas);
+        console.log('Filiales pendientes cctv', filialesPendientes);
+        console.log('Filiales fallidas cctv', filialesFallidas);
     }
     
     const graph = document.querySelector(canvaId);
@@ -97,7 +97,7 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     const data = {
         labels: labels,
         datasets: [{
-            data: [fGActualizadas, fGPendientes, fGFallidas],
+            data: [filialesActualizadas, filialesPendientes, filialesFallidas],
             backgroundColor: colors
         }]
     };
