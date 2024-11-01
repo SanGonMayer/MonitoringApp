@@ -79,17 +79,17 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
 
     } else {
         ({ 
-            filialesActualizadas, 
-            filialesPendientes, 
-            filialesFallidas 
+            fGActualizadas, 
+            fGPendientes, 
+            fGFallidas 
         } = { 
-            filialesActualizadas: 34, 
-            filialesPendientes: 2, 
-            filialesFallidas: 2 
+            fGActualizadas: 34, 
+            fGPendientes: 2, 
+            fGFallidas: 2 
         });
-        console.log('Filiales actualizadas cctv', filialesActualizadas);
-        console.log('Filiales pendientes cctv', filialesPendientes);
-        console.log('Filiales fallidas cctv', filialesFallidas);
+        console.log('Filiales actualizadas cctv', fGActualizadas);
+        console.log('Filiales pendientes cctv', fGPendientes);
+        console.log('Filiales fallidas cctv', fGFallidas);
     }
     
     const graph = document.querySelector(canvaId);
