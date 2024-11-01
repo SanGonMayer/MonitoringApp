@@ -92,6 +92,8 @@ async function createFilialButtons(filiales, tipoTerminal) {
   inicializarEstadosFiliales(); 
   inicializarEstadosHosts();
 
+  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+
   for (const filial of filiales) {
       const button = document.createElement('button');
       button.textContent = filial.name;
@@ -105,6 +107,8 @@ async function createFilialButtons(filiales, tipoTerminal) {
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
           displayHosts(hosts);
+          // Desplaza la pantalla hacia la tabla de hosts
+          tableElement.scrollIntoView({ behavior: 'smooth' });
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
