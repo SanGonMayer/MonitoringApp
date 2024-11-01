@@ -64,7 +64,7 @@
 
 /* ----------------------------------------------------- */
 
-async function crearGraficoCircular(canvaId, tipoTerminal) {
+function crearGraficoCircular(canvaId, tipoTerminal) {
     const labels = ['Actualizadas', 'Desactualizadas', 'Fallidas'];
     const colors = ['rgb(26,194,23)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
     const redirectUrl = tipoTerminal;
@@ -72,7 +72,7 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     let filialesActualizadas, filialesPendientes, filialesFallidas;
 
     if (tipoTerminal === 'wst.html') {
-        ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
+        ({ filialesActualizadas, filialesPendientes, filialesFallidas } = fetchFilialesGraficoDB(tipoTerminal)); 
         console.log('Filiales actualizadas wst', filialesActualizadas);
         console.log('Filiales actualizadas wst', filialesPendientes);
         console.log('Filiales actualizadas wst', filialesFallidas);
