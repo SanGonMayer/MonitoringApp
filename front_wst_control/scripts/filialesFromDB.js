@@ -227,8 +227,104 @@ async function evaluarEstadoFiliales(filialId, tipo) {
                      // hace fetch de los hosts
   }
 }
+
+
+
+async function fetchFilialesGraficoDB(tipoTerminal) {
+  try {
+    console.log('Fetching filiales from the database:', tipoTerminal);
+    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener filiales desde la base de datos');
+    }
+
+    const filiales = await response.json();
+
+    let filialesFiltradas = []; 
+
+    if (tipoTerminal === 'wst.html') {
+      filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
+    } else if (tipoTerminal === 'cctv.html') {
+      console.log('Estoy evaluando las filiales para cctv')
+      filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+    }
+
+    console.log('Filiales filtradas:', filialesFiltradas);
+    
+    
+    const {fActualizadas, fPendientes, fFallidas } = evaluarEstadoFiliales(filialesFiltradas, tipoTerminal)
+    return { fActualizadas, fPendientes, fFallidas };
+
+  } catch (error) {
+    console.error('Error obteniendo las filiales desde la base de datos:', error);
+    return [];
+  }
+}
+
+
+
+async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filialesId -> filiales
+
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+  
+  try {
+      let filialesActualizadas = 0
+      let filialesPendientes = 0
+      let filialesFallidas = 0
+      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+
+      for (const filial of filiales){
+          
+          const hosts = await fetchHostsFromDB(filial.id, tipo);
+          let hayPendientes = false;
+          let hayFallidas = false;
+          let todasActualizadas = true;
+  
+          hosts.forEach(host => {
+              window.totalHosts++;
+              const status = host.status || 'pendiente';
+  
+              if (status === 'pendiente') {
+                  window.hostsPendientes++;
+                  hayPendientes = true;
+                  todasActualizadas = false;
+              } else if (status === 'fallido') {
+                  window.hostsFallidos++;
+                  hayFallidas = true;
+                  todasActualizadas = false;
+              } else if (status !== 'actualizado') {
+                  window.hostsActualizados++;
+                  todasActualizadas = false;
+              }
+          });
+  
+          if (hayFallidas) {
+              window.fallidas++;
+          } else if (hayPendientes) {
+              window.pendientes++;
+          } else if (todasActualizadas) {
+              window.actualizadas++;
+          }
+      }
+      
+
+      filialesActualizadas = window.actualizadas;
+      filialesPendientes = window.pendientes;
+      filialesFallidas = window.fallidas;
+      
+      return { filialesActualizadas, filialesPendientes, filialesFallidas};
+  } catch (error) {
+      console.error('Error evaluando los hosts:', error);
+      return 'gray'; // Para este caso de error, poder devolver color grey por defecto, o crear otro try catch arriba solo para cuando 
+                     // hace fetch de los hosts
+  }
+}
 /* ------------------------------------- */
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
 window.clearFilialContainer = clearFilialContainer;
 window.createFilialButtons = createFilialButtons;
+window.fetchFilialesGraficoDB = fetchFilialesGraficoDB;
+window.evaluarEstadoFiliales = evaluarEstadoFiliales;
