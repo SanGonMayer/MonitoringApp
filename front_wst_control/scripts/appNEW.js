@@ -8,14 +8,14 @@
     }
 }
  */
-function buscar(tipoTerminal) {
+async function buscar(tipoTerminal) {
     if (tipoTerminal === 'cctv.html') {
-        fetchFilialesFromDB('cctv.html');
+        await fetchFilialesFromDB('cctv.html');
     } else if (tipoTerminal === 'wst.html') {
-        fetchFilialesFromDB('wst.html');
+        await fetchFilialesFromDB('wst.html');
     } else if (tipoTerminal === ''){
-        crearGraficoCircular('#circularCctv','cctv.html');
-        crearGraficoCircular('#circularWst','wst.html');
+        await crearGraficoCircular('#circularCctv','cctv.html');
+        await crearGraficoCircular('#circularWst','wst.html');
     } else {
         console.log('Página no reconocida.');
     }
