@@ -97,7 +97,7 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     const data = {
         labels: labels,
         datasets: [{
-            data: [filialesActualizadas, filialesPendientes, filialesFallidas],
+            data: [fGActualizadas, fGPendientes, fGFallidas],
             backgroundColor: colors
         }]
     };
