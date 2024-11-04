@@ -128,7 +128,7 @@ export const syncHostsFromInventory22 = async (filial) => {
     try {
 
       const hostsCCTV = await fetchAllPages(`${hostsApiUrl}/${filial.awx_id_cctv}/hosts/`);
-      const enabledHostIdsFromAPI = hostsWST.map(host => host.id);
+      const enabledHostIdsFromAPI = hostsCCTV.map(host => host.id);
   
       for (const host of hostsCCTV) {
         await CCTV.upsert({
