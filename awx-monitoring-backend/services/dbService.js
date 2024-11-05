@@ -26,3 +26,7 @@ export const getFilialesFromDB = async () => {
         throw error; 
     }
 };
+
+
+
+/* ------------ NUEVAS PRUEBAS */
