@@ -52,15 +52,13 @@ function filtrando() {
 
 
 function filtrarPorColorVerde() {
-    
     allButtons.forEach(button => {
-      // Obtiene el color de fondo actual del botón
-      const backgroundColor = window.getComputedStyle(button).backgroundColor;
-      // Muestra solo los botones con fondo verde (rgb(0, 128, 0))
-      button.style.display = (backgroundColor === 'green') ? '' : 'none';
+        // Obtiene el color de fondo actual del botón en formato RGB
+        const backgroundColor = window.getComputedStyle(button).backgroundColor;
+        // Muestra solo los botones con fondo verde exacto rgb(0, 128, 0)
+        button.style.display = (backgroundColor === 'rgb(0, 128, 0)') ? '' : 'none';
     });
 }
-
 
 /* ------------------------------------- */
 
