@@ -37,12 +37,17 @@ function filtrando() {
     const tableBody = document.querySelector('#workstationsTable tbody');
     tableBody.innerHTML = ''; 
 
+    const table = document.getElementById('workstationsTable');
+
     const filial = document.getElementById('search').value.toLowerCase();
 
     allButtons.forEach(button => {
         const buttonText = button.textContent.toLowerCase();
         button.style.display = buttonText.includes(filial) ? '' : 'none';
     });
+
+    // Oculta la tabla
+    table.style.display = 'none';
 }
 
 /* ------------------------------------- */
