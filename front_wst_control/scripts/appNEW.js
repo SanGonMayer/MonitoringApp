@@ -32,6 +32,11 @@ window.allButtons = [];
 
 
 function filtrando() {
+
+    // LIMPIANDO LA TABLA CUANDO SE BUSCA
+    const tableBody = document.querySelector('#workstationsTable tbody');
+    tableBody.innerHTML = ''; 
+
     const filial = document.getElementById('search').value.toLowerCase();
 
     allButtons.forEach(button => {
