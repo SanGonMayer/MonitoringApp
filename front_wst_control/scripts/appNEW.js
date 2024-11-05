@@ -50,11 +50,25 @@ function filtrando() {
     table.style.display = 'none';
 }
 
+
+function filtrarPorColorVerde() {
+    
+    allButtons.forEach(button => {
+      // Obtiene el color de fondo actual del botón
+      const backgroundColor = window.getComputedStyle(button).backgroundColor;
+      // Muestra solo los botones con fondo verde (rgb(0, 128, 0))
+      button.style.display = (backgroundColor === 'green') ? '' : 'none';
+    });
+}
+
+
 /* ------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
+
+    document.querySelector('.circle.clickable').addEventListener('click', filtrarPorColorVerde);
 });
 
 window.buscar = buscar;
