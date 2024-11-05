@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
 
-    document.querySelector('.circle.clickable').addEventListener('click', filtrarPorColorVerde);
+    document.querySelector('.circle').addEventListener('click', filtrarPorColorVerde);
 });
 
 window.buscar = buscar;
