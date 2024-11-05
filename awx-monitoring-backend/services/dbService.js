@@ -1,6 +1,8 @@
 import Filial from '../models/filiales.js'; 
 import { Op } from 'sequelize'; 
 import CCTV from '../models/cctv.js';
+import Workstation from '../models/workstations.js';
+
 
 
     /**
@@ -35,7 +37,7 @@ export const getFilialesFromDB = async () => {
 
 export const getFilialesConHosts = async (tipoTerminal) => {
     try {
-        const modelo = tipoTerminal === 'WORKSTATION' ? WORKSTATION : CCTV;
+        const modelo = tipoTerminal === 'WORKSTATION' ? Workstation : CCTV;
         // Consulta para obtener solo las filiales que tienen al menos un host en la tabla CCTV
         const filiales = await Filial.findAll({
             attributes: ['id', 'name', 'description', 'awx_id_wst', 'awx_id_cctv'],
