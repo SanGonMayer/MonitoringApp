@@ -90,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function filtrarPorColor(selectedColor) {
     // Lógica para filtrar botones
+    console.log('Mostrando el color por cada click', selectedColor);
+
     allButtons.forEach(button => {
         const backgroundColor = window.getComputedStyle(button).backgroundColor;
         // Compara el color del botón con el color seleccionado
