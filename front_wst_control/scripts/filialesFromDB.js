@@ -152,13 +152,13 @@ async function evaluarEstadoHosts(filialId, tipo) {
       window.totalFiliales++;
       if (hayFallidas) {
           window.fallidas++;
-          color = 'red'; 
+          color = '#dc3545'; 
       } else if (hayPendientes) {
           window.pendientes++;
           color = '#ffc107'; 
       } else if (todasActualizadas) {
           window.actualizadas++;
-          color = 'green'; 
+          color = '#28a745'; //
       }
       return { color , hosts };
   } catch (error) {
