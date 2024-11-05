@@ -37,7 +37,7 @@ awxRoutes.get('/api/db/filiales/:filialId/hosts', getHostsByFilial);
 
 /* ------------------------------------------------ */
 
-awxRoutes.get('api/db/filiales/CCTV', async (req, res) => {
+awxRoutes.get('api/db/filiales/cctv', async (req, res) => {
   try{
       const filiales = await getFilialesCCTVConHosts();
       res.json(filiales);

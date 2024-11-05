@@ -275,7 +275,7 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
 async function fetchFilialesCCTVFromDB(tipoTerminal) {
   try {
     console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/CCTV');
+    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/cctv');
     
     if (!response.ok) {
       throw new Error('Error al obtener filiales desde la base de datos');
