@@ -51,12 +51,13 @@ function filtrando() {
 }
 
 
-function filtrarPorColorVerde() {
+function filtrarPorColor(color) {
+
     allButtons.forEach(button => {
         // Obtiene el color de fondo actual del botón en formato RGB
         const backgroundColor = window.getComputedStyle(button).backgroundColor;
         // Muestra solo los botones con fondo verde exacto rgb(0, 128, 0)
-        button.style.display = (backgroundColor === 'rgb(0, 128, 0)') ? '' : 'none';
+        button.style.display = (backgroundColor === color) ? '' : 'none';
     });
 }
 
@@ -66,7 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
 
-    document.querySelector('.circle').addEventListener('click', filtrarPorColorVerde);
+    document.querySelector('.circle.verde').addEventListener('click', filtrarPorColor('rgb(0, 128, 0)'));
+    document.querySelector('.circle.naranja').addEventListener('click', filtrarPorColor('rgb(255, 193, 7)'));
+    document.querySelector('.circle.rojo').addEventListener('click', filtrarPorColor('rgb(255, 0, 0)'));
 });
 
 window.buscar = buscar;
