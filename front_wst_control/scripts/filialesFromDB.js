@@ -93,6 +93,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
   inicializarEstadosHosts();
 
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+  tableElement.style.display = 'none';
 
   for (const filial of filiales) {
       const button = document.createElement('button');
