@@ -275,7 +275,7 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
 async function fetchFilialesConHostsFromDB(tipoTerminal) {
   try {
 
-    const tipo = '';
+    let tipo = '';
 
     if (tipoTerminal === 'wst.html'){
       tipo = 'WORKSTATION';
