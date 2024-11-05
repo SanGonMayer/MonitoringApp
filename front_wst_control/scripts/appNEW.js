@@ -74,6 +74,9 @@ function filtrando() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const terminal = window.location.pathname.split('/').pop(); 
+    buscar(terminal);
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
     const circles = document.querySelectorAll('.circle');
 
