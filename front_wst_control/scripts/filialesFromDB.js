@@ -106,6 +106,9 @@ async function createFilialButtons(filiales, tipoTerminal) {
 
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
+
+          tableElement.style.display = '';
+
           displayHosts(hosts);
           // Desplaza la pantalla hacia la tabla de hosts
           tableElement.scrollIntoView({ behavior: 'smooth' });
