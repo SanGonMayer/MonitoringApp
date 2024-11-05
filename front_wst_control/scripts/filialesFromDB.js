@@ -278,7 +278,8 @@ async function fetchFilialesCCTVFromDB(tipoTerminal) {
     const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/cctv');
     
     if (!response.ok) {
-      throw new Error('Error al obtener filiales desde la base de datos');
+      const errorDetails = await response.text();
+      throw new Error(`Error al obtener filiales desde la base de datos: ${errorDetails}`);
     }
 
     const filiales = await response.json();
