@@ -317,3 +317,4 @@ window.clearFilialContainer = clearFilialContainer;
 window.createFilialButtons = createFilialButtons;
 window.fetchFilialesGraficoDB = fetchFilialesGraficoDB;
 window.evaluarEstadoFiliales = evaluarEstadoFiliales;
+window.fetchFilialesCCTVFromDB = fetchFilialesCCTVFromDB;
