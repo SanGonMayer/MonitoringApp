@@ -269,6 +269,47 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
       return { filialesActualizadas: 0, filialesPendientes: 0, filialesFallidas: 0 };
   }
 }
+
+
+
+async function fetchFilialesCCTVFromDB(tipoTerminal) {
+  try {
+    console.log('Fetching filiales from the database:', tipoTerminal);
+    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/CCTV');
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener filiales desde la base de datos');
+    }
+
+    const filiales = await response.json();
+
+    /* const filialesFiltradas = filiales.filter(filial => {
+      return (tipoTerminal === 'wst.html' && filial.hasWST) ||
+             (tipoTerminal === 'cctv.html' && filial.hasCCTV);
+    }); */
+
+    let filialesFiltradas = []; 
+
+    if (tipoTerminal === 'wst.html') {
+      filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
+    } else if (tipoTerminal === 'cctv.html') {
+      console.log('Estoy evaluando las filiales para cctv')
+      filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+    }
+
+    console.log('Filiales filtradas:', filialesFiltradas);
+    
+    clearFilialContainer();
+
+    createFilialButtons(filialesFiltradas, tipoTerminal);
+
+    return filialesFiltradas;
+
+  } catch (error) {
+    console.error('Error obteniendo las filiales desde la base de datos:', error);
+    return [];
+  }
+}
 /* ------------------------------------- */
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
