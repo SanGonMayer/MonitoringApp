@@ -11,7 +11,7 @@
 async function buscar(tipoTerminal) {
     if (tipoTerminal === 'cctv.html') {
         //await fetchFilialesFromDB('cctv.html');
-        fetchFilialesCCTVFromDB('cctv.html');
+        fetchFilialesConHostsFromDB('cctv.html');
     } else if (tipoTerminal === 'wst.html') {
         await fetchFilialesFromDB('wst.html');
     } else if (tipoTerminal === ''){

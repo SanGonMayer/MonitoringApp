@@ -33,14 +33,15 @@ export const getFilialesFromDB = async () => {
 /* ------------ NUEVAS PRUEBAS */
 
 
-export const getFilialesCCTVConHosts = async () => {
+export const getFilialesConHosts = async (tipoTerminal) => {
     try {
+        const modelo = tipoTerminal === 'WORKSTATION' ? WORKSTATION : CCTV;
         // Consulta para obtener solo las filiales que tienen al menos un host en la tabla CCTV
         const filiales = await Filial.findAll({
             attributes: ['id', 'name', 'description', 'awx_id_wst', 'awx_id_cctv'],
             include: [
                 {
-                    model: CCTV,
+                    model: modelo,
                     required: true, // Solo incluye filiales que tienen al menos un registro en CCTV
                     where: {
                         filial_id: { [Op.col]: 'Filial.id' } // Verifica que CCTV.filial_id coincida con Filial.id

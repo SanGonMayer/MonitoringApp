@@ -4,7 +4,7 @@ import { startDataSync } from '../app.js';
 //import Filial from '../models/filiales.js';
 import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial } from '../controllers/hostsController.js';
-import { getFilialesCCTVConHosts } from '../services/dbService.js';
+import { getFilialesConHosts } from '../services/dbService.js';
 
 export const awxRoutes = Router();
 
@@ -37,9 +37,10 @@ awxRoutes.get('/api/db/filiales/:filialId/hosts', getHostsByFilial);
 
 /* ------------------------------------------------ */
 
-awxRoutes.get('/api/db/filiales/cctv', async (req, res) => {
+awxRoutes.get('/api/db/filiales/:tipoTerminal', async (req, res) => {
+  const { tipoTerminal } = req.params;
   try{
-      const filiales = await getFilialesCCTVConHosts();
+      const filiales = await getFilialesConHosts(tipoTerminal);
       res.json(filiales);
   }catch (error){
     console.log('Error al obtener filiales de CCTV', error.message);

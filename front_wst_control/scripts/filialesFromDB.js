@@ -272,10 +272,20 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
 
 
 
-async function fetchFilialesCCTVFromDB(tipoTerminal) {
+async function fetchFilialesConHostsFromDB(tipoTerminal) {
   try {
+
+    const tipo = '';
+
+    if (tipoTerminal === 'wst.html'){
+      tipo = 'WORKSTATION';
+    } else if (tipoTerminal === 'cctv.html'){
+      tipo = 'CCTV';
+    }
+
+
     console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/cctv');
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
     
     if (!response.ok) {
       const errorDetails = await response.text();
@@ -318,4 +328,4 @@ window.clearFilialContainer = clearFilialContainer;
 window.createFilialButtons = createFilialButtons;
 window.fetchFilialesGraficoDB = fetchFilialesGraficoDB;
 window.evaluarEstadoFiliales = evaluarEstadoFiliales;
-window.fetchFilialesCCTVFromDB = fetchFilialesCCTVFromDB;
+window.fetchFilialesConHostsFromDB = fetchFilialesConHostsFromDB;
