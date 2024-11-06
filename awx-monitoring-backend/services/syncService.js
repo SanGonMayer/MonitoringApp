@@ -167,6 +167,7 @@ export const syncHostsFromInventory22 = async (filial) => {
           cctv_id: inventoryId === 347 ? hostId : null,
           job_id: summary.summary_fields.job.id,  
           job_name: summary.summary_fields.job.name,
+          jobCreationDate: new Date(summary.created)
         });
       }
       console.log(`JobHostSummaries del host ${hostId} sincronizados.`);

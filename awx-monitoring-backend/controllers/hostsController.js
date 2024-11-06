@@ -26,16 +26,16 @@ export const getHostsByFilial = async (req, res) => {
             {
                 model: JobHostSummary,
                 as: 'jobSummaries',
-                attributes: ['job_name', 'failed'],
+                attributes: ['job_name', 'failed','jobCreationDate'],
                 required: false
             }
         ],
       });
 
       const hostsWithStatus = hosts.map(host => {
-        const jobSummaries = host.jobSummaries || [];
+        const jobSummaries = (host.jobSummaries || []).sort((a, b) => new Date(b.jobCreationDate) - new Date(a.jobCreationDate));
 
-        console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos.`);
+        console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos ordenados por fecha de creación..`);
 
         // Buscar el último "wst_ipa_v"
         const lastIPAIndex = jobSummaries.findIndex(

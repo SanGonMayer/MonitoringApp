@@ -28,6 +28,10 @@ const JobHostSummary = sequelize.define('JobHostSummary', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  jobCreationDate: { 
+    type: DataTypes.DATE,
+    allowNull: false
+  }
 });
 
 
