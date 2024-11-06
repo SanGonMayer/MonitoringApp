@@ -21,7 +21,7 @@ export const getHostsByFilial = async (req, res) => {
     let hosts;
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
-        where: { filial_id: filialIdInt, enabled: true },
+        where: { filial_id: filialIdInt, enabled: true, description: { [Op.notILike]: 'HP ProDesk 400%' } },
         include: [
             {
                 model: JobHostSummary,
