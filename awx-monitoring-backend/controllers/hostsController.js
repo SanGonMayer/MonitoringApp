@@ -2,6 +2,8 @@ import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
 import Filial from '../models/filiales.js';
+import { Op } from 'sequelize';
+
 
 export const getHostsByFilial = async (req, res) => {
   try {
