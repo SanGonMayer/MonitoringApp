@@ -23,10 +23,12 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     hosts.forEach((host, index) => {
         //const jobNames = host.jobNames.join(', ');
 
+      const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${id}/completed_jobs?`
+      
       const row = `
         <tr>
           <td>${index + 1}</td>
-          <td>${host.name}</td>
+          <td><a href="${rutaJobsAwx}" target="_blank">${host.name}</a></td>
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
