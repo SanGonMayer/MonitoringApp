@@ -166,9 +166,10 @@ header {
   left: 20px; /* Ajusta el espacio desde el borde izquierdo */
   font-size: 18px;
   color: #555;
-  background-color: #f0f0f0; /* Fondo gris suave */
+  background-color: rgba(240, 240, 240, 0.7);  /* Fondo gris suave */
   padding: 5px 10px; /* Agregar algo de espacio alrededor del texto */
   border-radius: 5px;
+  
 }
 
 
