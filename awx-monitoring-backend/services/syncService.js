@@ -4,6 +4,7 @@ import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
 import Inventory from '../models/inventory.js';
+import { Op } from 'sequelize';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
@@ -176,3 +177,67 @@ export const syncHostsFromInventory22 = async (filial) => {
     }
   };
   
+
+  export const syncSingleFilial = async (filialId) => {
+    try {
+
+        const filial = await Filial.findByPk(filialId);
+
+        if (!filial) {
+            throw new Error(`Filial con ID ${filialId} no encontrada`);
+        }
+
+        if (filial.awx_id_wst) {
+            const hostsWST = await fetchAllPages(`http://sawx0001lx.bancocredicoop.coop/api/v2/groups/${filial.awx_id_wst}/hosts/`);
+            const enabledHostIdsFromAPI = hostsWST.filter(host => host.enabled).map(host => host.id);
+
+            for (const host of hostsWST) {
+                await Workstation.upsert({
+                    id: host.id,
+                    name: host.name,
+                    description: host.description,
+                    inventory_id: 22,
+                    filial_id: filial.id,
+                    enabled: host.enabled,
+                });
+                await syncJobHostSummaries(host.id, 22);
+            }
+
+            await Workstation.destroy({
+                where: {
+                    filial_id: filial.id,
+                    id: { [Op.notIn]: enabledHostIdsFromAPI },
+                }
+            });
+        }
+
+        if (filial.awx_id_cctv) {
+            const hostsCCTV = await fetchAllPages(`http://sawx0001lx.bancocredicoop.coop/api/v2/groups/${filial.awx_id_cctv}/hosts/`);
+            const enabledHostIdsFromAPI = hostsCCTV.filter(host => host.enabled).map(host => host.id);
+
+            for (const host of hostsCCTV) {
+                await CCTV.upsert({
+                    id: host.id,
+                    name: host.name,
+                    description: host.description,
+                    inventory_id: 347,
+                    filial_id: filial.id,
+                    enabled: host.enabled,
+                });
+                await syncJobHostSummaries(host.id, 347);
+            }
+
+            await CCTV.destroy({
+                where: {
+                    filial_id: filial.id,
+                    id: { [Op.notIn]: enabledHostIdsFromAPI },
+                }
+            });
+        }
+
+        console.log(`Filial ${filialId} sincronizada correctamente.`);
+    } catch (error) {
+        console.error(`Error al sincronizar la filial ${filialId}:`, error.message);
+        throw error;
+    }
+};

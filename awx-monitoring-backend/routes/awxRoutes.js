@@ -5,6 +5,7 @@ import { startDataSync } from '../app.js';
 import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
+import { updateSingleFilial } from '../controllers/syncController.js';
 
 export const awxRoutes = Router();
 
@@ -47,6 +48,8 @@ awxRoutes.get('/api/db/filiales/:tipoTerminal', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener filiales'});
   }
 })
+
+awxRoutes.post('/api/sync/filial/:filialId', updateSingleFilial);
 
 export default awxRoutes;
 
