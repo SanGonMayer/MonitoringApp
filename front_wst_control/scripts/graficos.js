@@ -72,7 +72,7 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     let filialesActualizadas, filialesPendientes, filialesFallidas;
 
     if (tipoTerminal === 'wst.html') {
-        ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesConHostsFromDB(tipoTerminal)); 
+        ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
     } else {
         ({ 
             filialesActualizadas, 

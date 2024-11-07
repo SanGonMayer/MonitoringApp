@@ -185,11 +185,21 @@ function updateCantidadDeFiliales(){
 
 async function fetchFilialesGraficoDB(tipoTerminal) {
   try {
+    let tipo = '';
+
+    if (tipoTerminal === 'wst.html'){
+      tipo = 'WORKSTATION';
+    } else if (tipoTerminal === 'cctv.html'){
+      tipo = 'CCTV';
+    }
+
+
     console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
     
     if (!response.ok) {
-      throw new Error('Error al obtener filiales desde la base de datos');
+      const errorDetails = await response.text();
+      throw new Error(`Error al obtener filiales desde la base de datos: ${errorDetails}`);
     }
 
     const filiales = await response.json();
