@@ -145,12 +145,42 @@ body {
   padding: 20px;
 }
 
+/* header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+} */
+
 header {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  padding: 0 20px;
+  position: relative; /* Necesario para posicionar el breadcrumb */
 }
+
+.breadcrumb {
+  position: absolute;
+  left: 20px; /* Ajusta el espacio desde el borde izquierdo */
+  font-size: 18px;
+  color: #555;
+}
+
+
+.breadcrumb a {
+  color: #555;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
 
 h1 {
   color: #333;
