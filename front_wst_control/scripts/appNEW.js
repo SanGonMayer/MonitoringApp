@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function filtrarPorColor(selectedColor) {
     // Lógica para filtrar botones
+    const table = document.getElementById('workstationsTable');
+    const tableBody = document.querySelector('#workstationsTable tbody');
+    tableBody.innerHTML = ''; 
     console.log('Mostrando el color por cada click', selectedColor);
 
     allButtons.forEach(button => {
@@ -97,6 +100,8 @@ function filtrarPorColor(selectedColor) {
         // Compara el color del botón con el color seleccionado
         button.style.display = (backgroundColor === selectedColor) ? '' : 'none';
     });
+
+    table.style.display = 'none';
 }
 
 window.buscar = buscar;
