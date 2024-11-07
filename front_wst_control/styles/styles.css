@@ -169,6 +169,7 @@ header {
   background-color: rgba(240, 240, 240, 0.7);  /* Fondo gris suave */
   padding: 5px 10px; /* Agregar algo de espacio alrededor del texto */
   border-radius: 5px;
+  backdrop-filter: blur(10px);
   
 }
 
