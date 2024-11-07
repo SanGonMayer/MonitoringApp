@@ -48,7 +48,7 @@ awxRoutes.get('/api/db/filiales/:tipoTerminal', async (req, res) => {
   }
 })
 
-router.post('/api/sync/filial/:filialId', updateSingleFilial);
+awxRoutes.post('/api/sync/filial/:filialId', updateSingleFilial);
 
 export default awxRoutes;
 
