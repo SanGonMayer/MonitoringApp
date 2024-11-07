@@ -166,11 +166,14 @@ header {
   left: 20px; /* Ajusta el espacio desde el borde izquierdo */
   font-size: 18px;
   color: #555;
-  background-color: rgba(240, 240, 240, 0.7);  /* Fondo gris suave */
   padding: 5px 10px; /* Agregar algo de espacio alrededor del texto */
   border-radius: 5px;
-  backdrop-filter: blur(10px);
-  
+  background: 
+    linear-gradient(rgba(240, 240, 240, 0.7), rgba(240, 240, 240, 0.7)),
+    rgba(240, 240, 240, 0.7); /* Fondo gris suave con gradiente para difuminar */
+  background-size: 100% 100%;
+  backdrop-filter: blur(10px); /* Desenfoque del fondo */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1); /* Suaviza la transición interna */
 }
 
 
