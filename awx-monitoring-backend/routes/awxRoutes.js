@@ -5,6 +5,7 @@ import { startDataSync } from '../app.js';
 import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
+import { updateSingleFilial } from '../controllers/syncController.js';
 
 export const awxRoutes = Router();
 
