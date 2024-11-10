@@ -96,6 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const filialContainer = document.querySelector('#filialContainer');
         filialContainer.innerHTML = '';
 
+        const cards = document.querySelectorAll('.main-skills .card .circle span');
+        cards.forEach(card => {
+            card.textContent = '';
+        });
+
         // Llama a `buscar` con el terminal actual para recargar las filiales
         const terminal = window.location.pathname.split('/').pop();
         buscar(terminal);
