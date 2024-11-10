@@ -68,7 +68,7 @@ function inicializarEstadosHosts() {
 }
 
 
-async function createFilialButtons(filiales, tipoTerminal) {
+/* async function createFilialButtons(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
   inicializarEstadosHosts();
@@ -94,6 +94,40 @@ async function createFilialButtons(filiales, tipoTerminal) {
           displayHosts(hosts);
           // Desplaza la pantalla hacia la tabla de hosts
           tableElement.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+      window.allButtons.push(button);
+  }
+  console.log('Mostrando botones de filiales', window.allButtons);
+  updateCantidadDeFiliales();
+} */
+
+
+async function createFilialButtons(filiales, tipoTerminal) {
+  const filialContainer = document.querySelector('#filialContainer');
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+
+  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+  tableElement.style.display = 'none';
+
+  for (const filial of filiales) {
+      const button = document.createElement('button');
+      button.textContent = filial.name;
+      button.classList.add('custom-button');
+
+      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
+      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
+      button.style.backgroundColor = color;
+
+      // Asigna los hosts directamente al evento click sin volver a hacer fetch
+      button.onclick = () => {
+
+        const filialName = filial.name; 
+        sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+        window.open(`filial.html?name=${filialName}`, '_blank');
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor

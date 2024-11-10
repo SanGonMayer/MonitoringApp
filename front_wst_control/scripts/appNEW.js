@@ -47,12 +47,12 @@ function filtrando() {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+/* document.addEventListener('DOMContentLoaded', () => {
 
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
 
-    /* -------------------- */
+    // -------------------- 
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
     const circles = document.querySelectorAll('.circle');
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    /* -------------------- */
+    // --------------------
 
     const actionButton = document.querySelector('#action-button');
     actionButton.addEventListener('click', () => {
@@ -83,7 +83,64 @@ document.addEventListener('DOMContentLoaded', () => {
         buscar(terminal);
     });
 
+}); */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const terminal = window.location.pathname.split('/').pop(); 
+    buscar(terminal);
+
+    // -------------------- 
+    // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
+
+    const circles = document.querySelectorAll('.circle');
+
+    circles.forEach(circle => {
+        circle.addEventListener('click', () => {
+            const color = window.getComputedStyle(circle).backgroundColor; // Obtiene el color de fondo del círculo
+            filtrarPorColor(color); // Llama a la función de filtrado con el color
+        });
+    });
+
+
+    // --------------------
+
+    const actionButton = document.querySelector('#action-button');
+    actionButton.addEventListener('click', () => {
+        // Llama a la función `clearFilialContainer` para borrar botones actuales
+        const filialContainer = document.querySelector('#filialContainer');
+        filialContainer.innerHTML = '';
+
+        const cards = document.querySelectorAll('.main-skills .card .circle span');
+        cards.forEach(card => {
+            card.textContent = '';
+        });
+
+        // Llama a `buscar` con el terminal actual para recargar las filiales
+        const terminal = window.location.pathname.split('/').pop();
+        buscar(terminal);
+    });
+
+
+    // ------------------------
+
+    const params = new URLSearchParams(window.location.search);
+    const filialName = params.get('name');
+
+    if (filialName) {
+        // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
+        const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
+        if (hosts) {
+            displayHosts(hosts);
+        } else {
+            console.error('No se encontraron datos de hosts en sessionStorage');
+        }
+    } else {
+        console.error("No se ha pasado el nombre de la filial en la URL.");
+    }   
+
 });
+
 
 function filtrarPorColor(selectedColor) {
     // Lógica para filtrar botones
