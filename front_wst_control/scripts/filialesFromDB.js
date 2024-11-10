@@ -127,6 +127,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
 
         const filialName = filial.name; 
         sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+        console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
         window.open(`filial.html?name=${filialName}`, '_blank');
       };
 
