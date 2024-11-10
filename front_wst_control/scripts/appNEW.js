@@ -86,6 +86,16 @@ document.addEventListener('DOMContentLoaded', () => {
             filtrarPorColor(color); // Llama a la función de filtrado con el color
         });
     });
+
+
+    /* -------------------- */
+
+    const actionButton = document.getElementById("action-button");
+    if (actionButton) {
+        actionButton.addEventListener("click", buscarFiliales);
+    }
+
+
 });
 
 function filtrarPorColor(selectedColor) {
@@ -103,6 +113,24 @@ function filtrarPorColor(selectedColor) {
 
     table.style.display = 'none';
 }
+
+/* --------------- */
+
+function buscarFiliales(){
+    const terminal = window.location.pathname.split('/').pop(); 
+
+    const filialContainer = document.getElementById("filialContainer");
+
+    // Limpia el contenedor para eliminar botones anteriores
+    if (filialContainer) {
+        filialContainer.innerHTML = ""; // Esto asegura que el contenedor esté vacío antes de agregar nuevos botones
+    }
+    
+    window.allButtons = 0;
+    buscar(terminal);
+}
+
+
 
 window.buscar = buscar;
 window.filtrando = filtrando;

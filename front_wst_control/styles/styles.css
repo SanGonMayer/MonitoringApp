@@ -185,6 +185,31 @@ header {
   text-decoration: underline; /* Subrayado al pasar el ratón */
 }
 
+/* --------------------------------------- */
+
+.button-container {
+  position: absolute;
+  right: 20px;
+}
+
+#action-button {
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: #263ec5;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+#action-button:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+/* --------------------------------------- */
 
 h1 {
   color: #333;
