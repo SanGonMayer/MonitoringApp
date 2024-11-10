@@ -1,13 +1,4 @@
-/* function buscar(tipoTerminal) {
-    if (tipoTerminal === 'cctv.html') {
-        fetchFilialesFromDB('cctv.html');
-    } else if (tipoTerminal === 'wst.html') {
-        fetchFilialesFromDB('wst.html');
-    } else {
-        console.log('Página no reconocida.');
-    }
-}
- */
+
 async function buscar(tipoTerminal) {
     if (tipoTerminal === 'cctv.html') {
         //await fetchFilialesFromDB('cctv.html');
@@ -24,6 +15,7 @@ async function buscar(tipoTerminal) {
 
 /* ------------------------------------- */
 // Variables globales para el estado
+
 window.totalFiliales = 0;
 window.actualizadas = 0;
 window.pendientes = 0;
@@ -51,33 +43,18 @@ function filtrando() {
 }
 
 
-/* function filtrarPorColor(){
-
-    allButtons.forEach(button => {
-        // Obtiene el color de fondo actual del botón en formato RGB
-        const backgroundColor = window.getComputedStyle(button).backgroundColor;
-        // Muestra solo los botones con fondo verde exacto rgb(0, 128, 0)
-        button.style.display = (backgroundColor === 'rgb(0, 128, 0)') ? '' : 'none';
-    });
-} */
-
 /* ------------------------------------- */
 
-/* document.addEventListener('DOMContentLoaded', () => {
-    const terminal = window.location.pathname.split('/').pop(); 
-    buscar(terminal);
-
-    document.querySelector('.circle').addEventListener('click', filtrarPorColor);
-    //document.querySelector('.circle.naranja').addEventListener('click', filtrarPorColor('rgb(255, 193, 7)'));
-    //document.querySelector('.circle.rojo').addEventListener('click', filtrarPorColor('rgb(255, 0, 0)'));
-}); */
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
+
+    /* -------------------- */
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
+
     const circles = document.querySelectorAll('.circle');
 
     circles.forEach(circle => {
@@ -123,8 +100,6 @@ function filtrarPorColor(selectedColor) {
 
     table.style.display = 'none';
 }
-
-
 
 
 window.buscar = buscar;

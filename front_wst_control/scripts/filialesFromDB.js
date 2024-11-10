@@ -50,25 +50,6 @@ function clearFilialContainer() {
     filialContainer.innerHTML = '';
 }
 
-/* function createFilialButtons(filiales, tipoTerminal) {
-    const filialContainer = document.querySelector('#filialContainer');
-    
-    filiales.forEach(filial => {
-        const button = document.createElement('button');
-        button.textContent = filial.name;
-        button.classList.add('custom-button');
-        
-        button.onclick = async () => {
-            const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
-            const hosts = await fetchHostsFromDB(filial.id, tipo);
-            displayHosts(hosts);
-        };
-        
-        filialContainer.appendChild(button);
-    });
-} */
-
-
 
 /* ------------------------------------- */
 
@@ -307,11 +288,6 @@ async function fetchFilialesConHostsFromDB(tipoTerminal) {
     }
 
     const filiales = await response.json();
-
-    /* const filialesFiltradas = filiales.filter(filial => {
-      return (tipoTerminal === 'wst.html' && filial.hasWST) ||
-             (tipoTerminal === 'cctv.html' && filial.hasCCTV);
-    }); */
 
     let filialesFiltradas = []; 
 
