@@ -126,9 +126,10 @@ async function createFilialButtons(filiales, tipoTerminal) {
       button.onclick = () => {
 
         const filialName = filial.name; 
+        
         sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
         console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-        window.open(`filial.html?name=${filialName}`, '_blank');
+        window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
