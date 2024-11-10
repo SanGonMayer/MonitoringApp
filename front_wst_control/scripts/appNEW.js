@@ -94,32 +94,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
     const circles = document.querySelectorAll('.circle');
-
-    circles.forEach(circle => {
-        circle.addEventListener('click', () => {
-            const color = window.getComputedStyle(circle).backgroundColor; // Obtiene el color de fondo del círculo
-            filtrarPorColor(color); // Llama a la función de filtrado con el color
+    if (circles.length > 0) {
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                const color = window.getComputedStyle(circle).backgroundColor;
+                filtrarPorColor(color);
+            });
         });
-    });
+    } else {
+        console.log("No se encontraron elementos con la clase 'circle' en esta página.");
+    }
 
 
     // --------------------
 
     const actionButton = document.querySelector('#action-button');
-    actionButton.addEventListener('click', () => {
-        // Llama a la función `clearFilialContainer` para borrar botones actuales
-        const filialContainer = document.querySelector('#filialContainer');
-        filialContainer.innerHTML = '';
+    if (actionButton) {
+        actionButton.addEventListener('click', () => {
+            const filialContainer = document.querySelector('#filialContainer');
+            filialContainer.innerHTML = '';
 
-        const cards = document.querySelectorAll('.main-skills .card .circle span');
-        cards.forEach(card => {
-            card.textContent = '';
+            const cards = document.querySelectorAll('.main-skills .card .circle span');
+            cards.forEach(card => {
+                card.textContent = '';
+            });
+
+            const terminal = window.location.pathname.split('/').pop();
+            buscar(terminal);
         });
-
-        // Llama a `buscar` con el terminal actual para recargar las filiales
-        const terminal = window.location.pathname.split('/').pop();
-        buscar(terminal);
-    });
+    } else {
+        console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
+    }
 
 
     // ------------------------
