@@ -90,11 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* -------------------- */
 
-    const actionButton = document.getElementById("action-button");
-    if (actionButton) {
-        actionButton.addEventListener("click", buscarFiliales);
-    }
+    const actionButton = document.querySelector('#action-button');
+    actionButton.addEventListener('click', () => {
+        // Llama a la función `clearFilialContainer` para borrar botones actuales
+        const filialContainer = document.querySelector('#filialContainer');
+        filialContainer.innerHTML = '';
 
+        // Llama a `buscar` con el terminal actual para recargar las filiales
+        const terminal = window.location.pathname.split('/').pop();
+        buscar(terminal);
+    });
 
 });
 
@@ -114,21 +119,6 @@ function filtrarPorColor(selectedColor) {
     table.style.display = 'none';
 }
 
-/* --------------- */
-
-function buscarFiliales(){
-    const terminal = window.location.pathname.split('/').pop(); 
-
-    /* const filialContainer = document.getElementById("filialContainer");
-
-    // Limpia el contenedor para eliminar botones anteriores
-    if (filialContainer) {
-        filialContainer.innerHTML = ""; // Esto asegura que el contenedor esté vacío antes de agregar nuevos botones
-    } */
-
-    window.allButtons = 0;
-    buscar(terminal);
-}
 
 
 
