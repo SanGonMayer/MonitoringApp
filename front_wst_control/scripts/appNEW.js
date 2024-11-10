@@ -119,13 +119,13 @@ function filtrarPorColor(selectedColor) {
 function buscarFiliales(){
     const terminal = window.location.pathname.split('/').pop(); 
 
-    const filialContainer = document.getElementById("filialContainer");
+    /* const filialContainer = document.getElementById("filialContainer");
 
     // Limpia el contenedor para eliminar botones anteriores
     if (filialContainer) {
         filialContainer.innerHTML = ""; // Esto asegura que el contenedor esté vacío antes de agregar nuevos botones
-    }
-    
+    } */
+
     window.allButtons = 0;
     buscar(terminal);
 }
