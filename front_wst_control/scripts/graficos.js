@@ -69,7 +69,7 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     const colors = ['rgb(26,194,23)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
     const redirectUrl = tipoTerminal;
 
-    let filialesActualizadas, filialesPendientes, filialesFallidas;
+    /* let filialesActualizadas, filialesPendientes, filialesFallidas;
 
     if (tipoTerminal === 'wst.html') {
         ({ filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal)); 
@@ -83,7 +83,9 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
             filialesPendientes: 2, 
             filialesFallidas: 2 
         });
-    }
+    } */
+
+    const { filialesActualizadas, filialesPendientes, filialesFallidas } = await fetchFilialesGraficoDB(tipoTerminal);
     
     const graph = document.querySelector(canvaId);
   
