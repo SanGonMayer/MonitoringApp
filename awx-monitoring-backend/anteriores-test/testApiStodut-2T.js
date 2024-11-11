@@ -1,8 +1,8 @@
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { requestLoggerMiddleware } from './middlewares/solicitudes.js';
-import { corsMiddleware } from './middlewares/cors.js';
+import { requestLoggerMiddleware } from '../middlewares/solicitudes.js';
+import { corsMiddleware } from '../middlewares/cors.js';
 import base64 from 'base-64';  // Para codificar en base64
 
 dotenv.config();
@@ -27,7 +27,11 @@ app.use(corsMiddleware())
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories'; // Parte base de la URL para los inventarios
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups'; 
 
-
+const gruposExcluidos = [
+    'f0504', 'f0509', 'f0513', 'f0514', 'f0559', 'f0579', 'f0580', 'f0583', 'f0584', 'f0593', 'f0594', 'f0595', 'f0597', 'f0652', 'f0653', 'f0688', 'f0703',
+    'f0071', 'f0517', 'f0603', 'f0661', 'f0662', 'f0663', 'f0664', 'f0665', 'f0668',
+    'wst', 'pve','f0999'
+];
 
 async function fetchAllPages(apiUrl) {
   let page = 1;
@@ -63,8 +67,8 @@ app.get('/api/awx/inventories/:inventoryId/groups', async (req, res) => {
     try {
         // Obtener la lista de grupos para el inventario específico
         const awxResponse = await fetchAllPages(`${baseApiUrl}/${inventoryId}/groups/`)
-
-        const groups = awxResponse.filter(group => group.name.toLowerCase() !== 'wst' && group.name.toLowerCase() !== 'pve')
+        // Filtrar solo 5 grupos para el test
+        const groups = awxResponse.filter(group => !gruposExcluidos.includes(group.name.toLowerCase()))
         .map(group => ({
             id: group.id,
             name: group.name,
@@ -90,12 +94,16 @@ async function getJobSummaries(host, templateName) {
         const jobSummaries = await fetchAllPages(jobSummariesUrl, authConfig);
         jobNames = jobSummaries.map(job => job.summary_fields.job.name);
 
-        const matchingJob = jobSummaries.find(job => job.summary_fields.job.name === templateName);
+        const matchingJob = jobSummaries.find(job => {
+            const jobName = job.summary_fields.job.name;
+            const jobStatus = job.failed;
+            return jobName === templateName && !jobStatus;
+        });
 
-        if (matchingJob.failed) {
-            status = 'Fallido';
-        } else {
+        if (matchingJob) {
             status = 'Actualizado';
+        } else if (jobSummaries.some(job => job.summary_fields.job.name === templateName)) {
+            status = 'Fallido';
         }
     } catch (error) {
         console.error(`Error al obtener trabajos para el host ${host.name}:`, error.message);

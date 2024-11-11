@@ -32,12 +32,41 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
+          <td>
+            <button onclick="launchJobDirectly(${host.id})" class="btn btn-primary">Ejecutar WOL</button>
+          </td>
 
         </tr>
       `;
       tableBody.innerHTML += row;
     });
   }
+
+  async function launchJobDirectly(hostId) {
+    try {
+      const response = await fetch('/api/awx/launch-job', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          host_id: hostId, 
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert(`Job lanzado correctamente en el host ${hostId}. ID del job: ${data.job_id}`);
+      } else {
+        alert(`Error al lanzar el job: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error al lanzar el job:', error);
+      alert('Error al lanzar el job.');
+    }
+  }
+  
   
   window.fetchHostsFromDB = fetchHostsFromDB;
   window.displayHosts = displayHosts;

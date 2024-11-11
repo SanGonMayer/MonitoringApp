@@ -79,3 +79,37 @@ export class GroupHostController{
         }
     }
 }
+
+
+const awxUser = process.env.AWX_USER_TEST;
+const awxPass = process.env.AWX_USER_TEST_PASS;
+
+export const launchJob = async (req, res) => {
+  const { job_template_id = 1263, host_id } = req.body;
+
+  try {
+ 
+    const response = await axios.post(
+      `http://sawx0001lx.bancocredicoop.coop/api/v2/job_templates/${job_template_id}/launch/`,
+      {
+        limit: host_id,
+        extra_vars,
+        verbosity,
+      },
+      {
+        auth: {
+          username: awxUser,
+          password: awxPass,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    res.status(200).json({ message: 'Job ejecutado correctamente', job_id: response.data.job });
+  } catch (error) {
+    console.error('Error al ejecutar el job:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Error al ejecutar el job' });
+  }
+};
