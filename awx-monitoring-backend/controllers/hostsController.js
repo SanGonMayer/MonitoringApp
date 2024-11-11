@@ -225,8 +225,8 @@ export const getHostsByFilial = async (req, res) => {
       hosts = await CCTV.findAll({
         where: { 
             filial_id: filialIdInt, 
-            enabled: true, 
-            description: { [Op.notILike]: 'HP ProDesk 400%' } 
+            enabled: true 
+            //description: { [Op.notILike]: 'HP ProDesk 400%' } 
           },
         include: [
           {
