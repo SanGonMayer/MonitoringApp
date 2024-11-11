@@ -32,6 +32,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
+          <td>${host.enabled ? 'Sí' : 'No'}</td>
           <td>
             <button onclick="launchJobDirectly(${host.id})" class="btn btn-primary">Ejecutar WOL</button>
           </td>
