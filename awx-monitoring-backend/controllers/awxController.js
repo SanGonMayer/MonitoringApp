@@ -88,6 +88,12 @@ export const launchJob = async (req, res) => {
   const { job_template_id = 1263, host_id } = req.body;
 
   try {
+    console.log('Lanzando job con los siguientes datos:', {
+        job_template_id,
+        host_id,
+        extra_vars,
+        verbosity
+    });
  
     const response = await axios.post(
       `http://sawx0001lx.bancocredicoop.coop/api/v2/job_templates/${job_template_id}/launch/`,
