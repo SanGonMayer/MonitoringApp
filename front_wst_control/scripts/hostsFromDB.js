@@ -70,4 +70,5 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
   
   window.fetchHostsFromDB = fetchHostsFromDB;
   window.displayHosts = displayHosts;
+  window.launchJobDirectly = launchJobDirectly;
   
