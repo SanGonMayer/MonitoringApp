@@ -43,6 +43,10 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 
   async function launchJobDirectly(hostId) {
     try {
+
+      console.log("Iniciando ejecución del job para el host:", hostId);
+
+
       const response = await fetch('/api/awx/launch-job', {
         method: 'POST',
         headers: {
@@ -52,8 +56,21 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           host_id: hostId, 
         }),
       });
+
+      const responseText = await response.text();
+
+      console.log("Texto completo de la respuesta:", responseText);
+
+      let data;
+      try {
+          data = JSON.parse(responseText);
+      } catch (jsonError) {
+          console.error("Error al parsear JSON:", jsonError);
+          alert("Error al lanzar el job: Respuesta no válida del servidor.");
+          return;
+      }
   
-      const data = await response.json();
+      //const data = await response.json();
   
       if (response.ok) {
         alert(`Job lanzado correctamente en el host ${hostId}. ID del job: ${data.job_id}`);
