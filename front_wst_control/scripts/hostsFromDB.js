@@ -24,7 +24,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         //const jobNames = host.jobNames.join(', ');
 
       const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`
-      const jobWolButton = `<button onclick="launchJobDirectly('${host.id}')">Ejecutar</button>`;
+      const jobWolButton = `<button onclick="launchJobDirectly('${host.id}')">Ejecutar</button>`
       
       const row = `
         <tr>
@@ -33,7 +33,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
-          <td>{jobWolButton}</td>
+          <td>${jobWolButton}</td>
 
         </tr>
       `;
