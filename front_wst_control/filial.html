@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terminales - WST</title>
+  <title>Estado de Filial</title>
   <link rel="stylesheet" href="styles/styles.css">
   <link rel="stylesheet" href="styles/searchbar.css">
   <link rel="stylesheet" href="styles/botonFilial.css">
@@ -44,63 +44,12 @@
       <header>
         <div class="breadcrumb">
           <a href="/MonitoringAppFront/">Home</a> / 
-          <a href="wst.html">WST</a>
+          <a href="wst.html">DEFINIR</a>
           </div>
-        <h1>Monitoreo de Actualizaciones</h1>
-        <div class="button-container">
-          <button id="action-button">Recargar Filiales</button>
-        </div>
+        <h1>Monitoreo de </h1>
       </header>
 
       <main>
-        <!-- Sección de estado -->
-        <section class="status-section">
-          <!-- Formulario de búsqueda -->
-          <div class="search-container">
-            <form onsubmit="event.preventDefault(); filtrando();" role="search">
-              <label for="search">Buscar</label>
-              <input id="search" type="search" placeholder="Buscar filial wst..." autofocus required />
-              <button type="submit" class="search-button">
-                <img src="images/search-svgrepo-com.svg" alt="Buscar" />
-              </button>
-            </form>
-          </div>
-        
-          <!-- Sección de tarjetas de estado -->
-          <div class="main-skills">
-            <div class="card">
-              <div class="card-content">
-                <h3>Actualizadas</h3>
-                <p>Filiales actualizadas sin errores.</p>
-              </div>
-              <!-- Círculo con el porcentaje convertido en botón -->
-              <div class="circle clickable">
-                <span></span> <!-- Cambiado a 0% para ser actualizado dinámicamente -->
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-content">
-                <h3>Pendientes</h3>
-                <p>Filiales con al menos una terminal pendiente de ejecución.</p>
-              </div>
-              <!-- Círculo con el porcentaje convertido en botón -->
-              <div class="circle clickable">
-                <span></span> <!-- Cambiado a 0% para ser actualizado dinámicamente -->
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-content">
-                <h3>Fallidas</h3>
-                <p>Filiales con al menos una terminal con fallo de ejecución.</p>
-              </div>
-              <!-- Círculo con el porcentaje convertido en botón -->
-              <div class="circle clickable">
-                <span></span> <!-- Cambiado a 0% para ser actualizado dinámicamente -->
-              </div>
-            </div>
-          </div>
-        </section>
-        
         <!-- Añadir un canvas para el gráfico de barras -->
         <div id="filialContainer" style="text-align: center; margin: 20px;">
           <!-- Botones de filiales se agregan aca-->
@@ -124,9 +73,6 @@
       </main>
     </div>
   </div>
-  <!--<script type="module" src="scripts/app.js"></script>
-  <script type="module" src="scripts/hosts.js"></script>
-  <script type="module" src="scripts/filiales.js"></script>-->
   <script type="module" src="scripts/appNEW.js"></script>
   <script type="module" src="scripts/filialesFromDB.js"></script>
   <script type="module" src="scripts/hostsFromDB.js"></script>
