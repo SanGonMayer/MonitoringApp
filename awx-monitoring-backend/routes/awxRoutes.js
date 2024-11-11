@@ -6,6 +6,7 @@ import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
 import { updateSingleFilial } from '../controllers/syncController.js';
+import { launchJob } from '../controllers/awxController.js';
 
 export const awxRoutes = Router();
 
@@ -50,6 +51,7 @@ awxRoutes.get('/api/db/filiales/:tipoTerminal', async (req, res) => {
 })
 
 awxRoutes.post('/api/sync/filial/:filialId', updateSingleFilial);
+awxRoutes.post('/api/awx/launch-job', launchJob);
 
 export default awxRoutes;
 
