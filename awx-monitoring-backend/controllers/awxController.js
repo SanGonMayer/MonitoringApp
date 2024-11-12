@@ -106,7 +106,7 @@ export const launchJob = async (req, res) => {
 
     console.log('Lanzando job con los siguientes datos:', {
         job_template_id,
-        hostanme,
+        hostname,
         extra_vars,
         verbosity
     });
