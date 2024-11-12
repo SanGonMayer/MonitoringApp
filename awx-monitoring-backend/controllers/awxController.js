@@ -1,4 +1,6 @@
 import { fetchAllPages, getJobSummaries } from '../services/awxService.js';
+import axios from 'axios';
+
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
