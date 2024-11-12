@@ -389,3 +389,27 @@ button:hover {
   font-family: Arial, sans-serif;
   font-weight: bold;
 }
+
+
+#workstationsTable {
+  margin-top: 80px;
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+#workstationsTable th, #workstationsTable td {
+  padding: 12px;
+  border: none; 
+}
+#workstationsTable thead tr {
+  background-color: #e0e0e0;
+}
+#workstationsTable tbody tr {
+  border-bottom: 1px solid #ddd; 
+}
+#workstationsTable tbody tr:last-child {
+  border-bottom: none;
+}
