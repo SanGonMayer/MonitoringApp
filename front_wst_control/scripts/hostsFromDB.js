@@ -24,7 +24,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         //const jobNames = host.jobNames.join(', ');
 
       const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`
-      const jobWolButton = `<button onclick="launchJobDirectly('${host.name}')">Ejecutar</button>`
+      const jobWolButton = `<button onclick="launchJobWol('${host.name}')">Ejecutar</button>`
+      const jobUpdButton = `<button onclick="launchJobUpd('${host.name}')">Ejecutar</button>`
 
       let descriptionClass = '';
       if (host.description === 'actualizado') {
@@ -43,6 +44,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td class="${descriptionClass}">${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
           <td>${jobWolButton}</td>
+          <td>${jobUpdButton}</td>
 
         </tr>
       `;
@@ -50,7 +52,50 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     });
   }
 
-  async function launchJobDirectly(hostname) {
+  async function launchJobWol(hostname) {
+    try {
+
+      console.log("Iniciando ejecución del job para el host:", hostname);
+
+
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          job_template_id: 1263,
+          hostname: hostname,
+        }),
+      });
+
+      const responseText = await response.text();
+
+      console.log("Texto completo de la respuesta:", responseText);
+
+      let data;
+      try {
+          data = JSON.parse(responseText);
+      } catch (jsonError) {
+          console.error("Error al parsear JSON:", jsonError);
+          alert("Error al lanzar el job: Respuesta no válida del servidor.");
+          return;
+      }
+  
+      //const data = await response.json();
+  
+      if (response.ok) {
+        alert(`Job lanzado correctamente en el host ${hostname}. ID del job: ${data.job_id}`);
+      } else {
+        alert(`Error al lanzar el job: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error al lanzar el job:', error);
+      alert('Error al lanzar el job.');
+    }
+  }
+
+  async function launchJobUpd(hostname) {
     try {
 
       console.log("Iniciando ejecución del job para el host:", hostname);
@@ -96,5 +141,6 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
   
   window.fetchHostsFromDB = fetchHostsFromDB;
   window.displayHosts = displayHosts;
-  window.launchJobDirectly = launchJobDirectly;
+  window.launchJobWol = launchJobWol;
+  window.launchJobUpd = launchJobUpd;
   

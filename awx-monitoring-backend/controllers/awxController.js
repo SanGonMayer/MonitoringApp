@@ -86,6 +86,9 @@ export class GroupHostController{
 const awxUser = process.env.AWX_USER_TEST;
 const awxPass = process.env.AWX_USER_TEST_PASS;
 
+const serviceUser = process.env.AWX_SERVER_USER;
+const servicePass = process.env.AWX_SERVER_PASS;
+
 export const launchJob = async (req, res) => {
   console.log("launchJob fue llamado con los datos:", req.body);
   const { job_template_id, hostname, extra_vars = {}, verbosity = 2 } = req.body;
@@ -120,8 +123,8 @@ export const launchJob = async (req, res) => {
       },
       {
         auth: {
-          username: awxUser,
-          password: awxPass,
+          username: serviceUser,
+          password: servicePass,
         },
         headers: {
           'Content-Type': 'application/json',
