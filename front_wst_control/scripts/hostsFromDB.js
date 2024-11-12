@@ -50,10 +50,10 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     });
   }
 
-  async function launchJobDirectly(hostName) {
+  async function launchJobDirectly(hostanme) {
     try {
 
-      console.log("Iniciando ejecución del job para el host:", hostName);
+      console.log("Iniciando ejecución del job para el host:", hostanme);
 
 
       const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
@@ -63,7 +63,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         },
         body: JSON.stringify({
           job_template_id: 1263,
-          hostname: hostName,
+          hostname: hostanme,
         }),
       });
 
@@ -83,7 +83,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
       //const data = await response.json();
   
       if (response.ok) {
-        alert(`Job lanzado correctamente en el host ${hostName}. ID del job: ${data.job_id}`);
+        alert(`Job lanzado correctamente en el host ${hostanme}. ID del job: ${data.job_id}`);
       } else {
         alert(`Error al lanzar el job: ${data.error}`);
       }
