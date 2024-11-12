@@ -24,7 +24,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         //const jobNames = host.jobNames.join(', ');
 
       const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`
-      const jobWolButton = `<button onclick="launchJobDirectly('${host.id}')">Ejecutar</button>`
+      const jobWolButton = `<button onclick="launchJobDirectly('${host.name}')">Ejecutar</button>`
 
       let descriptionClass = '';
       if (host.description === 'actualizado') {
@@ -50,20 +50,20 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     });
   }
 
-  async function launchJobDirectly(hostId) {
+  async function launchJobDirectly(hostName) {
     try {
 
-      console.log("Iniciando ejecución del job para el host:", hostId);
+      console.log("Iniciando ejecución del job para el host:", hostName);
 
 
-      const response = await fetch('/api/awx/launch-job', {
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           job_template_id: 1263,
-          host_id: hostId,
+          host_name: hostName,
         }),
       });
 
@@ -83,7 +83,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
       //const data = await response.json();
   
       if (response.ok) {
-        alert(`Job lanzado correctamente en el host ${hostId}. ID del job: ${data.job_id}`);
+        alert(`Job lanzado correctamente en el host ${hostName}. ID del job: ${data.job_id}`);
       } else {
         alert(`Error al lanzar el job: ${data.error}`);
       }

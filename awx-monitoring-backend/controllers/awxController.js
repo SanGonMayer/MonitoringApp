@@ -88,25 +88,25 @@ const awxPass = process.env.AWX_USER_TEST_PASS;
 
 export const launchJob = async (req, res) => {
   console.log("launchJob fue llamado con los datos:", req.body);
-  const { job_template_id, host_id, extra_vars = {}, verbosity = 2 } = req.body;
+  const { job_template_id, hostName, extra_vars = {}, verbosity = 2 } = req.body;
 
 
   console.log("Datos recibidos para ejecutar el job:");
   console.log(`job_template_id: ${job_template_id}`);
-  console.log(`host_id: ${host_id}`);
+  console.log(`host_id: ${hostName}`);
   console.log(`extra_vars: ${JSON.stringify(extra_vars)}`);
   console.log(`verbosity: ${verbosity}`);
 
   try {
 
-    if (!job_template_id || !host_id) {
+    if (!job_template_id || !hostName) {
         return res.status(400).json({ error: "Faltan datos obligatorios (job_template_id o host_id)" });
       }
 
 
     console.log('Lanzando job con los siguientes datos:', {
         job_template_id,
-        host_id,
+        host_name,
         extra_vars,
         verbosity
     });
@@ -114,7 +114,7 @@ export const launchJob = async (req, res) => {
     const response = await axios.post(
       `http://sawx0001lx.bancocredicoop.coop/api/v2/job_templates/${job_template_id}/launch/`,
       {
-        limit: host_id,
+        limit: hostName,
         extra_vars,
         verbosity,
       },
