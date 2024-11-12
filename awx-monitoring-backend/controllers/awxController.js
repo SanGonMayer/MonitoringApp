@@ -85,7 +85,7 @@ const awxUser = process.env.AWX_USER_TEST;
 const awxPass = process.env.AWX_USER_TEST_PASS;
 
 export const launchJob = async (req, res) => {
-  const { job_template_id = 1263, host_id } = req.body;
+  const { job_template_id, host_id } = req.body;
 
 
   console.log("Datos recibidos para ejecutar el job:");
