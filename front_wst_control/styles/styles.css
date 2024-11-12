@@ -335,16 +335,13 @@ button:hover {
 
 
 .bg-green {
-  background-color: #d4edda; /* Verde claro */
-  color: #155724; /* Verde oscuro para el texto */
+  background-color: green; /* Verde claro */
 }
 
 .bg-yellow {
-  background-color: #fff3cd; /* Amarillo claro */
-  color: #856404; /* Amarillo oscuro para el texto */
+  background-color: yellow; /* Amarillo claro */
 }
 
 .bg-red {
-  background-color: #f8d7da; /* Rojo claro */
-  color: #721c24; /* Rojo oscuro para el texto */
+  background-color: red; /* Rojo claro */
 }
