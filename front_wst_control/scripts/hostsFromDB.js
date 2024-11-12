@@ -25,13 +25,22 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 
       const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`
       const jobWolButton = `<button onclick="launchJobDirectly('${host.id}')">Ejecutar</button>`
+
+      let descriptionClass = '';
+      if (host.description === 'actualizado') {
+          descriptionClass = 'bg-green';
+      } else if (host.description === 'pendiente') {
+          descriptionClass = 'bg-yellow';
+      } else if (host.description === 'fallido') {
+          descriptionClass = 'bg-red';
+      }
       
       const row = `
         <tr>
           <td>${index + 1}</td>
           <td><a href="${rutaJobsAwx}" target="_blank">${host.name}</a></td>
           <td>${host.id}</td>
-          <td>${host.description || 'Sin descripción'}</td>
+          <td class="${descriptionClass}">${host.description || 'Sin descripción'}</td>
           <td>${host.status || 'Desconocido'}</td>
           <td>${jobWolButton}</td>
 

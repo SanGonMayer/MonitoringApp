@@ -328,3 +328,23 @@ button:hover {
 .custom-button:hover {
   background-color: rgb(77, 107, 197); /* Cambiar el color al pasar el mouse */
 }
+
+
+
+/* ---------------- */
+
+
+.bg-green {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Verde oscuro para el texto */
+}
+
+.bg-yellow {
+  background-color: #fff3cd; /* Amarillo claro */
+  color: #856404; /* Amarillo oscuro para el texto */
+}
+
+.bg-red {
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24; /* Rojo oscuro para el texto */
+}
