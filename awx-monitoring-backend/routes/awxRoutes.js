@@ -51,7 +51,10 @@ awxRoutes.get('/api/db/filiales/:tipoTerminal', async (req, res) => {
 })
 
 awxRoutes.post('/api/sync/filial/:filialId', updateSingleFilial);
-awxRoutes.post('/api/awx/launch-job', launchJob);
+awxRoutes.post('/api/awx/launch-job', (req, res, next) => {
+  console.log("Ruta /api/awx/launch-job alcanzada");
+  next();
+}, launchJob);
 
 export default awxRoutes;
 
