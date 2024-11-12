@@ -27,13 +27,13 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
       const jobWolButton = `<button onclick="launchJobWol('${host.name}')">Ejecutar</button>`
       const jobUpdButton = `<button onclick="launchJobUpd('${host.name}')">Ejecutar</button>`
 
-      let descriptionClass = '';
-      if (host.description === 'actualizado') {
-          descriptionClass = 'bg-green';
-      } else if (host.description === 'pendiente') {
-          descriptionClass = 'bg-yellow';
-      } else if (host.description === 'fallido') {
-          descriptionClass = 'bg-red';
+      let descriptionStatus = '';
+      if (host.status === 'actualizado') {
+          descriptionStatus = 'bg-green';
+      } else if (host.status === 'pendiente') {
+          descriptionStatus = 'bg-yellow';
+      } else if (host.status === 'fallido') {
+          descriptionStatus = 'bg-red';
       }
       
       const row = `
@@ -41,8 +41,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td>${index + 1}</td>
           <td><a href="${rutaJobsAwx}" target="_blank">${host.name}</a></td>
           <td>${host.id}</td>
-          <td class="${descriptionClass}">${host.description || 'Sin descripción'}</td>
-          <td>${host.status || 'Desconocido'}</td>
+          <td>${host.description || 'Sin descripción'}</td>
+          <td><span class="${descriptionStatus}">${host.status || 'Desconocido'}</span></td>
           <td>${jobWolButton}</td>
           <td>${jobUpdButton}</td>
 

@@ -333,15 +333,59 @@ button:hover {
 
 /* ---------------- */
 
-
 .bg-green {
-  background-color: green; /* Verde claro */
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Verde oscuro para el texto */
+  padding:10px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  width: calc(100% - 8px); /* Deja un margen lateral */
+  height: calc(100% - 8px);
 }
 
 .bg-yellow {
-  background-color: yellow; /* Amarillo claro */
+  background-color: #fff3cd; /* Amarillo claro */
+  color: #856404; /* Amarillo oscuro para el texto */
+  padding:10px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  width: calc(100% - 8px); /* Deja un margen lateral */
+  height: calc(100% - 8px);
 }
 
 .bg-red {
-  background-color: red; /* Rojo claro */
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24; /* Rojo oscuro para el texto */
+  padding:10px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  width: calc(100% - 8px); /* Deja un margen lateral */
+  height: calc(100% - 8px);
+}
+
+
+
+.line {
+  border: none;
+  border-top: 5px solid #5c5555;  /* Línea gruesa de 5px */
+  margin: 20px 0;  /* Margen para separar los divs */
+  width: 60%;  /* Ajusta el ancho de la línea */
+  margin-left: auto; /* Centra la línea */
+  margin-right: auto; /* Centra la línea */
+}
+
+
+
+.welcome-container {
+  position: absolute;
+  right: 20px;
+}
+
+.welcome-container h2 {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
 }
