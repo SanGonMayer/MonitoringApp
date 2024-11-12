@@ -62,7 +62,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          job_template_id: 1263,
+          job_template_id: 1615,
           hostname: hostname,
         }),
       });
