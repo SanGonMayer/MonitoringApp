@@ -58,7 +58,7 @@ awxRoutes.post('/api/awx/launch-job', (req, res, next) => {
 
 
 
-awxRoutes.get('api/db/filiales/:filialId/hosts/srno', getHostsByFilialSNRO);
+awxRoutes.get('/api/db/filiales/:filialId/hosts/srno', getHostsByFilialSNRO);
 
 export default awxRoutes;
 
