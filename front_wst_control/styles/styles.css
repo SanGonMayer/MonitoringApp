@@ -417,3 +417,13 @@ button:hover {
 #filialTable{
   margin-top: 50px;
 }
+
+
+.linefilial {
+  border: none;
+  border-top: 5px solid #5c5555;  /* Línea gruesa de 5px */
+  margin: 20px 0;  /* Margen para separar los divs */
+  width: 30%;  /* Ajusta el ancho de la línea */
+  margin-left: auto; /* Centra la línea */
+  margin-right: auto; /* Centra la línea */
+}
