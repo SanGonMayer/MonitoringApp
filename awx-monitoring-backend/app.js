@@ -10,6 +10,7 @@ import './models/index.js';
 import Filial from './models/filiales.js';
 import cron from 'node-cron';
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
+import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTelegram } from './services/notificadorService.js';
 
 dotenv.config();
 
@@ -42,6 +43,11 @@ const startDataSync = async () => {
     }
 
     console.log('Sincronización de datos completada.');
+    
+    const { filiales: outdatedFiliales, hosts: outdatedHosts } = await getOutdatedFilialesAndHosts();   
+    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts);
+    await sendReportViaTelegram(report);
+    
   } catch (error) {
     console.error('Error durante la sincronización de datos:', error.message);
   }
