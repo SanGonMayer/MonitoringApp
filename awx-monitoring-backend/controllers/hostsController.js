@@ -315,7 +315,7 @@ export const getHostsByFilialSNRO = async (req, res) => {
     
 
     if (tipo === 'wst') {
-      hosts = await CCTV.findAll({
+      hosts = await Workstation.findAll({
         where: { 
             filial_id: filialIdInt, 
             enabled: true 
