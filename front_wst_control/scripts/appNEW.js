@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // -------------------- AL CLICKEAR ALGUNA CARD DE LAS 3 QUE HAY EN LA PAGINA
 
-    //filtrarFilialesPorCards();
+    filtrarFilialesPorCards();
 
     const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
@@ -142,11 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------ AL MOMENTO DE CLICKEAR EN ALGUNA FILIAL (EL EVENTO CLICK ESTA EN "FILIALES FROM DB")
 
-    //mostrarHostsDefilialHtml(); 
+    mostrarHostsDefilialHtml(); 
 
     //-----------------------
 
-    const urlParams = new URLSearchParams(window.location.search);
+    /* const urlParams = new URLSearchParams(window.location.search);
     const hostType = urlParams.get('from');
 
     if (hostType) {
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarPagina(1);
     } else {
         console.error("No se ha especificado el tipo de hosts en la URL.");
-    }
+    } */
 });
 
 
