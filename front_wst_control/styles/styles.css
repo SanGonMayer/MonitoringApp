@@ -413,3 +413,7 @@ button:hover {
 #workstationsTable tbody tr:last-child {
   border-bottom: none;
 }
+
+#filialTable{
+  margin-top: 50px;
+}
