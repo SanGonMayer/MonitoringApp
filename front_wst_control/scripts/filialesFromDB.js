@@ -142,7 +142,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
 
 async function evaluarEstadoHosts(filialId, tipo) {
   try {
-      const hosts = await fetchHostsFromDB(filialId, tipo);
+      const hosts = await fetchHostsFromDB(filialId, tipo); //EN ESTE CASO, SE PODRIA EVALULAR SI QUIERO ESTE O OTRO DEPEDIENDO SI ES PARA SRNO
       let hayPendientes = false;
       let hayFallidas = false;
       let todasActualizadas = true;
@@ -348,6 +348,131 @@ async function fetchFilialesConHostsFromDB(tipoTerminal) {
   }
 }
 /* ------------------------------------- */
+
+
+async function fetchFilialesConHostsSrno(tipoTerminal) {
+  try {
+
+    let tipo = '';
+
+    if (tipoTerminal === 'srno.html'){
+      tipo = 'WORKSTATION';
+    }
+
+    console.log('Fetching filiales from the database:', tipoTerminal);
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
+    
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(`Error al obtener filiales desde la base de datos: ${errorDetails}`);
+    }
+
+    const filiales = await response.json();
+
+    let filialesFiltradas = []; 
+
+    if (tipoTerminal === 'wst.html') {
+      filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
+    } else if (tipoTerminal === 'cctv.html') {
+      console.log('Estoy evaluando las filiales para cctv')
+      filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+    }
+
+    console.log('Filiales filtradas:', filialesFiltradas);
+    
+    clearFilialContainer();
+
+    createFilialButtons(filialesFiltradas, tipoTerminal);
+
+    return filialesFiltradas;
+
+  } catch (error) {
+    console.error('Error obteniendo las filiales desde la base de datos:', error);
+    return [];
+  }
+}
+
+async function createFilialButtons(filiales, tipoTerminal) {
+  const filialContainer = document.querySelector('#filialContainer');
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+
+  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+  tableElement.style.display = 'none';
+
+  for (const filial of filiales) {
+      const button = document.createElement('button');
+      button.textContent = filial.name;
+      button.classList.add('custom-button');
+
+      const tipo = tipoTerminal === 'srno.html' ? 'wst' : 'cctv';
+      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
+      const { color, hosts } = await evaluarEstadoHostsSrno(filial.id, tipo);
+      button.style.backgroundColor = color;
+
+      // Asigna los hosts directamente al evento click sin volver a hacer fetch
+      button.onclick = () => {
+
+        const filialName = filial.name; 
+        
+        sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+        console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
+        window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+      };
+
+      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+      window.allButtons.push(button);
+  }
+  console.log('Mostrando botones de filiales', window.allButtons);
+  updateCantidadDeFiliales();
+}
+
+
+async function evaluarEstadoHostsSrno(filialId, tipo) {
+  try {
+      const hosts = await fetchHostsFromDBSrno(filialId, tipo); //EN ESTE CASO, SE PODRIA EVALULAR SI QUIERO ESTE O OTRO DEPEDIENDO SI ES PARA SRNO
+      let hayPendientes = false;
+      let hayFallidas = false;
+      let todasActualizadas = true;
+      let color = '';
+
+      hosts.forEach(host => {
+          window.totalHosts++;
+          const status = host.status || 'pendiente';
+
+          if (status === 'pendiente') {
+              window.hostsPendientes++;
+              hayPendientes = true;
+              todasActualizadas = false;
+          } else if (status === 'fallido') {
+              window.hostsFallidos++;
+              hayFallidas = true;
+              todasActualizadas = false;
+          } else if (status !== 'actualizado') {
+              window.hostsActualizados++;
+              todasActualizadas = false;
+          }
+      });
+
+      window.totalFiliales++;
+      if (hayFallidas) {
+          window.fallidas++;
+          color = '#dc3545'; 
+      } else if (hayPendientes) {
+          window.pendientes++;
+          color = '#ffc107'; 
+      } else if (todasActualizadas) {
+          window.actualizadas++;
+          color = '#28a745'; //
+      }
+      return { color , hosts };
+  } catch (error) {
+      console.error('Error evaluando los hosts:', error);
+      return 'gray'; // Para este caso de error, poder devolver color grey por defecto, o crear otro try catch arriba solo para cuando 
+                     // hace fetch de los hosts
+  }
+}
+
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
 window.clearFilialContainer = clearFilialContainer;

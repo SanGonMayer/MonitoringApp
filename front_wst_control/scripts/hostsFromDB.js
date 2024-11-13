@@ -138,6 +138,24 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     }
   }
   
+
+async function fetchHostsFromDBSrno(filialId, tipoTerminal) {
+  try {
+    console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
+    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${filialId}/hosts/srno?tipo=${tipoTerminal}`);
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener hosts desde la base de datos');
+    }
+
+    const hosts = await response.json();
+    console.log('Hosts obtenidos:', hosts);
+    return hosts;
+  } catch (error) {
+    console.error('Error obteniendo los hosts desde la base de datos:', error);
+    return [];
+  }
+}
   
   window.fetchHostsFromDB = fetchHostsFromDB;
   window.displayHosts = displayHosts;
