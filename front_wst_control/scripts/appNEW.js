@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------- 
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
-    /* const circles = document.querySelectorAll('.circle');
+    const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
@@ -105,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-    } */
+    }
 
-    const circles = document.querySelectorAll('.circle');
+    /* const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-    }
+    } */
 
 
     // --------------------
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //-----------------------
 
-    const urlParams = new URLSearchParams(window.location.search);
+    /* const urlParams = new URLSearchParams(window.location.search);
     const hostType = urlParams.get('from');
 
     if (hostType) {
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         console.error("No se ha especificado el tipo de hosts en la URL.");
-    }
+    } */
 });
 
 
