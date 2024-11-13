@@ -95,7 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------- 
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
-    const circles = document.querySelectorAll('.circle');
+    filtrarFilialesPorColor();
+
+    /* const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-    }
+    } */
 
     /* const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
@@ -225,6 +227,21 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("No se ha especificado el tipo de hosts en la URL.");
     } */
 });
+
+
+function filtrarFilialesPorColor(){
+    const circles = document.querySelectorAll('.circle');
+    if (circles.length > 0) {
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                const color = window.getComputedStyle(circle).backgroundColor;
+                filtrarPorColor(color);
+            });
+        });
+    } else {
+        console.log("No se encontraron elementos con la clase 'circle' en esta página.");
+    }
+}
 
 
 function filtrarPorColor(selectedColor) {
