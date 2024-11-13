@@ -6,7 +6,7 @@ async function buscar(tipoTerminal) {
     } else if (tipoTerminal === 'wst.html') {
         await fetchFilialesConHostsFromDB('wst.html');
     } else if(tipoTerminal === 'srno.html'){
-        await fetchFilialesConHostsFromDB('srno.html');
+        await fetchFilialesConHostsFromDB('wst.html');
     } else if (tipoTerminal === ''){
         await crearGraficoCircular('#circularCctv','cctv.html');
         await crearGraficoCircular('#circularWst','wst.html');
