@@ -75,9 +75,9 @@ async function crearGraficoCircular(canvaId, tipoTerminal) {
     const total = filialesActualizadas + filialesPendientes + filialesFallidas;
 
     // Solo aumentar visualmente los valores pequeños si no son 0
-    let adjustedPendientes = filialesPendientes > 0 && filialesPendientes < total * 0.2 ? total * 0.2 : filialesPendientes;
-    let adjustedFallidas = filialesFallidas > 0 && filialesFallidas < total * 0.2 ? total * 0.2 : filialesFallidas;
-    let adjustedActualizadas = filialesActualizadas > 0 && filialesActualizadas < total * 0.2 ? total * 0.2 : filialesActualizadas;
+    let adjustedPendientes = filialesPendientes > 0 && filialesPendientes < total * 0.05 ? total * 0.05 : filialesPendientes;
+    let adjustedFallidas = filialesFallidas > 0 && filialesFallidas < total * 0.05 ? total * 0.05 : filialesFallidas;
+    let adjustedActualizadas = filialesActualizadas > 0 && filialesActualizadas < total * 0.05 ? total * 0.05 : filialesActualizadas;
 
     const data = {
         labels: labels,
