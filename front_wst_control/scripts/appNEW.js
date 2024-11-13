@@ -95,12 +95,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------- 
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
-    const circles = document.querySelectorAll('.circle');
+    /* const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
                 const color = window.getComputedStyle(circle).backgroundColor;
                 filtrarPorColor(color);
+            });
+        });
+    } else {
+        console.log("No se encontraron elementos con la clase 'circle' en esta página.");
+    } */
+
+    const circles = document.querySelectorAll('.circle');
+    if (circles.length > 0) {
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                const color = window.getComputedStyle(circle).backgroundColor;
+                let hosts = [];
+                let tipo = '';
+
+                // Selecciona la lista de hosts y el tipo según el color del círculo
+                switch (color) {
+                    case 'rgb(40, 167, 69)': // Verde
+                        hosts = window.hostsActualizados;
+                        tipo = 'actualizados';
+                        break;
+                    case 'rgb(255, 193, 7)': // Amarillo
+                        hosts = window.hostsPendientes;
+                        tipo = 'pendientes';
+                        break;
+                    case 'rgb(220, 53, 69)': // Rojo
+                        hosts = window.hostsFallidos;
+                        tipo = 'fallidos';
+                        break;
+                    default:
+                        console.warn('Color de círculo desconocido:', color);
+                        return; // No hace nada si el color es desconocido
+                }
+
+                // Almacena los hosts seleccionados en sessionStorage y abre la nueva página
+                sessionStorage.setItem('HostsElegidos', JSON.stringify(hosts));
+                console.log("Hosts guardados en sessionStorage:", hosts);
+
+                
+                window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
             });
         });
     } else {
@@ -158,6 +197,33 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("No se ha pasado el nombre de la filial en la URL.");
     }   
 
+    //-----------------------
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const hostType = urlParams.get('from');
+
+    if (hostType) {
+        // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
+        const hosts = JSON.parse(sessionStorage.getItem('HostsElegidos'));
+
+        const breadcrumb = document.querySelector('.breadcrumb');
+        breadcrumb.innerHTML = `
+            <a href="/MonitoringAppFront/">Home</a> / 
+            <a href="${hostType}.html">${hostType.toUpperCase()}</a> / 
+            <span>Hosts - ${hostType.toUpperCase()}</span>
+        `;
+
+        const headerText = document.querySelector('header h1');
+        headerText.textContent = `Hosts - ${hostType.charAt(0).toUpperCase() + hostType.slice(1)}`;
+
+        if (hosts) {
+            displayHosts(hosts);
+        } else {
+            console.error('No se encontraron datos de hosts en sessionStorage');
+        }
+    } else {
+        console.error("No se ha especificado el tipo de hosts en la URL.");
+    }
 });
 
 
