@@ -432,7 +432,7 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
       window.allButtons.push(button);
   }
   console.log('Mostrando botones de filiales', window.allButtons);
-  updateCantidadDeFiliales();
+  updateCantidadDeHosts();
 }
 
 // ESTAS VARIABLES GLOBALES DEBEN ESTAR EN EL APPNEW Y ADEMAS, HACER UN INICIALIZAR COMO SE HIZO EN LOS OTROS CASOS 
