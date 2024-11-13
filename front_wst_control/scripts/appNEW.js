@@ -144,32 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ------------------------
 
-    const params = new URLSearchParams(window.location.search);
-    const filialName = params.get('name');
-    const fromPage = params.get('from');
-
-    if (filialName) {
-        // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
-        const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
-
-        const breadcrumb = document.querySelector('.breadcrumb');
-        breadcrumb.innerHTML = `
-            <a href="/MonitoringAppFront/">Home</a> / 
-            <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
-            <a href="filial.html?name=${filialName}&from=${fromPage}">${filialName}</a>
-        `;
-
-        const headerText = document.querySelector('header h1');
-        headerText.textContent += ` ${filialName}`;
-
-        if (hosts) {
-            displayHosts(hosts);
-        } else {
-            console.error('No se encontraron datos de hosts en sessionStorage');
-        }
-    } else {
-        console.error("No se ha pasado el nombre de la filial en la URL.");
-    }   
+    mostrarHostsDefilialHtml(); 
 
     //-----------------------
 
@@ -251,6 +226,36 @@ function recargarFilialesHtml(){
     } else {
         console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
     }
+}
+
+
+function mostrarHostsDefilialHtml(){
+    const params = new URLSearchParams(window.location.search);
+    const filialName = params.get('name');
+    const fromPage = params.get('from');
+
+    if (filialName) {
+        // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
+        const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
+
+        const breadcrumb = document.querySelector('.breadcrumb');
+        breadcrumb.innerHTML = `
+            <a href="/MonitoringAppFront/">Home</a> / 
+            <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
+            <a href="filial.html?name=${filialName}&from=${fromPage}">${filialName}</a>
+        `;
+
+        const headerText = document.querySelector('header h1');
+        headerText.textContent += ` ${filialName}`;
+
+        if (hosts) {
+            displayHosts(hosts);
+        } else {
+            console.error('No se encontraron datos de hosts en sessionStorage');
+        }
+    } else {
+        console.error("No se ha pasado el nombre de la filial en la URL.");
+    } 
 }
 
 
