@@ -371,7 +371,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 
     let filialesFiltradas = []; 
 
-    if (tipoTerminal === 'wst.html') {
+    if (tipoTerminal === 'srno.html') {
       filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
     } else if (tipoTerminal === 'cctv.html') {
       console.log('Estoy evaluando las filiales para cctv')
