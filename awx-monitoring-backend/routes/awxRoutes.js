@@ -3,7 +3,7 @@ import { GroupHostController } from '../controllers/awxController.js';
 import { startDataSync } from '../app.js';
 //import Filial from '../models/filiales.js';
 import { getFilialesFromDB } from '../services/dbService.js';
-import { getHostsByFilial } from '../controllers/hostsController.js';
+import { getHostsByFilial, getHostsByFilialSNRO } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
 import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
@@ -55,6 +55,10 @@ awxRoutes.post('/api/awx/launch-job', (req, res, next) => {
   console.log("Ruta /api/awx/launch-job alcanzada");
   next();
 }, launchJob);
+
+
+
+awxRoutes.get('api/db/filiales/:tipoTerminal/hosts/srno', getHostsByFilialSNRO);
 
 export default awxRoutes;
 
