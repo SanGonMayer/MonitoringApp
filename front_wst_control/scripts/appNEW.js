@@ -92,12 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminal = window.location.pathname.split('/').pop(); 
     buscar(terminal);
 
-    // -------------------- 
-    // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
+    // -------------------- AL CLICKEAR ALGUNA CARD DE LAS 3 QUE HAY EN LA PAGINA
 
-    filtrarFilialesPorCards();
+    //filtrarFilialesPorCards();
 
-    /* const circles = document.querySelectorAll('.circle');
+    const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
             circle.addEventListener('click', () => {
@@ -134,45 +133,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-    } */
+    }
 
 
-    // --------------------
+    // -------------------- AL MOMENTO DE PRESIONAR EL BOTON "RECARGAR FILIALES"
 
     recargarFilialesHtml();
 
+    // ------------------------ AL MOMENTO DE CLICKEAR EN ALGUNA FILIAL (EL EVENTO CLICK ESTA EN "FILIALES FROM DB")
 
-    // ------------------------
-
-    mostrarHostsDefilialHtml(); 
+    //mostrarHostsDefilialHtml(); 
 
     //-----------------------
 
-    /* const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
     const hostType = urlParams.get('from');
 
     if (hostType) {
-        // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
+        // Número de hosts por página
+        const hostsPorPagina = 100;
+
+        // Recupera los hosts desde sessionStorage
         const hosts = JSON.parse(sessionStorage.getItem('HostsElegidos'));
 
-        const breadcrumb = document.querySelector('.breadcrumb');
-        breadcrumb.innerHTML = `
-            <a href="/MonitoringAppFront/">Home</a> / 
-            <a href="${hostType}.html">${hostType.toUpperCase()}</a> / 
-            <span>Hosts - ${hostType.toUpperCase()}</span>
-        `;
+        // Calcula el número total de páginas
+        const totalPaginas = Math.ceil(hosts.length / hostsPorPagina);
 
-        const headerText = document.querySelector('header h1');
-        headerText.textContent = `Hosts - ${hostType.charAt(0).toUpperCase() + hostType.slice(1)}`;
+        // Función para mostrar los hosts de una página específica
+        function mostrarPagina(pagina) {
+            // Asegúrate de que la página sea válida
+            if (pagina < 1 || pagina > totalPaginas) return;
 
-        if (hosts) {
-            displayHosts(hosts);
-        } else {
-            console.error('No se encontraron datos de hosts en sessionStorage');
+            // Calcula los hosts a mostrar para la página seleccionada
+            const inicio = (pagina - 1) * hostsPorPagina;
+            const fin = inicio + hostsPorPagina;
+            const hostsPagina = hosts.slice(inicio, fin);
+
+            // Muestra los hosts en la interfaz
+            displayHosts(hostsPagina); // Aquí utilizas la función que ya tienes para mostrar los hosts
+
+            // Actualiza la barra de navegación
+            actualizarBarraDeNavegacion(pagina);
         }
+
+        // Función para actualizar la barra de navegación de páginas
+        function actualizarBarraDeNavegacion(paginaActual) {
+            const barraNavegacion = document.querySelector('.barra-navegacion');
+            barraNavegacion.innerHTML = ''; // Limpiar la barra de navegación
+
+            // Agrega los botones de página
+            for (let i = 1; i <= totalPaginas; i++) {
+                const boton = document.createElement('button');
+                boton.textContent = i;
+                boton.addEventListener('click', () => mostrarPagina(i));
+                
+                // Resaltar el botón de la página actual
+                if (i === paginaActual) {
+                    boton.classList.add('pagina-actual');
+                }
+
+                barraNavegacion.appendChild(boton);
+            }
+        }
+
+        // Llama a la función para mostrar la primera página al cargar
+        mostrarPagina(1);
     } else {
         console.error("No se ha especificado el tipo de hosts en la URL.");
-    } */
+    }
 });
 
 
