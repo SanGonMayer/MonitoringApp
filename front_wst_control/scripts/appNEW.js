@@ -95,19 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------- 
     // Seleccionar todos los elementos con la clase 'circle' y agregar un listener a cada uno
 
-    filtrarFilialesPorColor();
-
-    /* const circles = document.querySelectorAll('.circle');
-    if (circles.length > 0) {
-        circles.forEach(circle => {
-            circle.addEventListener('click', () => {
-                const color = window.getComputedStyle(circle).backgroundColor;
-                filtrarPorColor(color);
-            });
-        });
-    } else {
-        console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-    } */
+    filtrarFilialesPorCards();
 
     /* const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
@@ -151,23 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --------------------
 
-    const actionButton = document.querySelector('#action-button');
-    if (actionButton) {
-        actionButton.addEventListener('click', () => {
-            const filialContainer = document.querySelector('#filialContainer');
-            filialContainer.innerHTML = '';
-
-            const cards = document.querySelectorAll('.main-skills .card .circle span');
-            cards.forEach(card => {
-                card.textContent = '';
-            });
-
-            const terminal = window.location.pathname.split('/').pop();
-            buscar(terminal);
-        });
-    } else {
-        console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
-    }
+    recargarFilialesHtml();
 
 
     // ------------------------
@@ -229,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-function filtrarFilialesPorColor(){
+function filtrarFilialesPorCards(){
     const circles = document.querySelectorAll('.circle');
     if (circles.length > 0) {
         circles.forEach(circle => {
@@ -258,6 +230,27 @@ function filtrarPorColor(selectedColor) {
     });
 
     table.style.display = 'none';
+}
+
+
+function recargarFilialesHtml(){
+    const actionButton = document.querySelector('#action-button');
+    if (actionButton) {
+        actionButton.addEventListener('click', () => {
+            const filialContainer = document.querySelector('#filialContainer');
+            filialContainer.innerHTML = '';
+
+            const cards = document.querySelectorAll('.main-skills .card .circle span');
+            cards.forEach(card => {
+                card.textContent = '';
+            });
+
+            const terminal = window.location.pathname.split('/').pop();
+            buscar(terminal);
+        });
+    } else {
+        console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
+    }
 }
 
 
