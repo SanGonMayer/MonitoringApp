@@ -161,4 +161,6 @@ async function fetchHostsFromDBSrno(filialId, tipoTerminal) {
   window.displayHosts = displayHosts;
   window.launchJobWol = launchJobWol;
   window.launchJobUpd = launchJobUpd;
+
+  window.fetchHostsFromDBSrno = fetchHostsFromDBSrno;
   

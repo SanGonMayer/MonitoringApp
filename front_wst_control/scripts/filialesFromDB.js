@@ -382,7 +382,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
     
     clearFilialContainer();
 
-    createFilialButtons(filialesFiltradas, tipoTerminal);
+    createFilialButtonsSro(filialesFiltradas, tipoTerminal);
 
     return filialesFiltradas;
 
@@ -392,7 +392,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
   }
 }
 
-async function createFilialButtons(filiales, tipoTerminal) {
+async function createFilialButtonsSro(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
   inicializarEstadosHosts();
@@ -480,3 +480,7 @@ window.createFilialButtons = createFilialButtons;
 window.fetchFilialesGraficoDB = fetchFilialesGraficoDB;
 window.evaluarEstadoFiliales = evaluarEstadoFiliales;
 window.fetchFilialesConHostsFromDB = fetchFilialesConHostsFromDB;
+
+window.fetchFilialesConHostsSrno = fetchFilialesConHostsSrno;
+window.evaluarEstadoHostsSrno = evaluarEstadoHostsSrno;
+window.createFilialButtonsSro = createFilialButtonsSro;
