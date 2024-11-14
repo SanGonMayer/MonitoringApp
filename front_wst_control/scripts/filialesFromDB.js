@@ -1,6 +1,6 @@
 const gruposExcluidos = [
   'f0000','f0504', 'f0509', 'f0513', 'f0514', 'f0559', 'f0579', 'f0580', 'f0583', 'f0584', 'f0593', 'f0594', 'f0595', 'f0597', 'f0652', 'f0653', 'f0688', 'f0703',
-  'f0071', 'f0517', 'f0603', 'f0661', 'f0662', 'f0663', 'f0664', 'f0665', 'f0668',
+  'f0071', 'f0517', 'f0603', 'f0661', 'f0662', 'f0664', 'f0665', 'f0668',
   'wst', 'pve','f0999'
 ];
 
@@ -392,10 +392,18 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
   }
 }
 
+
+function inicializarEstadosHostsListas(){
+  window.hostsActualizados = [];
+  window.hostsPendientes = [];
+  window.hostsFallidos = [];
+}
+
 async function createFilialButtonsSro(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
   inicializarEstadosHosts();
+  inicializarEstadosHostsListas();
 
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
@@ -413,24 +421,30 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
 
-        const filialName = filial.name; 
-        
-        sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
-        console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-        window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+          const filialName = filial.name; 
+          
+          sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+          console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
+          window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
       window.allButtons.push(button);
   }
   console.log('Mostrando botones de filiales', window.allButtons);
-  updateCantidadDeFiliales();
+  updateCantidadDeHosts();
 }
 
+// ESTAS VARIABLES GLOBALES DEBEN ESTAR EN EL APPNEW Y ADEMAS, HACER UN INICIALIZAR COMO SE HIZO EN LOS OTROS CASOS 
+// DONDE SE TRABAJABA CON LAS FILIALES
+
+window.hostsActualizados = [];
+window.hostsPendientes = [];
+window.hostsFallidos = [];
 
 async function evaluarEstadoHostsSrno(filialId, tipo) {
   try {
-      const hosts = await fetchHostsFromDBSrno(filialId, tipo); //EN ESTE CASO, SE PODRIA EVALULAR SI QUIERO ESTE O OTRO DEPEDIENDO SI ES PARA SRNO
+      const hosts = await fetchHostsFromDBSrno(filialId, tipo);
       let hayPendientes = false;
       let hayFallidas = false;
       let todasActualizadas = true;
@@ -440,16 +454,18 @@ async function evaluarEstadoHostsSrno(filialId, tipo) {
           window.totalHosts++;
           const status = host.status || 'pendiente';
 
-          if (status === 'pendiente') {
-              window.hostsPendientes++;
+          if( status === 'actualizado'){
+              window.hostsActualizados.push(host);
+          } else if (status === 'pendiente') {
+              window.hostsPendientes.push(host);
               hayPendientes = true;
               todasActualizadas = false;
           } else if (status === 'fallido') {
-              window.hostsFallidos++;
+              window.hostsFallidos.push(host);
               hayFallidas = true;
               todasActualizadas = false;
           } else if (status !== 'actualizado') {
-              window.hostsActualizados++;
+              wwindow.hostsActualizados.push(host);
               todasActualizadas = false;
           }
       });
@@ -473,6 +489,18 @@ async function evaluarEstadoHostsSrno(filialId, tipo) {
   }
 }
 
+
+function updateCantidadDeHosts(){
+  if (window.totalFiliales === 0) return;
+
+  console.log('cantidad de filiales actualizadas', window.hostsActualizados.length)
+  console.log('cantidad de filiales pendientes', window.hostsPendientes.length)
+  console.log('cantidad de filiales fallidas', window.hostsFallidos.length)
+  
+  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${window.hostsActualizados.length}`;
+  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.hostsPendientes.length}`;
+  document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.hostsFallidos.length}`;
+}
 
 window.fetchFilialesFromDB = fetchFilialesFromDB;
 window.clearFilialContainer = clearFilialContainer;
