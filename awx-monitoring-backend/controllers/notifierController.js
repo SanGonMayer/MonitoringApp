@@ -1,4 +1,4 @@
-import { sendReportViaTelegram } from '../services/notifierService.js';
+import { sendReportViaTelegram } from '../services/notificadorService.js';
 
 export const sendTestTelegramMessage = async (req, res) => {
   const testReport = 'Este es un mensaje de prueba de sincronización de datos';

@@ -15,7 +15,6 @@ export const getOutdatedFilialesAndHosts = async () => {
       const outdatedHosts = [];
   
       for (const filial of filiales) {
-        // Obtener y procesar hosts WST
         const wstHosts = await Workstation.findAll({
           where: { 
             filial_id: filial.id, 
@@ -54,7 +53,6 @@ export const getOutdatedFilialesAndHosts = async () => {
           }
         });
   
-        // Obtener y procesar hosts CCTV
         const cctvHosts = await CCTV.findAll({
           where: { 
             filial_id: filial.id, 
