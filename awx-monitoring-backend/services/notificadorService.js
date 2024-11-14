@@ -115,32 +115,34 @@ export const generateOutdatedReport = (filiales, hosts) => {
 
 
 export const sendReportViaTelegram = async (report) => {
-  try {
-    const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
-    const telegramChatId = process.env.TELEGRAM_CHAT_ID;
-
-    if (!telegramBotToken || !telegramChatId) {
-      throw new Error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no están definidos en el archivo .env');
+    try {
+      const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+      const telegramChatIds = process.env.TELEGRAM_CHAT_ID.split(',');
+  
+      if (!telegramBotToken || !telegramChatIds.length) {
+        throw new Error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_IDS no están definidos en el archivo .env');
+      }
+  
+      for (const chatId of telegramChatIds) {
+        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId.trim(),
+            text: report,
+            parse_mode: 'Markdown'
+          }),
+        });
+  
+        if (!response.ok) {
+          console.error(`Error al enviar reporte a chat ID ${chatId}:`, response.statusText);
+        } else {
+          console.log(`Reporte enviado correctamente a chat ID ${chatId}.`);
+        }
+      }
+    } catch (error) {
+      console.error('Error al enviar el reporte por Telegram:', error.message);
     }
-
-    const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: telegramChatId,
-        text: report,
-        parse_mode: 'Markdown'
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error en la respuesta de Telegram: ${response.statusText}`);
-    }
-
-    console.log('Reporte enviado por Telegram correctamente.');
-  } catch (error) {
-    console.error('Error al enviar el reporte por Telegram:', error.message);
-  }
-};
+  };
