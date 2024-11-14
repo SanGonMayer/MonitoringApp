@@ -3,6 +3,8 @@ import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
 import { calculateHostStatus } from '../utils/hostStatus.js';
+import { Op } from 'sequelize';
+import fetch from 'node-fetch';
 
 export const getOutdatedFilialesAndHosts = async () => {
     try {
@@ -96,7 +98,7 @@ export const getOutdatedFilialesAndHosts = async () => {
     }
   };
 
-  
+
 export const generateOutdatedReport = (filiales, hosts) => {
   let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
   filiales.forEach(filial => {
