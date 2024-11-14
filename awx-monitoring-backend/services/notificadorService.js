@@ -5,6 +5,8 @@ import JobHostSummary from '../models/jobHostSummary.js';
 import { calculateHostStatus } from '../utils/hostStatus.js';
 import { Op } from 'sequelize';
 import fetch from 'node-fetch';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { HttpProxyAgent } from 'http-proxy-agent';
 
 export const getOutdatedFilialesAndHosts = async () => {
     try {
@@ -120,11 +122,19 @@ export const sendReportViaTelegram = async (report) => {
       const telegramChatIds = process.env.TELEGRAM_CHAT_ID.split(',');
   
       if (!telegramBotToken || !telegramChatIds.length) {
-        throw new Error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_IDS no están definidos en el archivo .env');
+        throw new Error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no están definidos en el archivo .env');
       }
   
+      const httpsProxyAgent = new HttpsProxyAgent('http://10.1.1.89:3128');
+      const httpProxyAgent = new HttpProxyAgent('http://10.1.1.89:3128');
+  
+      const getProxyAgent = (url) => {
+        return url.startsWith('https') ? httpsProxyAgent : httpProxyAgent;
+      };
+  
       for (const chatId of telegramChatIds) {
-        const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -132,8 +142,9 @@ export const sendReportViaTelegram = async (report) => {
           body: JSON.stringify({
             chat_id: chatId.trim(),
             text: report,
-            parse_mode: 'Markdown'
+            parse_mode: 'Markdown',
           }),
+          agent: getProxyAgent(url), 
         });
   
         if (!response.ok) {

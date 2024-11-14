@@ -7,6 +7,7 @@ import { getHostsByFilial, getHostsByFilialSNRO } from '../controllers/hostsCont
 import { getFilialesConHosts } from '../services/dbService.js';
 import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
+import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 
 export const awxRoutes = Router();
 
@@ -57,8 +58,10 @@ awxRoutes.post('/api/awx/launch-job', (req, res, next) => {
 }, launchJob);
 
 
-
 awxRoutes.get('/api/db/filiales/:filialId/hosts/srno', getHostsByFilialSNRO);
+
+awxRoutes.post('/api/test-telegram', sendTestTelegramMessage);
+
 
 export default awxRoutes;
 
