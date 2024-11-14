@@ -1,43 +1,102 @@
-import fetch from 'node-fetch';
 import Filial from '../models/filiales.js';
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
-import { Op } from 'sequelize';
+import JobHostSummary from '../models/jobHostSummary.js';
+import { calculateHostStatus } from '../utils/hostStatus.js';
 
 export const getOutdatedFilialesAndHosts = async () => {
-  try {
-    const filiales = await Filial.findAll();
-    const outdatedFiliales = [];
-    const outdatedHosts = [];
-
-    for (const filial of filiales) {
-      const wstHosts = await Workstation.findAll({
-        where: { filial_id: filial.id, status: { [Op.ne]: 'actualizado' } }
-      });
-
-      const cctvHosts = await CCTV.findAll({
-        where: { filial_id: filial.id, status: { [Op.ne]: 'actualizado' } }
-      });
-
-      if (wstHosts.length > 0 || cctvHosts.length > 0) {
-        outdatedFiliales.push({
-          id: filial.id,
-          name: filial.name,
-          description: filial.description,
+    try {
+      const filiales = await Filial.findAll();
+      const outdatedFiliales = [];
+      const outdatedHosts = [];
+  
+      for (const filial of filiales) {
+        // Obtener y procesar hosts WST
+        const wstHosts = await Workstation.findAll({
+          where: { 
+            filial_id: filial.id, 
+            enabled: true, 
+            description: { [Op.notILike]: 'HP ProDesk 400%' } 
+          },
+          include: [
+            {
+              model: JobHostSummary,
+              as: 'jobSummaries',
+              attributes: ['job_name', 'failed', 'jobCreationDate'],
+              required: false
+            }
+          ],
         });
-
-        wstHosts.forEach(host => outdatedHosts.push({ ...host.dataValues }));
-        cctvHosts.forEach(host => outdatedHosts.push({ ...host.dataValues }));
+  
+        wstHosts.forEach(host => {
+          const status = calculateHostStatus(host, 'wst');
+  
+          if (status !== 'actualizado') {
+            outdatedHosts.push({
+              id: host.id,
+              name: host.name,
+              description: host.description,
+              filial_id: filial.id,
+              status,
+            });
+  
+            if (!outdatedFiliales.some(f => f.id === filial.id)) {
+              outdatedFiliales.push({
+                id: filial.id,
+                name: filial.name,
+                description: filial.description,
+              });
+            }
+          }
+        });
+  
+        // Obtener y procesar hosts CCTV
+        const cctvHosts = await CCTV.findAll({
+          where: { 
+            filial_id: filial.id, 
+            enabled: true 
+          },
+          include: [
+            {
+              model: JobHostSummary,
+              as: 'jobSummaries',
+              attributes: ['job_name', 'failed', 'jobCreationDate'],
+              required: false
+            }
+          ],
+        });
+  
+        cctvHosts.forEach(host => {
+          const status = calculateHostStatus(host, 'cctv');
+  
+          if (status !== 'actualizado') {
+            outdatedHosts.push({
+              id: host.id,
+              name: host.name,
+              description: host.description,
+              filial_id: filial.id,
+              status,
+            });
+  
+            if (!outdatedFiliales.some(f => f.id === filial.id)) {
+              outdatedFiliales.push({
+                id: filial.id,
+                name: filial.name,
+                description: filial.description,
+              });
+            }
+          }
+        });
       }
+  
+      return { filiales: outdatedFiliales, hosts: outdatedHosts };
+    } catch (error) {
+      console.error('Error al obtener filiales y hosts desactualizados:', error.message);
+      throw new Error('Error al obtener filiales y hosts desactualizados');
     }
-    return { filiales: outdatedFiliales, hosts: outdatedHosts };
-  } catch (error) {
-    console.error('Error al obtener filiales y hosts desactualizados:', error.message);
-    throw new Error('Error al obtener filiales y hosts desactualizados');
-  }
-};
+  };
 
-
+  
 export const generateOutdatedReport = (filiales, hosts) => {
   let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
   filiales.forEach(filial => {
