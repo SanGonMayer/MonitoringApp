@@ -130,6 +130,7 @@ function mostrarHostsDefilialHtml(){
   const fromPage = params.get('from');
 
   if (filialName) {
+      console.log('Ahora ya se encontro una filialName, porque se clickeo en un boton filial')
       // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
       const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
 
