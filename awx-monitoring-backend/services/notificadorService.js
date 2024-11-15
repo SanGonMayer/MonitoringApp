@@ -13,6 +13,11 @@ export const getOutdatedFilialesAndHosts = async () => {
       const filiales = await Filial.findAll();
       const outdatedFiliales = [];
       const outdatedHosts = [];
+
+      const counters = {
+        wst: { actualizado: 0, pendiente: 0, fallido: 0 },
+        cctv: { actualizado: 0, pendiente: 0, fallido: 0 },
+        };
   
       for (const filial of filiales) {
         const wstHosts = await Workstation.findAll({
@@ -32,25 +37,26 @@ export const getOutdatedFilialesAndHosts = async () => {
         });
   
         wstHosts.forEach(host => {
-          const status = calculateHostStatus(host, 'wst');
-  
-          if (status !== 'actualizado') {
-            outdatedHosts.push({
-              id: host.id,
-              name: host.name,
-              description: host.description,
-              filial_id: filial.id,
-              status,
-            });
-  
-            if (!outdatedFiliales.some(f => f.id === filial.id)) {
-              outdatedFiliales.push({
-                id: filial.id,
-                name: filial.name,
-                description: filial.description,
-              });
+            const status = calculateHostStatus(host, 'wst');
+            counters.wst[status] += 1;
+
+            if (status !== 'actualizado') {
+                outdatedHosts.push({
+                    id: host.id,
+                    name: host.name,
+                    description: host.description,
+                    filial_id: filial.id,
+                    status,
+                });
+
+                if (!outdatedFiliales.some(f => f.id === filial.id)) {
+                    outdatedFiliales.push({
+                        id: filial.id,
+                        name: filial.name,
+                        description: filial.description,
+                    });
+                }
             }
-          }
         });
   
         const cctvHosts = await CCTV.findAll({
@@ -69,29 +75,30 @@ export const getOutdatedFilialesAndHosts = async () => {
         });
   
         cctvHosts.forEach(host => {
-          const status = calculateHostStatus(host, 'cctv');
-  
-          if (status !== 'actualizado') {
-            outdatedHosts.push({
-              id: host.id,
-              name: host.name,
-              description: host.description,
-              filial_id: filial.id,
-              status,
-            });
-  
-            if (!outdatedFiliales.some(f => f.id === filial.id)) {
-              outdatedFiliales.push({
-                id: filial.id,
-                name: filial.name,
-                description: filial.description,
-              });
+            const status = calculateHostStatus(host, 'cctv');
+            counters.cctv[status] += 1;
+
+            if (status !== 'actualizado') {
+                outdatedHosts.push({
+                    id: host.id,
+                    name: host.name,
+                    description: host.description,
+                    filial_id: filial.id,
+                    status,
+                });
+
+                if (!outdatedFiliales.some(f => f.id === filial.id)) {
+                    outdatedFiliales.push({
+                        id: filial.id,
+                        name: filial.name,
+                        description: filial.description,
+                    });
+                }
             }
-          }
         });
       }
   
-      return { filiales: outdatedFiliales, hosts: outdatedHosts };
+      return { filiales: outdatedFiliales, hosts: outdatedHosts, counters };
     } catch (error) {
       console.error('Error al obtener filiales y hosts desactualizados:', error.message);
       throw new Error('Error al obtener filiales y hosts desactualizados');
@@ -99,18 +106,24 @@ export const getOutdatedFilialesAndHosts = async () => {
   };
 
 
-export const generateOutdatedReport = (filiales, hosts) => {
-  let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
-  filiales.forEach(filial => {
-    report += `🏢 *Filial:* ${filial.name} (${filial.description})\n`;
-    hosts
-      .filter(host => host.filial_id === filial.id)
-      .forEach(host => {
-        report += `  - 🖥️ Host: ${host.name} (Status: ${host.status})\n`;
-      });
-    report += '\n';
-  });
-  return report;
+  export const generateOutdatedReport = (filiales, hosts, counters) => {
+    let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
+    
+    report += `🔢 Resumen General:\n`;
+    report += `- Hosts WST: Actualizados: ${counters.wst.actualizado}, Pendientes: ${counters.wst.pendiente}, Fallidos: ${counters.wst.fallido}\n`;
+    report += `- Hosts CCTV: Actualizados: ${counters.cctv.actualizado}, Pendientes: ${counters.cctv.pendiente}, Fallidos: ${counters.cctv.fallido}\n\n`;
+    
+    filiales.forEach(filial => {
+        report += `🏢 *Filial:* ${filial.name} (${filial.description})\n`;
+        hosts
+            .filter(host => host.filial_id === filial.id)
+            .forEach(host => {
+                report += `  - 🖥️ Host: ${host.name} (Status: ${host.status})\n`;
+            });
+        report += '\n';
+    });
+    
+    return report;
 };
 
 

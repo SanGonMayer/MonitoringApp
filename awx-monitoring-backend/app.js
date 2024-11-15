@@ -44,10 +44,10 @@ const startDataSync = async () => {
 
     console.log('Sincronización de datos completada.');
     
-    const { filiales: outdatedFiliales, hosts: outdatedHosts } = await getOutdatedFilialesAndHosts();   
-    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts);
+    const { filiales: outdatedFiliales, hosts: outdatedHosts, counters } = await getOutdatedFilialesAndHosts();   
+    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters);
     await sendReportViaTelegram(report);
-    
+
   } catch (error) {
     console.error('Error durante la sincronización de datos:', error.message);
   }
