@@ -427,3 +427,26 @@ button:hover {
   margin-left: auto; /* Centra la línea */
   margin-right: auto; /* Centra la línea */
 }
+
+
+
+/* ------------ */
+
+
+.barra-navegacion button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.barra-navegacion button:hover {
+  background-color: #0056b3;
+}
+
+.pagina-actual {
+  font-weight: bold;
+  background-color: #28a745;
+}
