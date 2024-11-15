@@ -168,14 +168,14 @@ export const getHostsByFilial = async (req, res) => {
         const lastIPAIndex = jobSummaries.findIndex(summary => summary.job_name.startsWith('wst_ipa_v'));
         const hasIPA = lastIPAIndex !== -1;
 
-        // Buscar si hay un "wst_upd_v1.7.19" exitoso posterior al último "wst_ipa_v"
+        // Buscar si hay un "wst_upd_v1.8.1" exitoso posterior al último "wst_ipa_v"
         const successfulUpdateAfterIPA = jobSummaries.slice(0, lastIPAIndex).find(
-          summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed
+          summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed
         );
 
-        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.7.19" exitoso
-        if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.7.19" exitoso. Marcado como actualizado.`);
+        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.8.1" exitoso
+        if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.8.1" exitoso. Marcado como actualizado.`);
           return {
             id: host.id,
             name: host.name,
@@ -185,9 +185,9 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.7.19" exitoso después de él, está actualizado
+        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.8.1" exitoso después de él, está actualizado
         if (hasIPA && successfulUpdateAfterIPA) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.7.19" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
           return {
             id: host.id,
             name: host.name,
@@ -197,9 +197,9 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        // Si hay un "wst_upd_v1.7.19" pero todos fallaron, está fallido
-        if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.7.19' && summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.7.19" fallido. Marcado como fallido.`);
+        // Si hay un "wst_upd_v1.8.1" pero todos fallaron, está fallido
+        if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" fallido. Marcado como fallido.`);
           return {
             id: host.id,
             name: host.name,
@@ -209,7 +209,7 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.7.19" después del "wst_ipa_v1.7.10".`);
+        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.8.1" después del "wst_ipa_v1.7.10".`);
 
         return {
           id: host.id,

@@ -6,10 +6,10 @@ export const calculateHostStatus = (host, tipoTerminal) => {
       const hasIPA = lastIPAIndex !== -1;
   
       const successfulUpdateAfterIPA = jobSummaries.slice(0, lastIPAIndex).find(
-        summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed
+        summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed
       );
   
-      if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.7.19' && !summary.failed)) {
+      if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed)) {
         return 'actualizado';
       }
       
@@ -17,7 +17,7 @@ export const calculateHostStatus = (host, tipoTerminal) => {
         return 'actualizado';
       }
   
-      if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.7.19' && summary.failed)) {
+      if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
         return 'fallido';
       }
   

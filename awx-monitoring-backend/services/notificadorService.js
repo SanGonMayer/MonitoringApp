@@ -8,6 +8,12 @@ import fetch from 'node-fetch';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { HttpProxyAgent } from 'http-proxy-agent';
 
+const gruposExcluidos = [
+    'f0000',
+    'f0071', 'f0603', 'f0661', 'f0662', 'f0664', 'f0665', 'f0668', 'f0299',
+    'wst', 'pve','f0999'
+  ];
+
 export const getOutdatedFilialesAndHosts = async () => {
     try {
       const filiales = await Filial.findAll();
@@ -20,6 +26,12 @@ export const getOutdatedFilialesAndHosts = async () => {
         };
   
       for (const filial of filiales) {
+
+        if (gruposExcluidos.includes(filial.name.toLowerCase())) {
+            console.log(`Filial excluida del reporte: ${filial.name}`);
+            continue;
+          }
+
         const wstHosts = await Workstation.findAll({
           where: { 
             filial_id: filial.id, 
