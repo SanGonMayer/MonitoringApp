@@ -126,11 +126,11 @@ export const getOutdatedFilialesAndHosts = async () => {
     report += `- Hosts CCTV: Actualizados: ${counters.cctv.actualizado}, Pendientes: ${counters.cctv.pendiente}, Fallidos: ${counters.cctv.fallido}\n\n`;
     
     filiales.forEach(filial => {
-        report += `🏢 *Filial:* ${filial.name} (${filial.description})\n`;
+        report += `🏢 *Filial:* ${filial.name}\n`;
         hosts
             .filter(host => host.filial_id === filial.id)
             .forEach(host => {
-                report += `  - 🖥️ Host: ${host.name} (Status: ${host.status})\n`;
+                report += `  - Host: ${host.name} - Estado: ${host.status}\n`;
             });
         report += '\n';
     });
