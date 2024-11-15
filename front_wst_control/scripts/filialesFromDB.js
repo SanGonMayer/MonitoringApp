@@ -5,12 +5,6 @@ function inicializarEstadosFiliales() {
   window.fallidas = 0;
 }
 
-function inicializarEstadosHosts() {
-  window.totalHosts = 0;
-  window.hostsActualizados = 0;
-  window.hostsPendientes = 0;
-  window.hostsFallidos = 0;
-}
 
 function inicializarEstadosHostsListas(){
   window.hostsActualizados = [];
@@ -83,7 +77,8 @@ function clearFilialContainer() {
 async function createFilialButtons(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
-  inicializarEstadosHosts();
+  //sinicializarEstadosHosts();
+  inicializarEstadosHostsListas();
 
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
