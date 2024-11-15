@@ -276,7 +276,8 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
 
 
 
-
+/* ------------------------------------- */
+/* ------------------------------------- */
 /* ------------------------------------- */
 
 
@@ -326,7 +327,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 async function createFilialButtonsSro(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
-  inicializarEstadosHosts();
+  //inicializarEstadosHosts();
   inicializarEstadosHostsListas();
 
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
