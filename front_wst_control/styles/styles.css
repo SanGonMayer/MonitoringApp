@@ -434,21 +434,21 @@ button:hover {
 
 .barra-navegacion{
   text-align: center; 
-  margin-top: 30px;
+  margin-top: 50px;
   margin-bottom: 30px;
 }
 
 .barra-navegacion button {
   padding: 5px 10px;
   margin: 0 5px;
-  background-color: #007bff;
+  background-color: #9de9d8;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .barra-navegacion button:hover {
-  background-color: #0056b3;
+  background-color: #66ed56;
 }
 
 .pagina-actual {
