@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ------------------------ AL MOMENTO DE CLICKEAR EN ALGUNA FILIAL (EL EVENTO CLICK ESTA EN "FILIALES FROM DB")
 
-  //mostrarHostsDefilialHtml(); 
+  mostrarHostsDefilialHtml(); 
 
   //----------------------- PRUEBAS PARA LA PAGINACION AL MOMENTO FILTRAR ESTADOS DE HOSTS POR CARD
   nuevoFiltroDeCards();
