@@ -1,58 +1,3 @@
-const gruposExcluidos = [
-  'f0000','f0504', 'f0509', 'f0513', 'f0514', 'f0559', 'f0579', 'f0580', 'f0583', 'f0584', 'f0593', 'f0594', 'f0595', 'f0597', 'f0652', 'f0653', 'f0688', 'f0703',
-  'f0071', 'f0517', 'f0603', 'f0661', 'f0662', 'f0664', 'f0665', 'f0668', 'f0299',
-  'wst', 'pve','f0999'
-];
-
-
-async function fetchFilialesFromDB(tipoTerminal) {
-    try {
-      console.log('Fetching filiales from the database:', tipoTerminal);
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales');
-      
-      if (!response.ok) {
-        throw new Error('Error al obtener filiales desde la base de datos');
-      }
-  
-      const filiales = await response.json();
-  
-      /* const filialesFiltradas = filiales.filter(filial => {
-        return (tipoTerminal === 'wst.html' && filial.hasWST) ||
-               (tipoTerminal === 'cctv.html' && filial.hasCCTV);
-      }); */
-
-      let filialesFiltradas = []; 
-
-      if (tipoTerminal === 'wst.html') {
-        filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
-      } else if (tipoTerminal === 'cctv.html') {
-        console.log('Estoy evaluando las filiales para cctv')
-        filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
-      }
-  
-      console.log('Filiales filtradas:', filialesFiltradas);
-      
-      clearFilialContainer();
-
-      createFilialButtons(filialesFiltradas, tipoTerminal);
-
-      return filialesFiltradas;
-  
-    } catch (error) {
-      console.error('Error obteniendo las filiales desde la base de datos:', error);
-      return [];
-    }
-  }
-  
-
-function clearFilialContainer() {
-    const filialContainer = document.querySelector('#filialContainer');
-    filialContainer.innerHTML = '';
-}
-
-
-/* ------------------------------------- */
-
 function inicializarEstadosFiliales() {
   window.totalFiliales = 0;
   window.actualizadas = 0;
@@ -67,41 +12,72 @@ function inicializarEstadosHosts() {
   window.hostsFallidos = 0;
 }
 
+function inicializarEstadosHostsListas(){
+  window.hostsActualizados = [];
+  window.hostsPendientes = [];
+  window.hostsFallidos = [];
+}
 
-/* async function createFilialButtons(filiales, tipoTerminal) {
-  const filialContainer = document.querySelector('#filialContainer');
-  inicializarEstadosFiliales(); 
-  inicializarEstadosHosts();
 
-  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
-  tableElement.style.display = 'none';
+window.hostsActualizados = [];
+window.hostsPendientes = [];
+window.hostsFallidos = [];
 
-  for (const filial of filiales) {
-      const button = document.createElement('button');
-      button.textContent = filial.name;
-      button.classList.add('custom-button');
 
-      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
-      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
-      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
-      button.style.backgroundColor = color;
+const gruposExcluidos = [
+  'f0000','f0504', 'f0509', 'f0513', 'f0514', 'f0559', 'f0579', 'f0580', 'f0583', 'f0584', 'f0593', 'f0594', 'f0595', 'f0597', 'f0652', 'f0653', 'f0688', 'f0703',
+  'f0071', 'f0517', 'f0603', 'f0661', 'f0662', 'f0664', 'f0665', 'f0668', 'f0299',
+  'wst', 'pve','f0999'
+];
 
-      // Asigna los hosts directamente al evento click sin volver a hacer fetch
-      button.onclick = () => {
 
-          tableElement.style.display = '';
+async function fetchFilialesConHostsFromDB(tipoTerminal) {
+  try {
 
-          displayHosts(hosts);
-          // Desplaza la pantalla hacia la tabla de hosts
-          tableElement.scrollIntoView({ behavior: 'smooth' });
-      };
+      let tipo = '';
 
-      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
-      window.allButtons.push(button);
+      if (tipoTerminal === 'wst.html'){
+          tipo = 'WORKSTATION';
+      } else if (tipoTerminal === 'cctv.html'){
+          tipo = 'CCTV';
+      }
+
+
+      console.log('Fetching filiales from the database:', tipoTerminal);
+      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
+      
+      if (!response.ok) {
+          const errorDetails = await response.text();
+          throw new Error(`Error al obtener filiales desde la base de datos: ${errorDetails}`);
+      }
+
+      const filiales = await response.json();
+      let filialesFiltradas = []; 
+
+      if (tipoTerminal === 'wst.html') {
+          filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
+      } else if (tipoTerminal === 'cctv.html') {
+          console.log('Estoy evaluando las filiales para cctv')
+          filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+      }
+
+      console.log('Filiales filtradas:', filialesFiltradas);
+      clearFilialContainer();
+      createFilialButtons(filialesFiltradas, tipoTerminal);
+      return filialesFiltradas;
+
+  } catch (error) {
+      console.error('Error obteniendo las filiales desde la base de datos:', error);
+      return [];
   }
-  console.log('Mostrando botones de filiales', window.allButtons);
-  updateCantidadDeFiliales();
-} */
+}
+  
+
+function clearFilialContainer() {
+  const filialContainer = document.querySelector('#filialContainer');
+  filialContainer.innerHTML = '';
+}
+
 
 
 async function createFilialButtons(filiales, tipoTerminal) {
@@ -136,7 +112,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
       window.allButtons.push(button);
   }
   console.log('Mostrando botones de filiales', window.allButtons);
-  updateCantidadDeFiliales();
+  updateCantidadDeHosts();
 }
 
 
@@ -152,16 +128,18 @@ async function evaluarEstadoHosts(filialId, tipo) {
           window.totalHosts++;
           const status = host.status || 'pendiente';
 
-          if (status === 'pendiente') {
-              window.hostsPendientes++;
+          if( status === 'actualizado'){
+              window.hostsActualizados.push(host);
+          } else if (status === 'pendiente') {
+              window.hostsPendientes.push(host);
               hayPendientes = true;
               todasActualizadas = false;
           } else if (status === 'fallido') {
-              window.hostsFallidos++;
+              window.hostsFallidos.push(host);
               hayFallidas = true;
               todasActualizadas = false;
           } else if (status !== 'actualizado') {
-              window.hostsActualizados++;
+              wwindow.hostsActualizados.push(host);
               todasActualizadas = false;
           }
       });
@@ -303,50 +281,7 @@ async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filia
 
 
 
-async function fetchFilialesConHostsFromDB(tipoTerminal) {
-  try {
 
-    let tipo = '';
-
-    if (tipoTerminal === 'wst.html'){
-      tipo = 'WORKSTATION';
-    } else if (tipoTerminal === 'cctv.html'){
-      tipo = 'CCTV';
-    }
-
-
-    console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
-    
-    if (!response.ok) {
-      const errorDetails = await response.text();
-      throw new Error(`Error al obtener filiales desde la base de datos: ${errorDetails}`);
-    }
-
-    const filiales = await response.json();
-
-    let filialesFiltradas = []; 
-
-    if (tipoTerminal === 'wst.html') {
-      filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
-    } else if (tipoTerminal === 'cctv.html') {
-      console.log('Estoy evaluando las filiales para cctv')
-      filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
-    }
-
-    console.log('Filiales filtradas:', filialesFiltradas);
-    
-    clearFilialContainer();
-
-    createFilialButtons(filialesFiltradas, tipoTerminal);
-
-    return filialesFiltradas;
-
-  } catch (error) {
-    console.error('Error obteniendo las filiales desde la base de datos:', error);
-    return [];
-  }
-}
 /* ------------------------------------- */
 
 
@@ -393,12 +328,6 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 }
 
 
-function inicializarEstadosHostsListas(){
-  window.hostsActualizados = [];
-  window.hostsPendientes = [];
-  window.hostsFallidos = [];
-}
-
 async function createFilialButtonsSro(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
@@ -437,10 +366,6 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
 
 // ESTAS VARIABLES GLOBALES DEBEN ESTAR EN EL APPNEW Y ADEMAS, HACER UN INICIALIZAR COMO SE HIZO EN LOS OTROS CASOS 
 // DONDE SE TRABAJABA CON LAS FILIALES
-
-window.hostsActualizados = [];
-window.hostsPendientes = [];
-window.hostsFallidos = [];
 
 async function evaluarEstadoHostsSrno(filialId, tipo) {
   try {
@@ -502,7 +427,7 @@ function updateCantidadDeHosts(){
   document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.hostsFallidos.length}`;
 }
 
-window.fetchFilialesFromDB = fetchFilialesFromDB;
+
 window.clearFilialContainer = clearFilialContainer;
 window.createFilialButtons = createFilialButtons;
 window.fetchFilialesGraficoDB = fetchFilialesGraficoDB;
@@ -512,3 +437,47 @@ window.fetchFilialesConHostsFromDB = fetchFilialesConHostsFromDB;
 window.fetchFilialesConHostsSrno = fetchFilialesConHostsSrno;
 window.evaluarEstadoHostsSrno = evaluarEstadoHostsSrno;
 window.createFilialButtonsSro = createFilialButtonsSro;
+
+
+
+
+
+/* ------------------------------------- */
+
+
+
+
+/* async function createFilialButtons(filiales, tipoTerminal) {
+  const filialContainer = document.querySelector('#filialContainer');
+  inicializarEstadosFiliales(); 
+  inicializarEstadosHosts();
+
+  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+  tableElement.style.display = 'none';
+
+  for (const filial of filiales) {
+      const button = document.createElement('button');
+      button.textContent = filial.name;
+      button.classList.add('custom-button');
+
+      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
+      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
+      button.style.backgroundColor = color;
+
+      // Asigna los hosts directamente al evento click sin volver a hacer fetch
+      button.onclick = () => {
+
+          tableElement.style.display = '';
+
+          displayHosts(hosts);
+          // Desplaza la pantalla hacia la tabla de hosts
+          tableElement.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+      window.allButtons.push(button);
+  }
+  console.log('Mostrando botones de filiales', window.allButtons);
+  updateCantidadDeFiliales();
+} */
