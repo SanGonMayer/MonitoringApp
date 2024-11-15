@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
   mostrarHostsDefilialHtml(); 
 
   //----------------------- PRUEBAS PARA LA PAGINACION AL MOMENTO FILTRAR ESTADOS DE HOSTS POR CARD
-  nuevoFiltroDeCards();
-  configuracionPaginacion();
-  actualizarRecuperarHosts();
+  //nuevoFiltroDeCards();
+  //configuracionPaginacion();
+  //actualizarRecuperarHosts();
 
   
 });
