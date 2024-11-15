@@ -20,6 +20,7 @@
     "express": "^4.21.0",
     "http-proxy-agent": "^7.0.2",
     "https-proxy-agent": "^7.0.5",
+    "json2csv": "^6.0.0-alpha.2",
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
     "pg": "^8.13.0",
