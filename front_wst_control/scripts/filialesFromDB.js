@@ -220,7 +220,7 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
 async function evaluarEstadoFiliales(filiales, tipoTerminal) {  // Cambiar filialesId -> filiales
 
   inicializarEstadosFiliales(); 
-  inicializarEstadosHosts();
+  //sinicializarEstadosHosts();
   
   try {
       let filialesActualizadas = 0
