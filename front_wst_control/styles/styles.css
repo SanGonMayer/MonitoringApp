@@ -439,16 +439,21 @@ button:hover {
 }
 
 .barra-navegacion button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  background-color: #9de9d8;
+  padding: 8px 15px;
+  margin: 0 8px;
+  background-color: #007BFF; /* Azul vibrante */
   color: white;
   border: none;
+  border-radius: 5px; /* Bordes redondeados */
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves */
 }
 
 .barra-navegacion button:hover {
-  background-color: #66ed56;
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: translateY(-3px); /* Pequeño levantamiento */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
 .pagina-actual {
