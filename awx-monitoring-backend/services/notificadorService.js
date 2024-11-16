@@ -7,6 +7,9 @@ import { Op } from 'sequelize';
 import fetch from 'node-fetch';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { HttpProxyAgent } from 'http-proxy-agent';
+import { Parser } from 'json2csv';
+import fs from 'fs';
+import path from 'path';
 
 const gruposExcluidos = [
     'f0000',
@@ -180,3 +183,43 @@ export const sendReportViaTelegram = async (report) => {
       console.error('Error al enviar el reporte por Telegram:', error.message);
     }
   };
+
+  export const generateAndSaveCSV = (filiales, hosts, counters, outputPath) => {
+    try {
+      const summaryRows = [
+        { Type: 'Hosts WST', Actualizados: counters.wst.actualizado, Pendientes: counters.wst.pendiente, Fallidos: counters.wst.fallido },
+        { Type: 'Hosts CCTV', Actualizados: counters.cctv.actualizado, Pendientes: counters.cctv.pendiente, Fallidos: counters.cctv.fallido },
+      ];
+  
+      const hostRows = [];
+      filiales.forEach(filial => {
+        const filialHosts = hosts.filter(host => host.filial_id === filial.id);
+        filialHosts.forEach(host => {
+          hostRows.push({
+            Filial: filial.name,
+            Host: host.name,
+            Estado: host.status,
+          });
+        });
+      });
+  
+      const parser = new Parser();
+      const csvSummary = parser.parse(summaryRows); 
+      const csvHosts = parser.parse(hostRows);     
+  
+      if (!fs.existsSync(outputPath)) {
+        fs.mkdirSync(outputPath, { recursive: true });
+      }
+  
+      const filePath = path.join(outputPath, `Reporte_Desactualizados_${Date.now()}.csv`);
+      fs.writeFileSync(filePath, `${csvSummary}\n\n${csvHosts}`, 'utf8');
+  
+      console.log(`CSV generado y guardado en: ${filePath}`);
+      return filePath;
+    } catch (error) {
+      console.error('Error al generar el CSV:', error.message);
+      throw new Error('Error al generar el CSV');
+    }
+  };
+
+  

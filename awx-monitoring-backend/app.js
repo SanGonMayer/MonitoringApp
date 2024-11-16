@@ -10,7 +10,7 @@ import './models/index.js';
 import Filial from './models/filiales.js';
 import cron from 'node-cron';
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
-import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTelegram } from './services/notificadorService.js';
+import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTelegram, generateAndSaveCSV } from './services/notificadorService.js';
 
 dotenv.config();
 
@@ -47,6 +47,13 @@ const startDataSync = async () => {
     const { filiales: outdatedFiliales, hosts: outdatedHosts, counters } = await getOutdatedFilialesAndHosts();   
     const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters);
     await sendReportViaTelegram(report);
+
+
+    const outputPath = path.join(__dirname, 'reports');
+    const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, outputPath);
+
+    const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: ${csvFilePath}`;
+    await sendReportViaTelegram(csvMessage);
 
   } catch (error) {
     console.error('Error durante la sincronización de datos:', error.message);
