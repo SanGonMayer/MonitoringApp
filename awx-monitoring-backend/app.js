@@ -46,8 +46,6 @@ const startDataSync = async () => {
     
     const { filiales: outdatedFiliales, hosts: outdatedHosts, counters } = await getOutdatedFilialesAndHosts();   
     const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters);
-    await sendReportViaTelegram(report);
-
 
     const outputPath = path.join(__dirname, 'reports');
     const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, outputPath);
@@ -55,13 +53,15 @@ const startDataSync = async () => {
     const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: ${csvFilePath}`;
     await sendReportViaTelegram(csvMessage);
 
+    await sendReportViaTelegram(report);
+
   } catch (error) {
     console.error('Error durante la sincronización de datos:', error.message);
   }
 };
 
 
-cron.schedule('0 0 * * *', async () => {
+cron.schedule('0 10 * * *', async () => {
   console.log('Ejecutando sincronización de datos programada a las 00:00...');
   await startDataSync();
 });
