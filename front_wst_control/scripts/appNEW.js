@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
   mostrarHostsDefilialHtml(); 
 
   //----------------------- PRUEBAS PARA LA PAGINACION AL MOMENTO FILTRAR ESTADOS DE HOSTS POR CARD
-  /* nuevoFiltroDeCards();
-  configuracionPaginacion();
-  actualizarRecuperarHosts(); */
+  nuevoFiltroDeCards();
+  //configuracionPaginacion();
+  actualizarRecuperarHosts();
 
   
 });
@@ -128,8 +128,12 @@ function mostrarHostsDefilialHtml(){
   const params = new URLSearchParams(window.location.search);
   const filialName = params.get('name');
   const fromPage = params.get('from');
+  const action = params.get('action');  
 
-  if (filialName) {
+  console.log('URL actual:', window.location.href);
+  console.log('Parámetro action:', action);
+
+  if (action == 'filialHost' && filialName) {
       console.log('Ahora ya se encontro una filialName, porque se clickeo en un boton filial')
       // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
       const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
@@ -157,7 +161,7 @@ function mostrarHostsDefilialHtml(){
 
 //--------------------------------------------
 
-function nuevoFiltroDeCards(){
+/* function nuevoFiltroDeCards(){
   let filialName = "wst"; 
 
   const circles = document.querySelectorAll('.circle');
@@ -188,23 +192,81 @@ function nuevoFiltroDeCards(){
               }
 
               // Almacena los hosts seleccionados en sessionStorage y abre la nueva página
-              sessionStorage.setItem('HostsElegidos', JSON.stringify(hosts));
+              sessionStorage.setItem('hostsElegidos', JSON.stringify(hosts));
               console.log("Hosts guardados en sessionStorage:", hosts);
 
+              const terminal = window.location.pathname.split('/').pop(); 
+
               
-              window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+              
+              //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+              window.open(`filial.html?name=${filialName}&from=${tipo}&action=estadosHost`, '_blank');
+              
           });
       });
   } else {
       console.log("No se encontraron elementos con la clase 'circle' en esta página.");
   }
-}
+} */
 
+
+  function nuevoFiltroDeCards(){
+    let filialName = "wst"; 
+  
+    const circles = document.querySelectorAll('.circle');
+    if (circles.length > 0) {
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                const color = window.getComputedStyle(circle).backgroundColor;
+                let hosts = [];
+                let estado = '';
+  
+                // Selecciona la lista de hosts y el tipo según el color del círculo
+                switch (color) {
+                    case 'rgb(40, 167, 69)': // Verde
+                        hosts = window.hostsActualizados;
+                        estado = 'actualizados';
+                        break;
+                    case 'rgb(255, 193, 7)': // Amarillo
+                        hosts = window.hostsPendientes;
+                        estado = 'pendientes';
+                        break;
+                    case 'rgb(220, 53, 69)': // Rojo
+                        hosts = window.hostsFallidos;
+                        estado = 'fallidos';
+                        break;
+                    default:
+                        console.warn('Color de círculo desconocido:', color);
+                        return; // No hace nada si el color es desconocido
+                }
+  
+                // Almacena los hosts seleccionados en sessionStorage y abre la nueva página
+                sessionStorage.setItem('hostsElegidos', JSON.stringify(hosts));
+                console.log("Hosts guardados en sessionStorage:", hosts);
+  
+                const terminal = window.location.pathname.split('/').pop(); 
+                let tipo = '';
+                if (terminal === 'wst.html'){
+                    tipo = 'wst';
+                }else if (terminal === 'cctv.html'){
+                    tipo = 'cctv'
+                }
+  
+                //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+                //window.open(`filial.html?name=${filialName}&from=${tipo}&action=estadosHost`, '_blank');
+                window.open(`filial.html?from=${tipo}&estado=${estado}&action=estadosHost`, '_blank');
+                
+            });
+        });
+    } else {
+        console.log("No se encontraron elementos con la clase 'circle' en esta página.");
+    }
+  }
 
 function configuracionPaginacion(){
     // Configuración de paginación
   const hostsPorPagina = 100; // Cambia esto si quieres mostrar más o menos hosts por página
-  const hosts = JSON.parse(sessionStorage.getItem('HostsElegidos')); // Recuperamos los hosts de sessionStorage
+  const hosts = JSON.parse(sessionStorage.getItem('hostsElegidos')); // Recuperamos los hosts de sessionStorage
 
   if (hosts) {
       const totalPaginas = Math.ceil(hosts.length / hostsPorPagina); // Calcula el número total de páginas
@@ -219,7 +281,7 @@ function configuracionPaginacion(){
           const hostsPagina = hosts.slice(inicio, fin);
 
           // Muestra los hosts de la página actual
-          displayHosts(hostsPagina);
+          displayHostsPorEstados(hostsPagina,inicio);
 
           // Actualiza la barra de navegación de páginas
           actualizarBarraDeNavegacion(pagina);
@@ -252,17 +314,56 @@ function configuracionPaginacion(){
   }
 }
 
+function displayHostsPorEstados(hosts, startIndex) {
+    const tableBody = document.querySelector('#workstationsTable tbody');
+    tableBody.innerHTML = ''; 
+    
+    hosts.forEach((host, index) => {
+        const globalIndex = startIndex + index + 1; // Calcula el índice global
+        
+        const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`;
+        const jobWolButton = `<button onclick="launchJobWol('${host.name}')">Ejecutar</button>`;
+        const jobUpdButton = `<button onclick="launchJobUpd('${host.name}')">Ejecutar</button>`;
+        
+        let descriptionStatus = '';
+        if (host.status === 'actualizado') {
+            descriptionStatus = 'bg-green';
+        } else if (host.status === 'pendiente') {
+            descriptionStatus = 'bg-yellow';
+        } else if (host.status === 'fallido') {
+            descriptionStatus = 'bg-red';
+        }
+        
+        const row = `
+            <tr>
+              <td>${globalIndex}</td>
+              <td><a href="${rutaJobsAwx}" target="_blank">${host.name}</a></td>
+              <td>${host.id}</td>
+              <td>${host.description || 'Sin descripción'}</td>
+              <td><span class="${descriptionStatus}">${host.status || 'Desconocido'}</span></td>
+              <td>${jobWolButton}</td>
+              <td>${jobUpdButton}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
 function actualizarRecuperarHosts(){
   // Recuperar el tipo de hosts desde la URL y actualizar la interfaz
   const urlParams = new URLSearchParams(window.location.search);
-  const hostType = urlParams.get('from');
+  const fromPage = urlParams.get('from')
+  const hostType = urlParams.get('estado');  // antes era actualizado, pendientes o fallido
+  const action = urlParams.get('action'); 
 
-  if (hostType) {
+  if (action == 'estadosHost' && hostType) {
+      configuracionPaginacion();
       const breadcrumb = document.querySelector('.breadcrumb');
       breadcrumb.innerHTML = `
           <a href="/MonitoringAppFront/">Home</a> / 
-          <a href="${hostType}.html">${hostType.toUpperCase()}</a> / 
-          <span>Hosts - ${hostType.toUpperCase()}</span>
+          <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
+          <a href="filial.html?from=${fromPage}&estado=${hostType}&action=${action}">Hosts - ${hostType.toUpperCase()}</a>
+          
       `;
 
       const headerText = document.querySelector('header h1');

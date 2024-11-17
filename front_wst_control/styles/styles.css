@@ -445,13 +445,21 @@ button:hover {
   color: #ffffff; /* Texto blanco */
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Agregar una transición suave */
 }
 
 .barra-navegacion button:hover {
   background-color: #a52a2a; /* Bordó más claro al hacer hover */
+  transform: scale(1.1); /* Agrandar ligeramente el botón al hacer hover */
 }
 
-.pagina-actual {
+.barra-navegacion button.pagina-actual {
+  background-color: #005f38; /* Verde oscuro para la página actual */
   font-weight: bold;
-  background-color: #28a745;
+  border-radius: 5px;
+  padding: 5px 10px; /* Aseguramos que tenga el mismo padding que los otros botones */
+}
+
+.barra-navegacion button.pagina-actual:hover {
+  background-color: #00402f; /* Verde más oscuro cuando se hace hover sobre el botón actual */
 }

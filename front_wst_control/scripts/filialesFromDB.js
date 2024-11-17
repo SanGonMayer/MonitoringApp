@@ -100,7 +100,8 @@ async function createFilialButtons(filiales, tipoTerminal) {
         
         sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
         console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-        window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+        //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+        window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
@@ -346,11 +347,12 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
 
-          const filialName = filial.name; 
+          const filialName = filial.name;
           
           sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
           console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-          window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+          //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
+          window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
       };
 
       filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
