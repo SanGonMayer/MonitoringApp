@@ -123,7 +123,7 @@ function recargarFilialesHtml(){
   }
 }
 
-
+/* 
 function mostrarHostsDefilialHtml(){
   const params = new URLSearchParams(window.location.search);
   const filialName = params.get('name');
@@ -156,7 +156,77 @@ function mostrarHostsDefilialHtml(){
   } else {
       console.error("No se ha pasado el nombre de la filial en la URL.");
   } 
+} */
+
+function mostrarHostsDefilialHtml(){
+  const params = new URLSearchParams(window.location.search);
+  const filialName = params.get('name');
+  const fromPage = params.get('from');
+  const action = params.get('action');  
+
+  console.log('URL actual:', window.location.href);
+  console.log('Parámetro action:', action);
+
+  if (action == 'filialHost' && filialName) {
+      console.log('Ahora ya se encontro una filialName, porque se clickeo en un boton filial')
+      // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
+      const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
+
+      const breadcrumb = document.querySelector('.breadcrumb');
+      breadcrumb.innerHTML = `
+          <a href="/MonitoringAppFront/">Home</a> / 
+          <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
+          <a href="filial.html?name=${filialName}&from=${fromPage}">${filialName}</a>
+      `;
+
+      const headerText = document.querySelector('header h1');
+      headerText.textContent += ` ${filialName}`;
+
+      if (hosts) {
+          
+          const statsContainer = document.querySelector('.stats-container');
+          
+
+          
+          // Limpiar el contenedor de estadísticas antes de agregar los nuevos divs
+          statsContainer.innerHTML = '';
+
+          // Contar los diferentes tipos de hosts
+          const total = hosts.length;
+          const actualizados = hosts.filter(host => host.status === 'actualizado').length;
+          const pendientes = hosts.filter(host => host.status === 'pendiente').length;
+          const fallidos = hosts.filter(host => host.status === 'fallido').length;
+
+          const statsData = [
+            { class: 'total', label: 'Total', value: total },
+            { class: 'actualizadas', label: 'Actualizadas', value: actualizados },
+            { class: 'pendientes', label: 'Pendientes', value: pendientes },
+            { class: 'fallidos', label: 'Fallidos', value: fallidos }
+          ];
+
+          // Actualizar los valores en el HTML
+          /* document.querySelector('.stats-container .total .value').textContent = total;
+          document.querySelector('.stats-container .actualizadas .value').textContent = actualizados;
+          document.querySelector('.stats-container .pendientes .value').textContent = pendientes;
+          document.querySelector('.stats-container .fallidos .value').textContent = fallidos; */
+
+          statsData.forEach(stat => {
+            const statDiv = document.createElement('div');
+            statDiv.classList.add('stat', stat.class);
+            statDiv.innerHTML = `${stat.label}: <span class="value">${stat.value}</span>`;
+            statsContainer.appendChild(statDiv);
+          });
+
+          displayHosts(hosts);
+      } else {
+          console.error('No se encontraron datos de hosts en sessionStorage');
+      }
+  } else {
+      console.error("No se ha pasado el nombre de la filial en la URL.");
+  } 
 }
+
+
 
 
 //--------------------------------------------

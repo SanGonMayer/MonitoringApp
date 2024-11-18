@@ -463,3 +463,55 @@ button:hover {
 .barra-navegacion button.pagina-actual:hover {
   background-color: #00402f; /* Verde más oscuro cuando se hace hover sobre el botón actual */
 }
+
+
+
+/* -------------------- */
+
+
+/* Contenedor principal del div */
+.stats-container {
+  display: flex;
+  justify-content: center; /* Centra los elementos horizontalmente */
+  align-items: center; /* Centra los elementos verticalmente si es necesario */
+  gap: 10px; /* Espacio uniforme entre los elementos */
+  /* padding: 10px; */
+  background-color: #f4f4f4; /* Fondo claro para el contenedor */
+  border-radius: 8px;
+  /* margin: 20px 0; */
+  /* margin-top: 80px; */
+  
+}
+
+
+/* Estilo común para cada estadística */
+.stat {
+  padding: 15px 50px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  flex: 0; /* No ocupa todo el espacio restante */
+  white-space: nowrap; /* Mantiene todo en una línea */
+  margin-top: 60px;
+}
+
+/* Colores específicos */
+.total {
+  background-color: #cce5ff; /* Azul claro */
+  color: #004085; /* Azul oscuro para el texto */
+}
+.actualizadas {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Verde oscuro para el texto */
+}
+.pendientes {
+  background-color: #fff3cd; /* Amarillo claro */
+  color: #856404; /* Amarillo oscuro para el texto */
+}
+.fallidos {
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24; /* Rojo oscuro para el texto */
+}
+
