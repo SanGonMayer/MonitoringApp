@@ -192,7 +192,7 @@ header {
   right: 20px;
 }
 
-#action-button {
+#action-button, #action-upd-filial {
   padding: 8px 15px;
   font-size: 16px;
   background-color: #263ec5;
@@ -204,7 +204,7 @@ header {
   font-weight: bold;
 }
 
-#action-button:hover {
+#action-button:hover, #action-upd-filial:hover {
   background-color: #45a049;
   transform: scale(1.1);
 }
@@ -540,3 +540,56 @@ button:hover {
   color: #721c24; /* Rojo oscuro para el texto */
 }
 
+
+/* ------- */
+
+
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 40px; /* Más separación horizontal entre los botones */
+  margin-top: 20px; /* Espaciado entre el texto y los botones */
+}
+
+.dialog.hidden {
+  display: none;
+}
+
+.dialog-buttons #confirm-accept {
+  background-color: #4caf50;
+  color: white;
+}
+
+.dialog-buttons #confirm-accept:hover {
+  background-color: #45a049;
+}
+
+.dialog-buttons #confirm-cancel {
+  background-color: #f44336;
+  color: white;
+}
+
+.dialog-buttons #confirm-cancel:hover {
+  background-color: #e53935;
+}

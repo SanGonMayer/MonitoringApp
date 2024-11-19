@@ -218,6 +218,7 @@ function mostrarHostsDefilialHtml(){
           });
 
           displayHosts(hosts);
+          actualizarFilialConUpd(filialName);
       } else {
           console.error('No se encontraron datos de hosts en sessionStorage');
       }
@@ -441,6 +442,87 @@ function actualizarRecuperarHosts(){
   } else {
       console.error("No se ha especificado el tipo de hosts en la URL.");
   }
+}
+
+
+
+//-------------
+
+
+function actualizarFilialConUpd(filialName) {
+    const actionButton = document.querySelector('#action-upd-filial');
+    if (actionButton) {
+        actionButton.addEventListener('click', () => {
+            mostrarDialogoConfirmacion(filialName);
+        });
+    } else {
+        console.log("El botón actionUpdFilial no está presente en esta página, se omite el eventListener.");
+    }
+}
+
+function mostrarDialogoConfirmacion(filial) {
+    const dialog = document.querySelector('#custom-dialog');
+    const confirmAccept = document.querySelector('#confirm-accept');
+    const confirmCancel = document.querySelector('#confirm-cancel');
+
+    dialog.classList.remove('hidden');
+
+    const aceptar = () => {
+        launchJobUpdFilial(filial);
+        cerrarDialogo();
+    };
+
+    const cancelar = () => {
+        console.log("El usuario canceló la operación.");
+        cerrarDialogo();
+    };
+
+    confirmAccept.addEventListener('click', aceptar, { once: true });
+    confirmCancel.addEventListener('click', cancelar, { once: true });
+
+    function cerrarDialogo() {
+        dialog.classList.add('hidden');
+    }
+}
+
+async function launchJobUpdFilial(filial) {  // 'hostname' cambiado a 'filial'
+    try {
+
+      console.log("Iniciando ejecución del job para la filial:", filial);
+
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job-filial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          job_template_id: 1678,
+          filial: filial,  // Usamos 'filial' en lugar de 'hostname'
+        }),
+      });
+
+      const responseText = await response.text();
+
+      console.log("Texto completo de la respuesta:", responseText);
+
+      let data;
+      try {
+          data = JSON.parse(responseText);
+      } catch (jsonError) {
+          console.error("Error al parsear JSON:", jsonError);
+          alert("Error al lanzar el job: Respuesta no válida del servidor.");
+          return;
+      }
+  
+      if (response.ok) {
+        alert(`Job lanzado correctamente para la filial ${filial}. ID del job: ${data.job_id}`);
+      } else {
+        alert(`Error al lanzar el job: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error al lanzar el job:', error);
+      alert('Error al lanzar el job.');
+    }
 }
 
 window.buscar = buscar;

@@ -140,3 +140,55 @@ export const launchJob = async (req, res) => {
     res.status(500).json({ error: 'Error al ejecutar el job' });
   }
 };
+
+
+//---------------------------------
+
+export const launchJobFilial = async (req, res) => {
+  console.log("launchJob fue llamado con los datos:", req.body);
+  const { job_template_id, filial, extra_vars = {}, verbosity = 2 } = req.body;  // Cambié 'hostname' por 'filial'
+
+  console.log("Datos recibidos para ejecutar el job:");
+  console.log(`job_template_id: ${job_template_id}`);
+  console.log(`filial: ${filial}`);  // Usamos 'filial' aquí
+  console.log(`extra_vars: ${JSON.stringify(extra_vars)}`);
+  console.log(`verbosity: ${verbosity}`);
+
+  try {
+    if (!job_template_id || !filial) {  // Cambié 'hostname' por 'filial'
+        return res.status(400).json({ error: "Faltan datos obligatorios (job_template_id o filial)" });
+    }
+
+    console.log('Lanzando job con los siguientes datos:', {
+        job_template_id,
+        filial,  // Usamos 'filial' aquí
+        extra_vars,
+        verbosity
+    });
+ 
+    const response = await axios.post(
+      `http://sawx0001lx.bancocredicoop.coop/api/v2/job_templates/${job_template_id}/launch/`,
+      {
+        limit: filial,  // Usamos 'filial' como 'limit'
+        extra_vars,
+        verbosity,
+      },
+      {
+        auth: {
+          username: serviceUser,
+          password: servicePass,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('Respuesta de AWX:', response.data);
+
+    res.status(200).json({ message: 'Job ejecutado correctamente', job_id: response.data.job });
+  } catch (error) {
+    console.error('Error al ejecutar el job:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Error al ejecutar el job' });
+  }
+};

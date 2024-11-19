@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { GroupHostController } from '../controllers/awxController.js';
+import { GroupHostController, launchJobFilial } from '../controllers/awxController.js';
 import { startDataSync } from '../app.js';
 //import Filial from '../models/filiales.js';
 import { getFilialesFromDB } from '../services/dbService.js';
@@ -61,6 +61,13 @@ awxRoutes.post('/api/awx/launch-job', (req, res, next) => {
 awxRoutes.get('/api/db/filiales/:filialId/hosts/srno', getHostsByFilialSNRO);
 
 awxRoutes.post('/api/test-telegram', sendTestTelegramMessage);
+
+//---------------
+
+awxRoutes.post('/api/awx/launch-job-filial', (req, res, next) => {
+  console.log("Ruta /api/awx/launch-job alcanzada");
+  next();
+}, launchJobFilial);
 
 
 export default awxRoutes;
