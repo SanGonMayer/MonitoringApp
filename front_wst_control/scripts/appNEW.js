@@ -450,6 +450,8 @@ function actualizarRecuperarHosts(){
 
 
 function actualizarFilialConUpd(filialName) {
+    const buttonContainer = document.querySelector(".button-container");
+    buttonContainer.style.display = "block"; // Cambia display a block para mostrar el div
     const actionButton = document.querySelector('#action-upd-filial');
     if (actionButton) {
         actionButton.addEventListener('click', () => {
