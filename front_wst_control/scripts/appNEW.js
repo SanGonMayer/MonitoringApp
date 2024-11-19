@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // -------------------- AL CLICKEAR ALGUNA CARD DE LAS 3 QUE HAY EN LA PAGINA
 
-  //filtrarFilialesPorCards();
+  filtrarFilialesPorCards();
   
   // -------------------- AL MOMENTO DE PRESIONAR EL BOTON "RECARGAR FILIALES"
 
@@ -72,7 +72,7 @@ function filtrando() {
 
 
 function filtrarFilialesPorCards(){
-  const circles = document.querySelectorAll('.circle');
+  const circles = document.querySelectorAll('.circle-filial');
   if (circles.length > 0) {
       circles.forEach(circle => {
           circle.addEventListener('click', () => {

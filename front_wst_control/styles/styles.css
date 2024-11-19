@@ -247,8 +247,10 @@ button:hover {
   margin-left: 170px; /* Ajusta el margen cuando la barra lateral se expande */
 }
  
+/* ----------------------------------------------------- */
+
 /* Ajustes para los círculos interactivos */
-.circle {
+.circle, .circle-filial {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,15 +260,16 @@ button:hover {
   color: #fff;
   font-weight: bold;
   font-size: 16px;
-  margin-left: 10px;
   cursor: pointer; /* Añadimos la propiedad de cursor de botón */
   transition: transform 0.3s ease; /* Añadimos una transición suave */
 }
 
-.circle:hover {
+/* Hover para círculos */
+.circle:hover, .circle-filial:hover {
   transform: scale(1.1); /* Aumenta el tamaño del círculo al pasar el ratón */
 }
 
+/* Contenedor principal de las cards */
 .main-skills {
   display: flex;
   justify-content: space-around; /* Espacio equitativo entre tarjetas */
@@ -274,21 +277,10 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Colores específicos para cada círculo */
-.main-skills .card:nth-child(1) .circle {
-  background-color: #28a745; /* Verde para "Actualizadas" */
-}
-
-.main-skills .card:nth-child(2) .circle {
-  background-color: #ffc107; /* Amarillo para "Pendientes" */
-}
-
-.main-skills .card:nth-child(3) .circle {
-  background-color: #dc3545; /* Rojo para "Fallidas" */
-}
-
-.main-skills .card {
+/* Contenedor de las cards individuales */
+.card {
   display: flex;
+  flex-direction: column; /* Mantener el contenido de la card en columna */
   align-items: center;
   justify-content: space-between;
   width: 30%; /* Ajusta el ancho para espaciar las tarjetas */
@@ -301,11 +293,44 @@ button:hover {
   position: relative;
 }
 
+/* Contenedor exclusivo para los círculos */
+.card .circles-container {
+  display: flex; /* Los círculos estarán en fila (horizontal) */
+  flex-direction: row;
+  gap: 45px; /* Ajusta este valor para controlar la separación entre círculos */
+  margin-top: 10px; /* Espaciado con respecto al contenido superior */
+}
+/* Estilo para la línea vertical entre los círculos */
+.line-vertical {
+  width: 1px; /* Ancho de la línea */
+  background-color: black; /* Color de la línea */
+  height: 50px; /* La altura será el 100% del contenedor de los círculos */
+
+}
+
 /* Otros estilos como el contenido del card y su texto */
 .card-content {
   flex-grow: 1;
   text-align: center;
 }
+
+/* Colores específicos para cada círculo */
+.main-skills .card:nth-child(1) .circle,
+.main-skills .card:nth-child(1) .circle-filial {
+  background-color: #28a745; /* Verde para "Actualizadas" */
+}
+
+.main-skills .card:nth-child(2) .circle,
+.main-skills .card:nth-child(2) .circle-filial {
+  background-color: #ffc107; /* Amarillo para "Pendientes" */
+}
+
+.main-skills .card:nth-child(3) .circle,
+.main-skills .card:nth-child(3) .circle-filial {
+  background-color: #dc3545; /* Rojo para "Fallidas" */
+}
+
+/* ----------------------------------------------------- */
 
 
 #workstationsTable td, #workstationsTable th {

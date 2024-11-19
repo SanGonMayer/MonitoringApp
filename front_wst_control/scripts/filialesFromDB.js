@@ -109,6 +109,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
   }
   console.log('Mostrando botones de filiales', window.allButtons);
   updateCantidadDeHosts();
+  updateCantidadDeFiliales();
 }
 
 
@@ -167,9 +168,9 @@ function updateCantidadDeFiliales(){
   console.log('cantidad de filiales pendientes', window.pendientes)
   console.log('cantidad de filiales fallidas', window.fallidas)
   
-  document.querySelector('.main-skills .card:nth-child(1) .circle span').textContent = `${window.actualizadas}`;
-  document.querySelector('.main-skills .card:nth-child(2) .circle span').textContent = `${window.pendientes}`;
-  document.querySelector('.main-skills .card:nth-child(3) .circle span').textContent = `${window.fallidas}`;
+  document.querySelector('.main-skills .card:nth-child(1) .circle-filial span').textContent = `${window.actualizadas}`;
+  document.querySelector('.main-skills .card:nth-child(2) .circle-filial span').textContent = `${window.pendientes}`;
+  document.querySelector('.main-skills .card:nth-child(3) .circle-filial span').textContent = `${window.fallidas}`;
 }
 
 
