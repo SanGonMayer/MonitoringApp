@@ -50,7 +50,8 @@ const startDataSync = async () => {
     const outputPath = path.join(__dirname, 'reports');
     const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, outputPath);
 
-    const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: ${csvFilePath}`;
+    const sanitizedFilePath = csvFilePath.replace(/\\/g, '/'); 
+    const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: ${sanitizedFilePath}`;
     await sendReportViaTelegram(csvMessage);
 
     await sendReportViaTelegram(report);
