@@ -492,7 +492,7 @@ function actualizarFilialConUpd(hostsPendientesFallidos) {   // Host pendientes 
 
             // Validación antes de mostrar el diálogo
             if (!hostsPendientesFallidos || hostsPendientesFallidos.trim() === '') {
-                alert("El campo de hosts está vacío. La filial esta actualizada.");
+                alert("Hay hay hosts pendientes y/o fallidos. La filial esta actualizada.");
                 return;  // No se llama a mostrarDialogoConfirmacion si hostsPendientesFallidos está vacío
             }
             
