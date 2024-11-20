@@ -72,6 +72,10 @@ awxRoutes.post('/api/awx/launch-job-filial', (req, res, next) => {
   next();
 }, launchJobFilial);
 
+awxRoutes.get('/test', (req, res) => {
+  res.send('La ruta está funcionando');
+});
+
 
 export default awxRoutes;
 
