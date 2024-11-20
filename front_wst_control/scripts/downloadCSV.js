@@ -2,7 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadButton = document.getElementById('report-csv-button');
     if (downloadButton) {
       downloadButton.addEventListener('click', () => {
-        window.location.href = '/download-latest-csv';
+        const link = document.createElement('a');
+        link.href = '/download-latest-csv'; 
+        link.download = 'Reporte_Desactualizados.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       });
     }
   });
