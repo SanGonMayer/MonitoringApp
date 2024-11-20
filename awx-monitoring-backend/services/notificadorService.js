@@ -222,4 +222,37 @@ export const sendReportViaTelegram = async (report) => {
     }
   };
 
+  export const getLatestCSV = (req, res) => {
+    try {
+      const reportsPath = path.join(__dirname, '../reports'); 
+      if (!fs.existsSync(reportsPath)) {
+        return res.status(404).send('No se encontraron reportes.');
+      }
+  
+      const files = fs.readdirSync(reportsPath)
+        .filter(file => file.endsWith('.csv')) 
+        .map(file => ({
+          name: file,
+          time: fs.statSync(path.join(reportsPath, file)).mtime.getTime(), 
+        }))
+        .sort((a, b) => b.time - a.time); 
+  
+      if (files.length === 0) {
+        return res.status(404).send('No se encontraron reportes.');
+      }
+  
+      const latestFile = files[0].name; 
+      const filePath = path.join(reportsPath, latestFile);
+  
+      res.download(filePath, latestFile, (err) => {
+        if (err) {
+          console.error('Error al descargar el archivo:', err);
+          res.status(500).send('Error al descargar el archivo.');
+        }
+      });
+    } catch (error) {
+      console.error('Error al obtener el CSV más reciente:', error.message);
+      res.status(500).send('Error al obtener el CSV más reciente.');
+    }
+  };
   
