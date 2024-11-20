@@ -63,7 +63,7 @@ awxRoutes.get('/api/db/filiales/:filialId/hosts/srno', getHostsByFilialSNRO);
 
 awxRoutes.post('/api/test-telegram', sendTestTelegramMessage);
 
-app.get('/download-latest-csv', getLatestCSV);
+awxRoutes.get('/download-latest-csv', getLatestCSV);
 
 //---------------
 
