@@ -31,6 +31,8 @@ export const getOutdatedFilialesAndHosts = async () => {
         wst: { actualizado: 0, pendiente: 0, fallido: 0 },
         cctv: { actualizado: 0, pendiente: 0, fallido: 0 },
         };
+    
+      const filialCounters = {};
   
       for (const filial of filiales) {
 
