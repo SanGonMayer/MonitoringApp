@@ -10,6 +10,10 @@ import { HttpProxyAgent } from 'http-proxy-agent';
 import { Parser } from 'json2csv';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const gruposExcluidos = [
     'f0000',
@@ -230,18 +234,18 @@ export const sendReportViaTelegram = async (report) => {
       }
   
       const files = fs.readdirSync(reportsPath)
-        .filter(file => file.endsWith('.csv')) 
+        .filter(file => file.endsWith('.csv'))
         .map(file => ({
           name: file,
-          time: fs.statSync(path.join(reportsPath, file)).mtime.getTime(), 
+          time: fs.statSync(path.join(reportsPath, file)).mtime.getTime(),
         }))
-        .sort((a, b) => b.time - a.time); 
+        .sort((a, b) => b.time - a.time);
   
       if (files.length === 0) {
         return res.status(404).send('No se encontraron reportes.');
       }
   
-      const latestFile = files[0].name; 
+      const latestFile = files[0].name;
       const filePath = path.join(reportsPath, latestFile);
   
       res.download(filePath, latestFile, (err) => {
