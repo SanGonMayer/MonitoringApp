@@ -95,19 +95,20 @@ label {
 }
 
 #report-csv-button {
-  padding: 0.5rem 1rem; /* Tamaño cómodo sin expandir demasiado */
-  font-size: 1rem;
+  position: absolute;
+  left: 20px; 
+  top: 60px; 
+  padding: 5px 15px;
+  font-size: 16px;
   background-color: #263ec5;
   color: white;
   border: none;
-  border-radius: var(--rad); /* Usa la misma variable de bordes redondeados */
+  border-radius: 5px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  font-family: var(--font-fam);
+  font-family: Arial, sans-serif;
   font-weight: bold;
-  height: var(--height); /* Asegura la misma altura que el input */
-  line-height: var(--height); /* Centra el texto verticalmente */
-  box-sizing: border-box; /* Asegura que el padding no desborde */
-  transition: background-color var(--dur), transform var(--dur);
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 #report-csv-button:hover {
