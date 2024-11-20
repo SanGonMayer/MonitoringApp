@@ -71,7 +71,6 @@ cron.schedule('0 9 * * *', async () => {
 sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
-    //startDataSync();  
     app.listen(PORT, () => {
       console.log(`Servidor escuchando en el puerto ${PORT}`);
     });

@@ -93,4 +93,24 @@ label {
   width: 100%; /* Asegura que ocupe todo el ancho disponible */
   margin-top: 0; /* Mantén el margen superior si es necesario */
 }
-  
+
+#report-csv-button {
+  padding: 0.5rem 1rem; /* Tamaño cómodo sin expandir demasiado */
+  font-size: 1rem;
+  background-color: #263ec5;
+  color: white;
+  border: none;
+  border-radius: var(--rad); /* Usa la misma variable de bordes redondeados */
+  cursor: pointer;
+  font-family: var(--font-fam);
+  font-weight: bold;
+  height: var(--height); /* Asegura la misma altura que el input */
+  line-height: var(--height); /* Centra el texto verticalmente */
+  box-sizing: border-box; /* Asegura que el padding no desborde */
+  transition: background-color var(--dur), transform var(--dur);
+}
+
+#report-csv-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
