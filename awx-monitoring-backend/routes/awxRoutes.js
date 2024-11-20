@@ -68,9 +68,10 @@ awxRoutes.get('/download-latest-csv', getLatestCSV);
 //---------------
 
 awxRoutes.post('/api/awx/launch-job-filial', (req, res, next) => {
-  console.log("Ruta /api/awx/launch-job alcanzada");
+  console.log("Ruta /api/awx/launch-job-filial alcanzada");
   next();
 }, launchJobFilial);
+
 
 awxRoutes.get('/test', (req, res) => {
   res.send('La ruta está funcionando');

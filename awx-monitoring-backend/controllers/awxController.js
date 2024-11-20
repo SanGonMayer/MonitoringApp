@@ -146,30 +146,30 @@ export const launchJob = async (req, res) => {
 
 export const launchJobFilial = async (req, res) => {
   console.log("launchJob fue llamado con los datos:", req.body);
-  const { job_template_id, filial, extra_vars = {}, verbosity = 2 } = req.body;  // Cambié 'hostname' por 'filial'
+  const { job_template_id, hostsPendientesFallidos, extra_vars = {}, verbosity = 2 } = req.body;  // Cambié 'hostname' por 'filial'
 
   console.log("Datos recibidos para ejecutar el job:");
   console.log(`job_template_id: ${job_template_id}`);
-  console.log(`filial: ${filial}`);  // Usamos 'filial' aquí
+  console.log(`hosts: ${hostsPendientesFallidos}`);  // Usamos 'hosts' aquí
   console.log(`extra_vars: ${JSON.stringify(extra_vars)}`);
   console.log(`verbosity: ${verbosity}`);
 
   try {
-    if (!job_template_id || !filial) {  // Cambié 'hostname' por 'filial'
-        return res.status(400).json({ error: "Faltan datos obligatorios (job_template_id o filial)" });
+    if (!job_template_id || !hostsPendientesFallidos) {  // Cambié 'hostname' por 'hostspendientesfallidos'
+        return res.status(400).json({ error: "Faltan datos obligatorios (job_template_id o hostsPendientesFallidos)" });
     }
 
     console.log('Lanzando job con los siguientes datos:', {
         job_template_id,
-        filial,  // Usamos 'filial' aquí
+        hostsPendientesFallidos,  // Usamos 'filial' aquí
         extra_vars,
         verbosity
     });
- 
+    
     const response = await axios.post(
       `http://sawx0001lx.bancocredicoop.coop/api/v2/job_templates/${job_template_id}/launch/`,
       {
-        limit: filial,  // Usamos 'filial' como 'limit'
+        limit: hostsPendientesFallidos,  // Usamos 'hostsPendientesFallidos-' como 'limit'
         extra_vars,
         verbosity,
       },

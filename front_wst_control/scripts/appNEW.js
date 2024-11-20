@@ -115,6 +115,11 @@ function recargarFilialesHtml(){
               card.textContent = '';
           });
 
+          const cardsFilial = document.querySelectorAll('.main-skills .card .circle-filial span');
+          cardsFilial.forEach(card => {
+              card.textContent = '';
+          });
+
           const terminal = window.location.pathname.split('/').pop();
           buscar(terminal);
       });
@@ -218,7 +223,16 @@ function mostrarHostsDefilialHtml(){
           });
 
           displayHosts(hosts);
-          actualizarFilialConUpd(filialName);
+
+          //-----
+
+          const hostsPendientesFallidos = hosts
+            .filter(host => host.status === 'pendiente' || host.status === 'fallido') // Filtra los hosts
+            .map(host => host.name) // Extrae solo los nombres
+            .join(";");
+
+          //-----
+          actualizarFilialConUpd(hostsPendientesFallidos);
       } else {
           console.error('No se encontraron datos de hosts en sessionStorage');
       }
@@ -445,24 +459,52 @@ function actualizarRecuperarHosts(){
 }
 
 
+//-----------------------------
 
-//-------------
+/* function actualizarFilialConUpd(filialName){
+    const actionButton = document.querySelector('#action-upd-filial');
+    if (actionButton) {
+        actionButton.addEventListener('click', () => {
+            
+            const confirmar = confirm(
+                "Estás a punto de aplicar una actualización a toda una filial. ¿Estás seguro de continuar?"
+            );
+            if (confirmar) {
+                // Solo se ejecuta si el usuario selecciona "Aceptar"
+                launchJobUpdFilial(filialName);
+            } else {
+                // Opcional: mensaje o acción cuando se cancela
+                console.log("El usuario canceló la operación.");
+            }
+            
+        });
+    } else {
+        console.log("El botón actionUpdFilial no está presente en esta página, se omite el eventListener.");
+    }
+} */
 
-
-function actualizarFilialConUpd(filialName) {
-    const buttonContainer = document.querySelector(".button-container");
+function actualizarFilialConUpd(hostsPendientesFallidos) {   // Host pendientes y fallidos
+    const buttonContainer = document.querySelector(".button-container-upd");
     buttonContainer.style.display = "block"; // Cambia display a block para mostrar el div
     const actionButton = document.querySelector('#action-upd-filial');
     if (actionButton) {
         actionButton.addEventListener('click', () => {
-            mostrarDialogoConfirmacion(filialName);
+
+            // Validación antes de mostrar el diálogo
+            if (!hostsPendientesFallidos || hostsPendientesFallidos.trim() === '') {
+                alert("El campo de hosts está vacío. La filial esta actualizada.");
+                return;  // No se llama a mostrarDialogoConfirmacion si hostsPendientesFallidos está vacío
+            }
+            
+            // Si hostsPendientesFallidos no está vacío, mostrar el diálogo de confirmación
+            mostrarDialogoConfirmacion(hostsPendientesFallidos);
         });
     } else {
         console.log("El botón actionUpdFilial no está presente en esta página, se omite el eventListener.");
     }
 }
 
-function mostrarDialogoConfirmacion(filial) {
+function mostrarDialogoConfirmacion(hostsPendientesFallidos) {
     const dialog = document.querySelector('#custom-dialog');
     const confirmAccept = document.querySelector('#confirm-accept');
     const confirmCancel = document.querySelector('#confirm-cancel');
@@ -470,7 +512,7 @@ function mostrarDialogoConfirmacion(filial) {
     dialog.classList.remove('hidden');
 
     const aceptar = () => {
-        launchJobUpdFilial(filial);
+        launchJobUpdFilial(hostsPendientesFallidos);
         cerrarDialogo();
     };
 
@@ -487,19 +529,19 @@ function mostrarDialogoConfirmacion(filial) {
     }
 }
 
-async function launchJobUpdFilial(filial) {  // 'hostname' cambiado a 'filial'
+async function launchJobUpdFilial(hostsPendientesFallidos) {  // 'hostname' cambiado a 'filial'
     try {
 
-      console.log("Iniciando ejecución del job para la filial:", filial);
+      console.log("Iniciando ejecución del job para la filial:", hostsPendientesFallidos);
 
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job-filial', {
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3001/api/awx/launch-job-filial', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           job_template_id: 1678,
-          filial: filial,  // Usamos 'filial' en lugar de 'hostname'
+          hostsPendientesFallidos: hostsPendientesFallidos,  // Usamos 'filial' en lugar de 'hostname'
         }),
       });
 
@@ -517,7 +559,7 @@ async function launchJobUpdFilial(filial) {  // 'hostname' cambiado a 'filial'
       }
   
       if (response.ok) {
-        alert(`Job lanzado correctamente para la filial ${filial}. ID del job: ${data.job_id}`);
+        alert(`Job lanzado correctamente para los hosts ${hostsPendientesFallidos}. ID del job: ${data.job_id}`);
       } else {
         alert(`Error al lanzar el job: ${data.error}`);
       }
@@ -526,6 +568,7 @@ async function launchJobUpdFilial(filial) {  // 'hostname' cambiado a 'filial'
       alert('Error al lanzar el job.');
     }
 }
+
 
 window.buscar = buscar;
 window.filtrando = filtrando;
