@@ -62,7 +62,7 @@ const startDataSync = async () => {
 };
 
 
-cron.schedule('0 10 * * *', async () => {
+cron.schedule('0 9 * * *', async () => {
   console.log('Ejecutando sincronización de datos programada a las 00:00...');
   await startDataSync();
 });
