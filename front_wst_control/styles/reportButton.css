@@ -1,0 +1,21 @@
+#report-csv-button {
+    position: absolute;
+    left: 20px; 
+    top: 60px; 
+    padding: 5px 15px;
+    font-size: 16px;
+    background-color: #263ec5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  #report-csv-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
