@@ -8,7 +8,7 @@ import { getFilialesConHosts } from '../services/dbService.js';
 import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
-import { getLatestCSV } from './services/notificadorService.js';
+import { getLatestCSV } from '../services/notificadorService.js';
 
 export const awxRoutes = Router();
 
