@@ -44,14 +44,14 @@ const startDataSync = async () => {
 
     console.log('Sincronización de datos completada.');
     
-    const { filiales: outdatedFiliales, hosts: outdatedHosts, counters } = await getOutdatedFilialesAndHosts();   
-    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters);
+    const { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters } = await getOutdatedFilialesAndHosts();   
+    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters, filialCounters);
 
     const outputPath = path.join(__dirname, 'reports');
-    const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, outputPath);
+    const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, filialCounters, outputPath);
+    const fileName = path.basename(csvFilePath);
 
-    const sanitizedFilePath = csvFilePath.replace(/\\/g, '/'); 
-    const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: ${sanitizedFilePath}`;
+    const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: \\MonitoringApp\\awx-monitoring-backend\\reports\\${fileName}`;
     await sendReportViaTelegram(csvMessage);
 
     await sendReportViaTelegram(report);

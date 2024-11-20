@@ -39,6 +39,17 @@ export const getOutdatedFilialesAndHosts = async () => {
             continue;
           }
 
+          filialCounters[filial.id] = {
+            totalWst: 0,
+            totalCctv: 0,
+            pendientesWst: 0,
+            fallidosWst: 0,
+            desactualizadosWst: 0,
+            pendientesCctv: 0,
+            fallidosCctv: 0,
+            desactualizadosCctv: 0,
+          };
+
         const wstHosts = await Workstation.findAll({
           where: { 
             filial_id: filial.id, 
@@ -58,6 +69,17 @@ export const getOutdatedFilialesAndHosts = async () => {
         wstHosts.forEach(host => {
             const status = calculateHostStatus(host, 'wst');
             counters.wst[status] += 1;
+
+            filialCounters[filial.id].totalWst += 1;
+
+            if (status === 'pendiente') {
+                filialCounters[filial.id].pendientesWst += 1;
+              } else if (status === 'fallido') {
+                filialCounters[filial.id].fallidosWst += 1;
+              }
+
+              filialCounters[filial.id].desactualizadosWst =
+              filialCounters[filial.id].pendientesWst + filialCounters[filial.id].fallidosWst;
 
             if (status !== 'actualizado') {
                 outdatedHosts.push({
@@ -97,6 +119,18 @@ export const getOutdatedFilialesAndHosts = async () => {
             const status = calculateHostStatus(host, 'cctv');
             counters.cctv[status] += 1;
 
+            filialCounters[filial.id].totalCctv += 1;
+
+            if (status === 'pendiente') {
+              filialCounters[filial.id].pendientesCctv += 1;
+            } else if (status === 'fallido') {
+              filialCounters[filial.id].fallidosCctv += 1;
+            }
+    
+            filialCounters[filial.id].desactualizadosCctv =
+              filialCounters[filial.id].pendientesCctv + filialCounters[filial.id].fallidosCctv;
+    
+
             if (status !== 'actualizado') {
                 outdatedHosts.push({
                     id: host.id,
@@ -117,7 +151,7 @@ export const getOutdatedFilialesAndHosts = async () => {
         });
       }
   
-      return { filiales: outdatedFiliales, hosts: outdatedHosts, counters };
+      return { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters };
     } catch (error) {
       console.error('Error al obtener filiales y hosts desactualizados:', error.message);
       throw new Error('Error al obtener filiales y hosts desactualizados');
@@ -125,7 +159,7 @@ export const getOutdatedFilialesAndHosts = async () => {
   };
 
 
-  export const generateOutdatedReport = (filiales, hosts, counters) => {
+  export const generateOutdatedReport = (filiales, hosts, counters, filialCounters) => {
     let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
     
     report += `🔢 Resumen General:\n`;
@@ -133,7 +167,18 @@ export const getOutdatedFilialesAndHosts = async () => {
     report += `- Hosts CCTV: Actualizados: ${counters.cctv.actualizado}, Pendientes: ${counters.cctv.pendiente}, Fallidos: ${counters.cctv.fallido}\n\n`;
     
     filiales.forEach(filial => {
+        const countersForFilial = filialCounters[filial.id];
+
         report += `🏢 *Filial:* ${filial.name}\n`;
+        report += `  - Total Hosts WST: ${countersForFilial.totalWst}\n`;
+        report += `    - Pendientes: ${countersForFilial.pendientesWst}\n`;
+        report += `    - Fallidos: ${countersForFilial.fallidosWst}\n`;
+        report += `    - Total Desactualizados: ${countersForFilial.desactualizadosWst}\n`;
+        report += `  - Total Hosts CCTV: ${countersForFilial.totalCctv}\n`;
+        report += `    - Pendientes: ${countersForFilial.pendientesCctv}\n`;
+        report += `    - Fallidos: ${countersForFilial.fallidosCctv}\n`;
+        report += `    - Total Desactualizados: ${countersForFilial.desactualizadosCctv}\n`;
+        
         hosts
             .filter(host => host.filial_id === filial.id)
             .forEach(host => {
@@ -188,35 +233,51 @@ export const sendReportViaTelegram = async (report) => {
     }
   };
 
-  export const generateAndSaveCSV = (filiales, hosts, counters, outputPath) => {
+  export const generateAndSaveCSV = (filiales, hosts, counters, filialCounters, outputPath) => {
     try {
-      const summaryRows = [
-        { Type: 'Hosts WST', Actualizados: counters.wst.actualizado, Pendientes: counters.wst.pendiente, Fallidos: counters.wst.fallido },
-        { Type: 'Hosts CCTV', Actualizados: counters.cctv.actualizado, Pendientes: counters.cctv.pendiente, Fallidos: counters.cctv.fallido },
-      ];
+      const rows = []; 
   
-      const hostRows = [];
-      filiales.forEach(filial => {
-        const filialHosts = hosts.filter(host => host.filial_id === filial.id);
-        filialHosts.forEach(host => {
-          hostRows.push({
-            Filial: filial.name,
-            Host: host.name,
-            Estado: host.status,
-          });
+
+      rows.push(['Resumen Global:']);
+      rows.push(['Type', 'Actualizados', 'Pendientes', 'Fallidos']);
+      rows.push(['Hosts WST', counters.wst.actualizado, counters.wst.pendiente, counters.wst.fallido]);
+      rows.push(['Hosts CCTV', counters.cctv.actualizado, counters.cctv.pendiente, counters.cctv.fallido]);
+      rows.push([]); 
+  
+      filiales.forEach((filial) => {
+        const countersForFilial = filialCounters[filial.id]; 
+  
+        rows.push([`Filial: ${filial.name}`]);
+        rows.push(['Total Hosts WST', 'Pendientes WST', 'Fallidos WST', 'Desactualizados WST', 'Total Hosts CCTV', 'Pendientes CCTV', 'Fallidos CCTV', 'Desactualizados CCTV']);
+        rows.push([
+          countersForFilial.totalWst,
+          countersForFilial.pendientesWst,
+          countersForFilial.fallidosWst,
+          countersForFilial.desactualizadosWst,
+          countersForFilial.totalCctv,
+          countersForFilial.pendientesCctv,
+          countersForFilial.fallidosCctv,
+          countersForFilial.desactualizadosCctv,
+        ]);
+        rows.push([]); 
+  
+        rows.push(['Host', 'Estado']);
+        const filialHosts = hosts.filter((host) => host.filial_id === filial.id);
+        filialHosts.forEach((host) => {
+          rows.push([host.name, host.status]);
         });
+        rows.push([]); 
       });
   
-      const parser = new Parser();
-      const csvSummary = parser.parse(summaryRows); 
-      const csvHosts = parser.parse(hostRows);     
+      const csvContent = rows.map((row) => row.join(',')).join('\n');
   
       if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true });
       }
   
       const filePath = path.join(outputPath, `Reporte_Desactualizados_${Date.now()}.csv`);
-      fs.writeFileSync(filePath, `${csvSummary}\n\n${csvHosts}`, 'utf8');
+  
+      fs.writeFileSync(filePath, csvContent, 'utf8');
   
       console.log(`CSV generado y guardado en: ${filePath}`);
       return filePath;
@@ -225,6 +286,7 @@ export const sendReportViaTelegram = async (report) => {
       throw new Error('Error al generar el CSV');
     }
   };
+  
 
   export const getLatestCSV = (req, res) => {
     try {
