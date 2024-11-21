@@ -584,7 +584,7 @@ async function launchJobUpdFilial(hostsPendientesFallidos,fromPage) {  // 'hostn
         console.log("fromPage recibido:", fromPage);
       }
 
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3001/api/awx/launch-job-filial', {
+      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job-filial', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
