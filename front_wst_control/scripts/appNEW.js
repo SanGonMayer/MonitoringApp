@@ -241,7 +241,7 @@ function mostrarHostsDefilialHtml(){
           const hostsPendientesFallidos = hosts
             .filter(host => host.status === 'pendiente' || host.status === 'fallido') // Filtra los hosts
             .map(host => host.name) // Extrae solo los nombres
-            .join(";");
+            .join(":");
 
           //-----
           actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
@@ -478,7 +478,7 @@ function actualizarRecuperarHosts(){
       if (hostType === 'pendientes' || hostType === 'fallidos'){
         hostsPendientesFallidos = hosts
             .map(host => host.name) // Extrae solo los nombres
-            .join(";");
+            .join(":");
 
         actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
       }
