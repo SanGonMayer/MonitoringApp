@@ -44,11 +44,11 @@ const startDataSync = async () => {
 
     console.log('Sincronización de datos completada.');
     
-    const { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters } = await getOutdatedFilialesAndHosts();   
-    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters, filialCounters);
+    const { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters } = await getOutdatedFilialesAndHosts('wst');   
+    const report = generateOutdatedReport(outdatedFiliales, outdatedHosts, counters, filialCounters, 'wst');
 
     const outputPath = path.join(__dirname, 'reports');
-    const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, filialCounters, outputPath);
+    const csvFilePath = generateAndSaveCSV(outdatedFiliales, outdatedHosts, counters, filialCounters, outputPath, 'wst');
     const fileName = path.basename(csvFilePath);
 
     const csvMessage = `📁 El archivo CSV con el reporte de filiales y hosts desactualizados se ha generado correctamente.\n\n📍 Ubicación: \\MonitoringApp\\awx-monitoring-backend\\reports\\${fileName}`;

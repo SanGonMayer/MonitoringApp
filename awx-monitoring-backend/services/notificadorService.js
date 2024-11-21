@@ -21,165 +21,101 @@ const gruposExcluidos = [
     'wst', 'pve','f0999'
   ];
 
-export const getOutdatedFilialesAndHosts = async () => {
+  export const getOutdatedFilialesAndHosts = async (type) => {
     try {
       const filiales = await Filial.findAll();
       const outdatedFiliales = [];
       const outdatedHosts = [];
-
-      const counters = {
-        wst: { actualizado: 0, pendiente: 0, fallido: 0 },
-        cctv: { actualizado: 0, pendiente: 0, fallido: 0 },
-        };
-    
+  
+      const counters = { actualizado: 0, pendiente: 0, fallido: 0 };
       const filialCounters = {};
   
+      const isWst = type === 'wst';
+      const HostModel = isWst ? Workstation : CCTV;
+  
       for (const filial of filiales) {
-
         if (gruposExcluidos.includes(filial.name.toLowerCase())) {
-            console.log(`Filial excluida del reporte: ${filial.name}`);
-            continue;
+          console.log(`Filial excluida del reporte: ${filial.name}`);
+          continue;
+        }
+  
+        filialCounters[filial.id] = {
+          [`total${type.toUpperCase()}`]: 0,
+          [`pendientes${type.toUpperCase()}`]: 0,
+          [`fallidos${type.toUpperCase()}`]: 0,
+          [`desactualizados${type.toUpperCase()}`]: 0,
+        };
+  
+        const hosts = await HostModel.findAll({
+          where: {
+            filial_id: filial.id,
+            enabled: true,
+            ...(isWst && { description: { [Op.notILike]: 'HP ProDesk 400%' } }),
+          },
+          include: [
+            {
+              model: JobHostSummary,
+              as: 'jobSummaries',
+              attributes: ['job_name', 'failed', 'jobCreationDate'],
+              required: false,
+            },
+          ],
+        });
+  
+        hosts.forEach((host) => {
+          const status = calculateHostStatus(host, type);
+          counters[status] += 1;
+  
+          filialCounters[filial.id][`total${type.toUpperCase()}`] += 1;
+          if (status === 'pendiente') filialCounters[filial.id][`pendientes${type.toUpperCase()}`] += 1;
+          if (status === 'fallido') filialCounters[filial.id][`fallidos${type.toUpperCase()}`] += 1;
+          filialCounters[filial.id][`desactualizados${type.toUpperCase()}`] =
+            filialCounters[filial.id][`pendientes${type.toUpperCase()}`] +
+            filialCounters[filial.id][`fallidos${type.toUpperCase()}`];
+  
+          if (status !== 'actualizado') {
+            outdatedHosts.push({
+              id: host.id,
+              name: host.name,
+              description: host.description,
+              filial_id: filial.id,
+              status,
+            });
+  
+            if (!outdatedFiliales.some((f) => f.id === filial.id)) {
+              outdatedFiliales.push({
+                id: filial.id,
+                name: filial.name,
+                description: filial.description,
+              });
+            }
           }
-
-          filialCounters[filial.id] = {
-            totalWst: 0,
-            totalCctv: 0,
-            pendientesWst: 0,
-            fallidosWst: 0,
-            desactualizadosWst: 0,
-            pendientesCctv: 0,
-            fallidosCctv: 0,
-            desactualizadosCctv: 0,
-          };
-
-        const wstHosts = await Workstation.findAll({
-          where: { 
-            filial_id: filial.id, 
-            enabled: true, 
-            description: { [Op.notILike]: 'HP ProDesk 400%' } 
-          },
-          include: [
-            {
-              model: JobHostSummary,
-              as: 'jobSummaries',
-              attributes: ['job_name', 'failed', 'jobCreationDate'],
-              required: false
-            }
-          ],
-        });
-  
-        wstHosts.forEach(host => {
-            const status = calculateHostStatus(host, 'wst');
-            counters.wst[status] += 1;
-
-            filialCounters[filial.id].totalWst += 1;
-
-            if (status === 'pendiente') {
-                filialCounters[filial.id].pendientesWst += 1;
-              } else if (status === 'fallido') {
-                filialCounters[filial.id].fallidosWst += 1;
-              }
-
-              filialCounters[filial.id].desactualizadosWst =
-              filialCounters[filial.id].pendientesWst + filialCounters[filial.id].fallidosWst;
-
-            if (status !== 'actualizado') {
-                outdatedHosts.push({
-                    id: host.id,
-                    name: host.name,
-                    description: host.description,
-                    filial_id: filial.id,
-                    status,
-                });
-
-                if (!outdatedFiliales.some(f => f.id === filial.id)) {
-                    outdatedFiliales.push({
-                        id: filial.id,
-                        name: filial.name,
-                        description: filial.description,
-                    });
-                }
-            }
-        });
-  
-        const cctvHosts = await CCTV.findAll({
-          where: { 
-            filial_id: filial.id, 
-            enabled: true 
-          },
-          include: [
-            {
-              model: JobHostSummary,
-              as: 'jobSummaries',
-              attributes: ['job_name', 'failed', 'jobCreationDate'],
-              required: false
-            }
-          ],
-        });
-  
-        cctvHosts.forEach(host => {
-            const status = calculateHostStatus(host, 'cctv');
-            counters.cctv[status] += 1;
-
-            filialCounters[filial.id].totalCctv += 1;
-
-            if (status === 'pendiente') {
-              filialCounters[filial.id].pendientesCctv += 1;
-            } else if (status === 'fallido') {
-              filialCounters[filial.id].fallidosCctv += 1;
-            }
-    
-            filialCounters[filial.id].desactualizadosCctv =
-              filialCounters[filial.id].pendientesCctv + filialCounters[filial.id].fallidosCctv;
-    
-
-            if (status !== 'actualizado') {
-                outdatedHosts.push({
-                    id: host.id,
-                    name: host.name,
-                    description: host.description,
-                    filial_id: filial.id,
-                    status,
-                });
-
-                if (!outdatedFiliales.some(f => f.id === filial.id)) {
-                    outdatedFiliales.push({
-                        id: filial.id,
-                        name: filial.name,
-                        description: filial.description,
-                    });
-                }
-            }
         });
       }
   
       return { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters };
     } catch (error) {
-      console.error('Error al obtener filiales y hosts desactualizados:', error.message);
-      throw new Error('Error al obtener filiales y hosts desactualizados');
+      console.error(`Error al obtener filiales y hosts ${type.toUpperCase()} desactualizados:`, error.message);
+      throw error;
     }
   };
+  
 
 
-  export const generateOutdatedReport = (filiales, hosts, counters, filialCounters) => {
+  export const generateOutdatedReport = (filiales, hosts, counters, filialCounters, type) => {
     let report = '📋 Reporte de Filiales y Hosts Desactualizados:\n\n';
     
     report += `🔢 Resumen General:\n`;
-    report += `- Hosts WST: Actualizados: ${counters.wst.actualizado}, Pendientes: ${counters.wst.pendiente}, Fallidos: ${counters.wst.fallido}\n`;
-    report += `- Hosts CCTV: Actualizados: ${counters.cctv.actualizado}, Pendientes: ${counters.cctv.pendiente}, Fallidos: ${counters.cctv.fallido}\n\n`;
+    report += `- Hosts: Actualizados: ${counters.actualizado}, Pendientes: ${counters.pendiente}, Fallidos: ${counters.fallido}\n`;
     
     filiales.forEach(filial => {
         const countersForFilial = filialCounters[filial.id];
 
         report += `🏢 *Filial:* ${filial.name}\n`;
-        report += `  - Total Hosts WST: ${countersForFilial.totalWst}\n`;
-        report += `    - Pendientes: ${countersForFilial.pendientesWst}\n`;
-        report += `    - Fallidos: ${countersForFilial.fallidosWst}\n`;
-        report += `    - Total Desactualizados: ${countersForFilial.desactualizadosWst}\n`;
-        report += `  - Total Hosts CCTV: ${countersForFilial.totalCctv}\n`;
-        report += `    - Pendientes: ${countersForFilial.pendientesCctv}\n`;
-        report += `    - Fallidos: ${countersForFilial.fallidosCctv}\n`;
-        report += `    - Total Desactualizados: ${countersForFilial.desactualizadosCctv}\n`;
+        report += `  - Total Hosts: ${countersForFilial[`total${type.toUpperCase()}`] || 0}\n`;
+        report += `    - Pendientes: ${countersForFilial[`pendientes${type.toUpperCase()}`] || 0}\n`;
+        report += `    - Fallidos: ${countersForFilial[`fallidos${type.toUpperCase()}`] || 0}\n`;
+        report += `    - Total Desactualizados: ${countersForFilial[`desactualizados${type.toUpperCase()}`] || 0}\n`;
         
         hosts
             .filter(host => host.filial_id === filial.id)
@@ -235,32 +171,27 @@ export const sendReportViaTelegram = async (report) => {
     }
   };
 
-  export const generateAndSaveCSV = (filiales, hosts, counters, filialCounters, outputPath) => {
+  export const generateAndSaveCSV = (filiales, hosts, counters, filialCounters, outputPath, type) => {
     try {
       const rows = []; 
   
 
       rows.push(['Resumen Global:']);
       rows.push(['Type', 'Actualizados', 'Pendientes', 'Fallidos']);
-      rows.push(['Hosts WST', counters.wst.actualizado, counters.wst.pendiente, counters.wst.fallido]);
-      rows.push(['Hosts CCTV', counters.cctv.actualizado, counters.cctv.pendiente, counters.cctv.fallido]);
+      rows.push(['Hosts', counters.actualizado, counters.pendiente, counters.fallido]);
       rows.push([]); 
   
       filiales.forEach((filial) => {
         const countersForFilial = filialCounters[filial.id]; 
   
         rows.push([`Filial: ${filial.name}`]);
-        rows.push(['Total Hosts WST', 'Pendientes WST', 'Fallidos WST', 'Desactualizados WST', 'Total Hosts CCTV', 'Pendientes CCTV', 'Fallidos CCTV', 'Desactualizados CCTV']);
+        rows.push(['Total Hosts ', 'Pendientes ', 'Fallidos ', 'Desactualizados ']);
         rows.push([
-          countersForFilial.totalWst,
-          countersForFilial.pendientesWst,
-          countersForFilial.fallidosWst,
-          countersForFilial.desactualizadosWst,
-          countersForFilial.totalCctv,
-          countersForFilial.pendientesCctv,
-          countersForFilial.fallidosCctv,
-          countersForFilial.desactualizadosCctv,
-        ]);
+            countersForFilial[`total${type.toUpperCase()}`] || 0,
+            countersForFilial[`pendientes${type.toUpperCase()}`] || 0,
+            countersForFilial[`fallidos${type.toUpperCase()}`] || 0,
+            countersForFilial[`desactualizados${type.toUpperCase()}`] || 0,
+          ]);
         rows.push([]); 
   
         rows.push(['Host', 'Estado']);
