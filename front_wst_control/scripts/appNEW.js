@@ -174,6 +174,18 @@ function mostrarHostsDefilialHtml(){
 
   if (action == 'filialHost' && filialName) {
       console.log('Ahora ya se encontro una filialName, porque se clickeo en un boton filial')
+
+      const actionButton = document.getElementById('action-upd-filial');
+      if (actionButton) {
+        if (fromPage === 'wst') {
+            actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
+        } else if (fromPage === 'cctv') {
+            actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+        } else {
+            actionButton.textContent = 'Aplicar actualización genérica';
+        }
+      }
+
       // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
       const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
 
@@ -232,7 +244,7 @@ function mostrarHostsDefilialHtml(){
             .join(";");
 
           //-----
-          actualizarFilialConUpd(hostsPendientesFallidos);
+          actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
       } else {
           console.error('No se encontraron datos de hosts en sessionStorage');
       }
@@ -442,6 +454,35 @@ function actualizarRecuperarHosts(){
   const action = urlParams.get('action'); 
 
   if (action == 'estadosHost' && hostType) {
+    // Aca podria llamar a la funcion actualizarFilialConUpd, pero primero obtento los hosts de la sessionStorage, no obstante
+    // ya sabemos que esos hosts seran del estado que se clickeo
+    // Seria ideal crear usar el actualizarFilialConUpd si es que el hostTipe, que indica el estados de los hosts mostrados
+    // llega a ser pendiente o fallido
+
+      const actionButton = document.getElementById('action-upd-filial');
+      if (actionButton) {
+        if (fromPage === 'wst') {
+            actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
+        } else if (fromPage === 'cctv') {
+            actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+        } else {
+            actionButton.textContent = 'Aplicar actualización genérica';
+        }
+      }
+
+      // Utilizar el fromPage, para que de esta forma pueda asignarse que tipo de plantilla es la que se va a utilizar,
+      // 
+
+      const hosts = JSON.parse(sessionStorage.getItem('hostsElegidos'));
+      let hostsPendientesFallidos = '';
+      if (hostType === 'pendientes' || hostType === 'fallidos'){
+        hostsPendientesFallidos = hosts
+            .map(host => host.name) // Extrae solo los nombres
+            .join(";");
+
+        actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
+      }
+
       configuracionPaginacion();
       const breadcrumb = document.querySelector('.breadcrumb');
       breadcrumb.innerHTML = `
@@ -483,7 +524,7 @@ function actualizarRecuperarHosts(){
     }
 } */
 
-function actualizarFilialConUpd(hostsPendientesFallidos) {   // Host pendientes y fallidos
+function actualizarFilialConUpd(hostsPendientesFallidos,fromPage) {   // Host pendientes y fallidos
     const buttonContainer = document.querySelector(".button-container-upd");
     buttonContainer.style.display = "block"; // Cambia display a block para mostrar el div
     const actionButton = document.querySelector('#action-upd-filial');
@@ -492,19 +533,19 @@ function actualizarFilialConUpd(hostsPendientesFallidos) {   // Host pendientes 
 
             // Validación antes de mostrar el diálogo
             if (!hostsPendientesFallidos || hostsPendientesFallidos.trim() === '') {
-                alert("No hay hosts pendientes y/o fallidos. La filial esta actualizada.");
+                alert("El campo de hosts está vacío. Todo esta actualizado.");
                 return;  // No se llama a mostrarDialogoConfirmacion si hostsPendientesFallidos está vacío
             }
             
             // Si hostsPendientesFallidos no está vacío, mostrar el diálogo de confirmación
-            mostrarDialogoConfirmacion(hostsPendientesFallidos);
+            mostrarDialogoConfirmacion(hostsPendientesFallidos,fromPage);
         });
     } else {
         console.log("El botón actionUpdFilial no está presente en esta página, se omite el eventListener.");
     }
 }
 
-function mostrarDialogoConfirmacion(hostsPendientesFallidos) {
+function mostrarDialogoConfirmacion(hostsPendientesFallidos,fromPage) {
     const dialog = document.querySelector('#custom-dialog');
     const confirmAccept = document.querySelector('#confirm-accept');
     const confirmCancel = document.querySelector('#confirm-cancel');
@@ -512,7 +553,7 @@ function mostrarDialogoConfirmacion(hostsPendientesFallidos) {
     dialog.classList.remove('hidden');
 
     const aceptar = () => {
-        launchJobUpdFilial(hostsPendientesFallidos);
+        launchJobUpdFilial(hostsPendientesFallidos,fromPage);
         cerrarDialogo();
     };
 
@@ -529,10 +570,19 @@ function mostrarDialogoConfirmacion(hostsPendientesFallidos) {
     }
 }
 
-async function launchJobUpdFilial(hostsPendientesFallidos) {  // 'hostname' cambiado a 'filial'
+async function launchJobUpdFilial(hostsPendientesFallidos,fromPage) {  // 'hostname' cambiado a 'filial'
     try {
 
       console.log("Iniciando ejecución del job para la filial:", hostsPendientesFallidos);
+
+      let template_id = 0;
+      if ( fromPage === 'wst'){
+        template_id = 1678;
+        console.log("fromPage recibido:", fromPage);
+      } else if (fromPage === 'cctv'){
+        template_id = 1613;
+        console.log("fromPage recibido:", fromPage);
+      }
 
       const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3001/api/awx/launch-job-filial', {
         method: 'POST',
@@ -540,7 +590,7 @@ async function launchJobUpdFilial(hostsPendientesFallidos) {  // 'hostname' camb
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          job_template_id: 1678,
+          job_template_id: template_id,
           hostsPendientesFallidos: hostsPendientesFallidos,  // Usamos 'filial' en lugar de 'hostname'
         }),
       });
