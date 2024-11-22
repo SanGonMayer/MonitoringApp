@@ -20,7 +20,7 @@ window.hostsFallidos = [];
 
 const gruposExcluidos = [
   'f0000',
-  'f0071', 'f0603', 'f0661', 'f0662', 'f0663', 'f0664', 'f0665', 'f0668', 'f0299',
+  'f0071', 'f0603', 'f0661', 'f0662', 'f0663', 'f0665', 'f0668', 'f0299',
   'wst', 'pve','f0999'
 ];
 
@@ -100,7 +100,6 @@ async function createFilialButtons(filiales, tipoTerminal) {
         
         sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
         console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-        //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
         window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
       };
 
@@ -352,7 +351,6 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
           
           sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
           console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-          //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
           window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
       };
 
@@ -363,8 +361,6 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
   updateCantidadDeHosts();
 }
 
-// ESTAS VARIABLES GLOBALES DEBEN ESTAR EN EL APPNEW Y ADEMAS, HACER UN INICIALIZAR COMO SE HIZO EN LOS OTROS CASOS 
-// DONDE SE TRABAJABA CON LAS FILIALES
 
 async function evaluarEstadoHostsSrno(filialId, tipo) {
   try {
@@ -437,46 +433,3 @@ window.fetchFilialesConHostsSrno = fetchFilialesConHostsSrno;
 window.evaluarEstadoHostsSrno = evaluarEstadoHostsSrno;
 window.createFilialButtonsSro = createFilialButtonsSro;
 
-
-
-
-
-/* ------------------------------------- */
-
-
-
-
-/* async function createFilialButtons(filiales, tipoTerminal) {
-  const filialContainer = document.querySelector('#filialContainer');
-  inicializarEstadosFiliales(); 
-  inicializarEstadosHosts();
-
-  const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
-  tableElement.style.display = 'none';
-
-  for (const filial of filiales) {
-      const button = document.createElement('button');
-      button.textContent = filial.name;
-      button.classList.add('custom-button');
-
-      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
-      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
-      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
-      button.style.backgroundColor = color;
-
-      // Asigna los hosts directamente al evento click sin volver a hacer fetch
-      button.onclick = () => {
-
-          tableElement.style.display = '';
-
-          displayHosts(hosts);
-          // Desplaza la pantalla hacia la tabla de hosts
-          tableElement.scrollIntoView({ behavior: 'smooth' });
-      };
-
-      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
-      window.allButtons.push(button);
-  }
-  console.log('Mostrando botones de filiales', window.allButtons);
-  updateCantidadDeFiliales();
-} */

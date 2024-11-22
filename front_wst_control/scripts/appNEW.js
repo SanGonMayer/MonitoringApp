@@ -128,40 +128,6 @@ function recargarFilialesHtml(){
   }
 }
 
-/* 
-function mostrarHostsDefilialHtml(){
-  const params = new URLSearchParams(window.location.search);
-  const filialName = params.get('name');
-  const fromPage = params.get('from');
-  const action = params.get('action');  
-
-  console.log('URL actual:', window.location.href);
-  console.log('Parámetro action:', action);
-
-  if (action == 'filialHost' && filialName) {
-      console.log('Ahora ya se encontro una filialName, porque se clickeo en un boton filial')
-      // Recuperar los hosts desde sessionStorage y mostrar los datos si existen
-      const hosts = JSON.parse(sessionStorage.getItem('filialHosts'));
-
-      const breadcrumb = document.querySelector('.breadcrumb');
-      breadcrumb.innerHTML = `
-          <a href="/MonitoringAppFront/">Home</a> / 
-          <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
-          <a href="filial.html?name=${filialName}&from=${fromPage}">${filialName}</a>
-      `;
-
-      const headerText = document.querySelector('header h1');
-      headerText.textContent += ` ${filialName}`;
-
-      if (hosts) {
-          displayHosts(hosts);
-      } else {
-          console.error('No se encontraron datos de hosts en sessionStorage');
-      }
-  } else {
-      console.error("No se ha pasado el nombre de la filial en la URL.");
-  } 
-} */
 
 function mostrarHostsDefilialHtml(){
   const params = new URLSearchParams(window.location.search);
@@ -221,12 +187,6 @@ function mostrarHostsDefilialHtml(){
             { class: 'fallidos', label: 'Fallidos', value: fallidos }
           ];
 
-          // Actualizar los valores en el HTML
-          /* document.querySelector('.stats-container .total .value').textContent = total;
-          document.querySelector('.stats-container .actualizadas .value').textContent = actualizados;
-          document.querySelector('.stats-container .pendientes .value').textContent = pendientes;
-          document.querySelector('.stats-container .fallidos .value').textContent = fallidos; */
-
           statsData.forEach(stat => {
             const statDiv = document.createElement('div');
             statDiv.classList.add('stat', stat.class);
@@ -234,7 +194,7 @@ function mostrarHostsDefilialHtml(){
             statsContainer.appendChild(statDiv);
           });
 
-          displayHosts(hosts);
+          displayHosts(hosts, fromPage);
 
           //-----
 
@@ -258,56 +218,7 @@ function mostrarHostsDefilialHtml(){
 
 //--------------------------------------------
 
-/* function nuevoFiltroDeCards(){
-  let filialName = "wst"; 
-
-  const circles = document.querySelectorAll('.circle');
-  if (circles.length > 0) {
-      circles.forEach(circle => {
-          circle.addEventListener('click', () => {
-              const color = window.getComputedStyle(circle).backgroundColor;
-              let hosts = [];
-              let tipo = '';
-
-              // Selecciona la lista de hosts y el tipo según el color del círculo
-              switch (color) {
-                  case 'rgb(40, 167, 69)': // Verde
-                      hosts = window.hostsActualizados;
-                      tipo = 'actualizados';
-                      break;
-                  case 'rgb(255, 193, 7)': // Amarillo
-                      hosts = window.hostsPendientes;
-                      tipo = 'pendientes';
-                      break;
-                  case 'rgb(220, 53, 69)': // Rojo
-                      hosts = window.hostsFallidos;
-                      tipo = 'fallidos';
-                      break;
-                  default:
-                      console.warn('Color de círculo desconocido:', color);
-                      return; // No hace nada si el color es desconocido
-              }
-
-              // Almacena los hosts seleccionados en sessionStorage y abre la nueva página
-              sessionStorage.setItem('hostsElegidos', JSON.stringify(hosts));
-              console.log("Hosts guardados en sessionStorage:", hosts);
-
-              const terminal = window.location.pathname.split('/').pop(); 
-
-              
-              
-              //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
-              window.open(`filial.html?name=${filialName}&from=${tipo}&action=estadosHost`, '_blank');
-              
-          });
-      });
-  } else {
-      console.log("No se encontraron elementos con la clase 'circle' en esta página.");
-  }
-} */
-
-
-  function nuevoFiltroDeCards(){
+function nuevoFiltroDeCards(){
     let filialName = "wst"; 
   
     const circles = document.querySelectorAll('.circle');
@@ -349,8 +260,6 @@ function mostrarHostsDefilialHtml(){
                     tipo = 'cctv'
                 }
   
-                //window.open(`filial.html?name=${filialName}&from=${tipo}`, '_blank');
-                //window.open(`filial.html?name=${filialName}&from=${tipo}&action=estadosHost`, '_blank');
                 window.open(`filial.html?from=${tipo}&estado=${estado}&action=estadosHost`, '_blank');
                 
             });
@@ -358,9 +267,57 @@ function mostrarHostsDefilialHtml(){
     } else {
         console.log("No se encontraron elementos con la clase 'circle' en esta página.");
     }
-  }
+}
 
-function configuracionPaginacion(){
+
+function actualizarRecuperarHosts(){
+    // Recuperar el tipo de hosts desde la URL y actualizar la interfaz
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromPage = urlParams.get('from')
+    const hostType = urlParams.get('estado');  // antes era actualizado, pendientes o fallido
+    const action = urlParams.get('action'); 
+  
+    if (action == 'estadosHost' && hostType) {
+  
+        const actionButton = document.getElementById('action-upd-filial');
+        if (actionButton) {
+          if (fromPage === 'wst') {
+              actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
+          } else if (fromPage === 'cctv') {
+              actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+          } else {
+              actionButton.textContent = 'Aplicar actualización genérica';
+          }
+        }
+  
+        const hosts = JSON.parse(sessionStorage.getItem('hostsElegidos'));
+        let hostsPendientesFallidos = '';
+        if (hostType === 'pendientes' || hostType === 'fallidos'){
+          hostsPendientesFallidos = hosts
+              .map(host => host.name) // Extrae solo los nombres
+              .join(":");
+  
+          actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
+        }
+  
+        configuracionPaginacion(fromPage);
+        const breadcrumb = document.querySelector('.breadcrumb');
+        breadcrumb.innerHTML = `
+            <a href="/MonitoringAppFront/">Home</a> / 
+            <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
+            <a href="filial.html?from=${fromPage}&estado=${hostType}&action=${action}">Hosts - ${hostType.toUpperCase()}</a>
+            
+        `;
+  
+        const headerText = document.querySelector('header h1');
+        headerText.textContent = `Hosts - ${hostType.charAt(0).toUpperCase() + hostType.slice(1)}`;
+    } else {
+        console.error("No se ha especificado el tipo de hosts en la URL.");
+    }
+}
+
+
+function configuracionPaginacion(fromPage){
     // Configuración de paginación
   const hostsPorPagina = 100; // Cambia esto si quieres mostrar más o menos hosts por página
   const hosts = JSON.parse(sessionStorage.getItem('hostsElegidos')); // Recuperamos los hosts de sessionStorage
@@ -378,7 +335,7 @@ function configuracionPaginacion(){
           const hostsPagina = hosts.slice(inicio, fin);
 
           // Muestra los hosts de la página actual
-          displayHostsPorEstados(hostsPagina,inicio);
+          displayHostsPorEstados(hostsPagina,inicio,fromPage);
 
           // Actualiza la barra de navegación de páginas
           actualizarBarraDeNavegacion(pagina);
@@ -411,7 +368,7 @@ function configuracionPaginacion(){
   }
 }
 
-function displayHostsPorEstados(hosts, startIndex) {
+function displayHostsPorEstados(hosts, startIndex,fromPage) {
     const tableBody = document.querySelector('#workstationsTable tbody');
     tableBody.innerHTML = ''; 
     
@@ -419,8 +376,8 @@ function displayHostsPorEstados(hosts, startIndex) {
         const globalIndex = startIndex + index + 1; // Calcula el índice global
         
         const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`;
-        const jobWolButton = `<button onclick="launchJobWol('${host.name}')">Ejecutar</button>`;
-        const jobUpdButton = `<button onclick="launchJobUpd('${host.name}')">Ejecutar</button>`;
+        const jobWolButton = `<button onclick="launchJobWol('${host.name}', '${fromPage}')">Ejecutar</button>`;
+        const jobUpdButton = `<button onclick="launchJobUpd('${host.name}', '${fromPage}')">Ejecutar</button>`;
         
         let descriptionStatus = '';
         if (host.status === 'actualizado') {
@@ -446,83 +403,8 @@ function displayHostsPorEstados(hosts, startIndex) {
     });
 }
 
-function actualizarRecuperarHosts(){
-  // Recuperar el tipo de hosts desde la URL y actualizar la interfaz
-  const urlParams = new URLSearchParams(window.location.search);
-  const fromPage = urlParams.get('from')
-  const hostType = urlParams.get('estado');  // antes era actualizado, pendientes o fallido
-  const action = urlParams.get('action'); 
-
-  if (action == 'estadosHost' && hostType) {
-    // Aca podria llamar a la funcion actualizarFilialConUpd, pero primero obtento los hosts de la sessionStorage, no obstante
-    // ya sabemos que esos hosts seran del estado que se clickeo
-    // Seria ideal crear usar el actualizarFilialConUpd si es que el hostTipe, que indica el estados de los hosts mostrados
-    // llega a ser pendiente o fallido
-
-      const actionButton = document.getElementById('action-upd-filial');
-      if (actionButton) {
-        if (fromPage === 'wst') {
-            actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
-        } else if (fromPage === 'cctv') {
-            actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
-        } else {
-            actionButton.textContent = 'Aplicar actualización genérica';
-        }
-      }
-
-      // Utilizar el fromPage, para que de esta forma pueda asignarse que tipo de plantilla es la que se va a utilizar,
-      // 
-
-      const hosts = JSON.parse(sessionStorage.getItem('hostsElegidos'));
-      let hostsPendientesFallidos = '';
-      if (hostType === 'pendientes' || hostType === 'fallidos'){
-        hostsPendientesFallidos = hosts
-            .map(host => host.name) // Extrae solo los nombres
-            .join(":");
-
-        actualizarFilialConUpd(hostsPendientesFallidos,fromPage);
-      }
-
-      configuracionPaginacion();
-      const breadcrumb = document.querySelector('.breadcrumb');
-      breadcrumb.innerHTML = `
-          <a href="/MonitoringAppFront/">Home</a> / 
-          <a href="${fromPage}.html">${fromPage.toUpperCase()}</a> / 
-          <a href="filial.html?from=${fromPage}&estado=${hostType}&action=${action}">Hosts - ${hostType.toUpperCase()}</a>
-          
-      `;
-
-      const headerText = document.querySelector('header h1');
-      headerText.textContent = `Hosts - ${hostType.charAt(0).toUpperCase() + hostType.slice(1)}`;
-  } else {
-      console.error("No se ha especificado el tipo de hosts en la URL.");
-  }
-}
-
 
 //-----------------------------
-
-/* function actualizarFilialConUpd(filialName){
-    const actionButton = document.querySelector('#action-upd-filial');
-    if (actionButton) {
-        actionButton.addEventListener('click', () => {
-            
-            const confirmar = confirm(
-                "Estás a punto de aplicar una actualización a toda una filial. ¿Estás seguro de continuar?"
-            );
-            if (confirmar) {
-                // Solo se ejecuta si el usuario selecciona "Aceptar"
-                launchJobUpdFilial(filialName);
-            } else {
-                // Opcional: mensaje o acción cuando se cancela
-                console.log("El usuario canceló la operación.");
-            }
-            
-        });
-    } else {
-        console.log("El botón actionUpdFilial no está presente en esta página, se omite el eventListener.");
-    }
-} */
 
 function actualizarFilialConUpd(hostsPendientesFallidos,fromPage) {   // Host pendientes y fallidos
     const buttonContainer = document.querySelector(".button-container-upd");

@@ -16,7 +16,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     }
   }
   
-  function displayHosts(hosts) {
+  function displayHosts(hosts, fromPage) {
     const tableBody = document.querySelector('#workstationsTable tbody');
     tableBody.innerHTML = ''; 
     
@@ -24,8 +24,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         //const jobNames = host.jobNames.join(', ');
 
       const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`
-      const jobWolButton = `<button onclick="launchJobWol('${host.name}')">Ejecutar</button>`
-      const jobUpdButton = `<button onclick="launchJobUpd('${host.name}')">Ejecutar</button>`
+      const jobWolButton = `<button onclick="launchJobWol('${host.name}', '${fromPage}')">Ejecutar</button>`;
+      const jobUpdButton = `<button onclick="launchJobUpd('${host.name}', '${fromPage}')">Ejecutar</button>`;
 
       let descriptionStatus = '';
       if (host.status === 'actualizado') {
@@ -52,11 +52,19 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     });
   }
 
-  async function launchJobWol(hostname) {
+  async function launchJobWol(hostname,fromPage) {
     try {
 
       console.log("Iniciando ejecución del job para el host:", hostname);
 
+      let template_id = 0;
+      if ( fromPage === 'wst'){
+        template_id = 1263;
+        console.log("fromPage recibido:", fromPage);
+      } else if (fromPage === 'cctv'){
+        template_id = 1565;
+        console.log("fromPage recibido:", fromPage);
+      }
 
       const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
         method: 'POST',
@@ -64,7 +72,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          job_template_id: 1263,
+          job_template_id: template_id,
           hostname: hostname,
         }),
       });
@@ -95,11 +103,19 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     }
   }
 
-  async function launchJobUpd(hostname) {
+  async function launchJobUpd(hostname, fromPage) {
     try {
 
       console.log("Iniciando ejecución del job para el host:", hostname);
 
+      let template_id = 0;
+      if ( fromPage === 'wst'){
+        template_id = 1678;
+        console.log("fromPage recibido:", fromPage);
+      } else if (fromPage === 'cctv'){
+        template_id = 1613;
+        console.log("fromPage recibido:", fromPage);
+      }
 
       const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
         method: 'POST',
@@ -107,7 +123,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          job_template_id: 1678,
+          job_template_id: template_id,
           hostname: hostname,
         }),
       });
