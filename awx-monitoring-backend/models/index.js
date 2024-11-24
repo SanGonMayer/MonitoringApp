@@ -7,7 +7,7 @@ import Workstation from './workstations.js';
 import CCTV from './cctv.js';
 //import Job from './jobs.js';
 import JobHostSummary from './jobHostSummary.js';
-import HostStatusHistory from './hostStatusHistory.js';
+//import HostStatusHistory from './hostStatusHistory.js';
 
 Filial.hasMany(Workstation, { foreignKey: 'filial_id' });
 Workstation.belongsTo(Filial, { foreignKey: 'filial_id' });
@@ -30,11 +30,11 @@ JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', as: 'works
 CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id', as: 'jobSummaries' });
 JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
 
-Workstation.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
-HostStatusHistory.belongsTo(Workstation, { foreignKey: 'host_id' });
+//Workstation.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
+//HostStatusHistory.belongsTo(Workstation, { foreignKey: 'host_id' });
 
-CCTV.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
-HostStatusHistory.belongsTo(CCTV, { foreignKey: 'host_id' });
+//CCTV.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
+//HostStatusHistory.belongsTo(CCTV, { foreignKey: 'host_id' });
 
 
 export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary };
