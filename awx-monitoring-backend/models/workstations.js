@@ -29,10 +29,6 @@ const Workstation = sequelize.define('Workstation', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true,
-  },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: true,
   }
 });
 

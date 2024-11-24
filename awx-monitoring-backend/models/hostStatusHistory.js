@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+/*import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
 const HostStatusHistory = sequelize.define('HostStatusHistory', {
@@ -34,3 +34,4 @@ const HostStatusHistory = sequelize.define('HostStatusHistory', {
 });
 
 export default HostStatusHistory;
+*/

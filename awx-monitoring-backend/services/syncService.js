@@ -88,51 +88,13 @@ export const syncHostsFromInventory22 = async (filial) => {
       const enabledHostIdsFromAPI = hostsWST.map(host => host.id);
   
       for (const host of hostsWST) {
-        let existingHost = await Workstation.findOne({
-          where: { id: host.id },
-          include: [
-            {
-              model: JobHostSummary,
-              as: 'jobSummaries',
-              attributes: ['job_name', 'failed', 'jobCreationDate'],
-            },
-          ],
-        });
-  
-        let previousStatus = null;
-
-        if (!existingHost) {
-          console.log(`Host ${host.name} no encontrado en la base. Creándolo como nuevo.`);
-          existingHost = await Workstation.create({
-            id: host.id,
-            name: host.name,
-            description: host.description,
-            inventory_id: 22,
-            filial_id: filial.id,
-            enabled: host.enabled,
-            status: 'pendiente', 
-          });
-  
-          previousStatus = null; 
-        } else {
-
-          previousStatus = existingHost.status;
-        }
-
-        const newStatus = calculateHostStatus(existingHost, 'wst');
-
-        if (previousStatus !== newStatus) {
-          await logStatusChange(existingHost, 22, previousStatus, newStatus);
-        }
-
         await Workstation.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 22, 
           filial_id: filial.id, 
-          enabled: host.enabled,
-          status: newStatus
+          enabled: host.enabled
         });
         await syncJobHostSummaries(host.id, 22); 
       }

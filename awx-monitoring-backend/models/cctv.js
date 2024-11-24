@@ -29,10 +29,6 @@ const CCTV = sequelize.define('CCTV', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true,
-  },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: true,
   }
 });
 
