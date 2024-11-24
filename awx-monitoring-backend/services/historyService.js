@@ -1,6 +1,15 @@
 import HostStatusHistory from '../models/hostStatusHistory.js';
 
 export const logStatusChange = async (host, inventoryId, previousStatus, newStatus) => {
+    if (!previousStatus) {
+        console.log(`Estado inicial del host ${host.name} (${host.id}): ${newStatus}. No se registra en el historial.`);
+        return; // No registrar cambios en la primera sincronización
+      }
+    
+    if (previousStatus === newStatus) {
+        return; 
+      }
+
   try {
     await HostStatusHistory.create({
       host_id: host.id,
