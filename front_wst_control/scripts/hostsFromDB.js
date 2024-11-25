@@ -35,6 +35,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
       } else if (host.status === 'fallido') {
           descriptionStatus = 'bg-red';
       }
+
+      console.log('fecha del host', host.dateSuccesful);
       
       const row = `
         <tr>
