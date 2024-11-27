@@ -35,6 +35,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
       } else if (host.status === 'fallido') {
           descriptionStatus = 'bg-red';
       }
+
+      console.log('fecha del host', host.dateSuccesful);
       
       const row = `
         <tr>
@@ -42,13 +44,31 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
           <td><a href="${rutaJobsAwx}" target="_blank">${host.name}</a></td>
           <td>${host.id}</td>
           <td>${host.description || 'Sin descripción'}</td>
-          <td><span class="${descriptionStatus}">${host.status || 'Desconocido'}</span></td>
+          <td>
+            <span 
+              class="status ${descriptionStatus}" 
+              data-status="${host.status || 'Desconocido'}" 
+              data-date="${host.dateSuccesful || 'Sin fecha'}">
+              ${host.status || 'Desconocido'}
+            </span>
+          </td>
           <td>${jobWolButton}</td>
           <td>${jobUpdButton}</td>
 
         </tr>
       `;
       tableBody.innerHTML += row;
+    });
+
+    // Agregar eventos para todos los spans
+    const statusSpans = tableBody.querySelectorAll('.status');
+    statusSpans.forEach(span => {
+        span.addEventListener('mouseenter', function() {
+            this.textContent = this.getAttribute('data-date');
+        });
+        span.addEventListener('mouseleave', function() {
+            this.textContent = this.getAttribute('data-status');
+        });
     });
   }
 
