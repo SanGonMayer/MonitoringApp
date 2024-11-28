@@ -359,6 +359,8 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
   }
   console.log('Mostrando botones de filiales', window.allButtons);
   updateCantidadDeHosts();
+  updateCantidadDeFiliales();
+
 }
 
 
