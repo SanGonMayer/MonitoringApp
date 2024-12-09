@@ -263,7 +263,7 @@ export const getHostsByFilial = async (req, res) => {
         }
 
         // Si hay un "wst_upd_v1.8.1" pero todos fallaron, está fallido
-        if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
+        if (filteredSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
           console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" fallido. Marcado como fallido.`);
           return {
             id: host.id,
