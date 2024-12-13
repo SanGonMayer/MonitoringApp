@@ -12,6 +12,9 @@ import cron from 'node-cron';
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTelegram, generateAndSaveCSV } from './services/notificadorService.js';
 
+import { createServer } from 'http';
+import { Server } from 'socket.io'; // WebSocket con ESModules
+
 dotenv.config();
 
 
@@ -20,6 +23,17 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT;
+
+const server = createServer(app); // Crea el servidor HTTP
+//const io = new Server(server); // Conecta Socket.io al servidor 
+
+const io = new Server(server, {
+  cors: {
+    origin: ['http://sncl7001lx.bancocredicoop.coop'], // Permitir el frontend
+    methods: ['GET', 'POST'], // Métodos permitidos
+  },
+});
+
 
 app.use(express.json());
 app.use(requestLoggerMiddleware());
@@ -41,7 +55,7 @@ const startDataSync = async () => {
       await syncHostsFromInventory22(filial);  
       await syncHostsFromInventory347(filial);  
     }
-
+    io.emit('db-updated', { source: 'Actualizacion template db' }); /////////////////
     console.log('Sincronización de datos completada.');
     
     const { filiales: outdatedFiliales, hosts: outdatedHosts, counters, filialCounters } = await getOutdatedFilialesAndHosts('wst');   
@@ -67,8 +81,17 @@ cron.schedule('0 9 * * *', async () => {
   await startDataSync();
 });
 
+io.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado:', socket.id);
 
-sequelize.sync({ alter: true })  
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado:', socket.id);
+  });
+});
+
+
+
+/* sequelize.sync({ alter: true })  
   .then(() => {
     console.log('Tablas sincronizadas con éxito');
     app.listen(PORT, () => {
@@ -77,6 +100,18 @@ sequelize.sync({ alter: true })
   })
   .catch((error) => {
     console.error('Error al sincronizar la base de datos:', error.message);
+  }); */
+
+sequelize.sync({ alter: true })  
+  .then(() => {
+    console.log('Tablas sincronizadas con éxito');
+    server.listen(PORT, () => {
+      console.log(`Servidor escuchando en el puerto ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error al sincronizar la base de datos:', error.message);
   });
 
-  export { startDataSync };
+export { startDataSync };
+export { io };

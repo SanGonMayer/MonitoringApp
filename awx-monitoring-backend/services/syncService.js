@@ -5,6 +5,7 @@ import CCTV from '../models/cctv.js';
 import JobHostSummary from '../models/jobHostSummary.js';
 import Inventory from '../models/inventory.js';
 import { Op } from 'sequelize';
+import { io } from '../app.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
@@ -234,7 +235,7 @@ export const syncHostsFromInventory22 = async (filial) => {
                 }
             });
         }
-
+        io.emit('db-updated', { source: 'Actualizacion template db' }); /////////////////
         console.log(`Filial ${filialId} sincronizada correctamente.`);
     } catch (error) {
         console.error(`Error al sincronizar la filial ${filialId}:`, error.message);

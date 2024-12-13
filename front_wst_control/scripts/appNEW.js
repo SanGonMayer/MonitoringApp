@@ -34,6 +34,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+//----------------------------------
+
+const socket = io('http://sncl7001lx.bancocredicoop.coop:3000');
+
+
+// Escucha los eventos del backend
+socket.on('db-updated', (data) => {
+    console.log(`Actualización recibida desde: ${data.source}`);
+    const button = document.getElementById('action-button');
+    //button.style.backgroundColor = 'yellow'; // Cambia el color a amarillo
+    //button.textContent = '¡Actualizar filiales!';
+    if (button) {
+        // Cambia el estilo dinámicamente al recibir la señal
+        button.style.backgroundColor = 'yellow'; // Cambia el fondo
+        button.style.color = 'black'; // Cambia el texto a negro para mayor contraste
+        button.textContent = '¡Sincronizar Ahora!';
+    }
+});
+
+//---------------------------------
+
 async function buscar(tipoTerminal) {
   if (tipoTerminal === 'cctv.html') {
       //await fetchFilialesFromDB('cctv.html');
