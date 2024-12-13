@@ -386,13 +386,27 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
 
   for (const filial of filiales) {
       const button = document.createElement('button');
-      button.textContent = filial.name;
       button.classList.add('custom-button');
-
+  
       const tipo = tipoTerminal === 'srno.html' ? 'wst' : 'cctv';
-      // Llamamos a evaluarEstadoHosts y obtenemos también los hosts
+  
+      // Evaluar el estado de los hosts
       const { color, hosts } = await evaluarEstadoHostsSrno(filial.id, tipo);
       button.style.backgroundColor = color;
+  
+      // Crear los spans para el nombre y la cantidad de hosts
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = filial.name;
+      nameSpan.classList.add('button-name');
+  
+      const hostsSpan = document.createElement('span');
+      hostsSpan.textContent = `${hosts.length}`;
+      hostsSpan.classList.add('button-hosts');
+  
+      // Agregar los spans al botón
+      button.appendChild(nameSpan);
+      button.appendChild(hostsSpan);
+
 
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
