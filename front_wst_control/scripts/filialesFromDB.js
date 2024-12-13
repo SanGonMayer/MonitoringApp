@@ -74,7 +74,7 @@ function clearFilialContainer() {
 
 
 
-async function createFilialButtons(filiales, tipoTerminal) {
+/* async function createFilialButtons(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
   inicializarEstadosFiliales(); 
   //sinicializarEstadosHosts();
@@ -109,6 +109,56 @@ async function createFilialButtons(filiales, tipoTerminal) {
   console.log('Mostrando botones de filiales', window.allButtons);
   updateCantidadDeHosts();
   updateCantidadDeFiliales();
+} */
+
+async function createFilialButtons(filiales, tipoTerminal) {
+    const filialContainer = document.querySelector('#filialContainer');
+    inicializarEstadosFiliales(); 
+    //sinicializarEstadosHosts();
+    inicializarEstadosHostsListas();
+  
+    const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+    tableElement.style.display = 'none';
+  
+    for (const filial of filiales) {
+        const button = document.createElement('button');
+        button.classList.add('custom-button');
+    
+        const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+    
+        // Evaluar el estado de los hosts
+        const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
+        button.style.backgroundColor = color;
+    
+        // Crear los spans para el nombre y la cantidad de hosts
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = filial.name;
+        nameSpan.classList.add('button-name');
+    
+        const hostsSpan = document.createElement('span');
+        hostsSpan.textContent = `${hosts.length}`;
+        hostsSpan.classList.add('button-hosts');
+    
+        // Agregar los spans al botón
+        button.appendChild(nameSpan);
+        button.appendChild(hostsSpan);
+  
+        // Asigna los hosts directamente al evento click sin volver a hacer fetch
+        button.onclick = () => {
+  
+          const filialName = filial.name; 
+          
+          sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+          console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
+          window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
+        };
+  
+        filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+        window.allButtons.push(button);
+    }
+    console.log('Mostrando botones de filiales', window.allButtons);
+    updateCantidadDeHosts();
+    updateCantidadDeFiliales();
 }
 
 
