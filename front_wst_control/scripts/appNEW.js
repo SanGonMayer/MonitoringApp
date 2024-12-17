@@ -34,6 +34,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+//----------------------------------
+
+const socket = io('http://sncl7001lx.bancocredicoop.coop:3000');
+
+
+// Escucha los eventos del backend
+socket.on('db-updated', (data) => {
+    console.log(`Actualización recibida desde: ${data.source}`);
+    const button = document.getElementById('action-button');
+    //button.style.backgroundColor = 'yellow'; // Cambia el color a amarillo
+    //button.textContent = '¡Actualizar filiales!';
+    if (button) {
+        // Cambia el estilo dinámicamente al recibir la señal
+        button.style.backgroundColor = 'yellow'; // Cambia el fondo
+        button.style.color = 'black'; // Cambia el texto a negro para mayor contraste
+        button.textContent = '¡Sincronizar Ahora!';
+    }
+});
+
+//---------------------------------
+
 async function buscar(tipoTerminal) {
   if (tipoTerminal === 'cctv.html') {
       //await fetchFilialesFromDB('cctv.html');
@@ -104,28 +125,33 @@ function filtrarPorColor(selectedColor) {
 
 
 function recargarFilialesHtml(){
-  const actionButton = document.querySelector('#action-button');
-  if (actionButton) {
-      actionButton.addEventListener('click', () => {
-          const filialContainer = document.querySelector('#filialContainer');
-          filialContainer.innerHTML = '';
-
-          const cards = document.querySelectorAll('.main-skills .card .circle span');
-          cards.forEach(card => {
-              card.textContent = '';
-          });
-
-          const cardsFilial = document.querySelectorAll('.main-skills .card .circle-filial span');
-          cardsFilial.forEach(card => {
-              card.textContent = '';
-          });
-
-          const terminal = window.location.pathname.split('/').pop();
-          buscar(terminal);
-      });
-  } else {
-      console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
-  }
+    const actionButton = document.querySelector('#action-button');
+    if (actionButton) {
+        actionButton.addEventListener('click', () => {
+            const filialContainer = document.querySelector('#filialContainer');
+            filialContainer.innerHTML = '';
+  
+            const cards = document.querySelectorAll('.main-skills .card .circle span');
+            cards.forEach(card => {
+                card.textContent = '';
+            });
+  
+            const cardsFilial = document.querySelectorAll('.main-skills .card .circle-filial span');
+            cardsFilial.forEach(card => {
+                card.textContent = '';
+            });
+  
+            const terminal = window.location.pathname.split('/').pop();
+            buscar(terminal);
+  
+             // Restablecer el estilo original del botón después de hacer clic
+             actionButton.style.backgroundColor = ''; // Vuelve al color original
+             actionButton.style.color = ''; // Vuelve al color original
+             actionButton.textContent = 'Vista Actualizada'; // Vuelve al texto original
+        });
+    } else {
+        console.log("El botón actionButton no está presente en esta página, se omite el eventListener.");
+    }
 }
 
 
