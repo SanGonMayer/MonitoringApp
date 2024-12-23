@@ -1,5 +1,4 @@
 /* ------------------------------------- */
-import Chart from '../libs/chart.js';
 
 // Variables globales para el estado
 

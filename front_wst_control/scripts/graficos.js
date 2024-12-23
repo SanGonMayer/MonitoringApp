@@ -66,7 +66,6 @@
     });
 } */
 
-import Chart from '../libs/chart.js';
 
 async function crearGraficoCircular(canvaId, tipoTerminal) {
     const labels = ['Actualizadas', 'Pendientes', 'Fallidas'];
