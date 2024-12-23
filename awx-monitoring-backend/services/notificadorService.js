@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 const gruposExcluidos = [
     'f0000',
-    'f0071', 'f0603', 'f0661', 'f0662', 'f0663','f0664', 'f0665', 'f0668', 'f0299',
+    'f0071', 'f0603', 'f0661', 'f0662', 'f0664', 'f0665', 'f0668', 'f0299',
     'wst', 'pve','f0999'
   ];
 
