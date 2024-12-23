@@ -1,4 +1,6 @@
 /* ------------------------------------- */
+import Chart from '../libs/chart.js';
+
 // Variables globales para el estado
 
 window.totalFiliales = 0;
