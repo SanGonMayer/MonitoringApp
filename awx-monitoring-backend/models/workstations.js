@@ -30,10 +30,6 @@ const Workstation = sequelize.define('Workstation', {
     allowNull: false,
     defaultValue: true,
   },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
 });
 
 

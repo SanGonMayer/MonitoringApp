@@ -30,10 +30,6 @@ const CCTV = sequelize.define('CCTV', {
     allowNull: false,
     defaultValue: true,
   },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
 });
 
 
