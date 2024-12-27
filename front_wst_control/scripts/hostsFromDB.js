@@ -1,7 +1,7 @@
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
-      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${filialId}/hosts?tipo=${tipoTerminal}`);
+      const response = await fetch(`http://sncl1001lx.bancocredicoop.coop:3000/api/db/filiales/${filialId}/hosts?tipo=${tipoTerminal}`);
       
       if (!response.ok) {
         throw new Error('Error al obtener hosts desde la base de datos');
@@ -86,7 +86,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         console.log("fromPage recibido:", fromPage);
       }
 
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
+      const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         console.log("fromPage recibido:", fromPage);
       }
 
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
+      const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 async function fetchHostsFromDBSrno(filialId, tipoTerminal) {
   try {
     console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${filialId}/hosts/srno?tipo=${tipoTerminal}`);
+    const response = await fetch(`http://sncl1001lx.bancocredicoop.coop:3000/api/db/filiales/${filialId}/hosts/srno?tipo=${tipoTerminal}`);
     
     if (!response.ok) {
       throw new Error('Error al obtener hosts desde la base de datos');

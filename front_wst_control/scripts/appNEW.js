@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //----------------------------------
 
-const socket = io('http://sncl7001lx.bancocredicoop.coop:3000');
+const socket = io('http://sncl1001lx.bancocredicoop.coop:3000');
 
 
 // Escucha los eventos del backend
@@ -511,7 +511,7 @@ async function launchJobUpdFilial(hostsPendientesFallidos,fromPage) {  // 'hostn
         console.log("fromPage recibido:", fromPage);
       }
 
-      const response = await fetch('http://sncl7001lx.bancocredicoop.coop:3000/api/awx/launch-job-filial', {
+      const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/awx/launch-job-filial', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

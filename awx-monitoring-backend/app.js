@@ -29,7 +29,7 @@ const server = createServer(app); // Crea el servidor HTTP
 
 const io = new Server(server, {
   cors: {
-    origin: ['http://sncl7001lx.bancocredicoop.coop'], // Permitir el frontend
+    origin: ['http://sncl1001lx.bancocredicoop.coop'], // Permitir el frontend
     methods: ['GET', 'POST'], // Métodos permitidos
   },
 });

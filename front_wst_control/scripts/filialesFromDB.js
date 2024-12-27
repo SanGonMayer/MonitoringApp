@@ -38,7 +38,7 @@ async function fetchFilialesConHostsFromDB(tipoTerminal) {
 
 
       console.log('Fetching filiales from the database:', tipoTerminal);
-      const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
+      const response = await fetch(`http://sncl1001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
       
       if (!response.ok) {
           const errorDetails = await response.text();
@@ -236,7 +236,7 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
 
 
     console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
+    const response = await fetch(`http://sncl1001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
     
     if (!response.ok) {
       const errorDetails = await response.text();
@@ -342,7 +342,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
     }
 
     console.log('Fetching filiales from the database:', tipoTerminal);
-    const response = await fetch(`http://sncl7001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
+    const response = await fetch(`http://sncl1001lx.bancocredicoop.coop:3000/api/db/filiales/${tipo}`);
     
     if (!response.ok) {
       const errorDetails = await response.text();
