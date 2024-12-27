@@ -89,29 +89,17 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
-/* sequelize.sync({ alter: true })  
+sequelize.authenticate()
   .then(() => {
-    console.log('Tablas sincronizadas con éxito');
-    app.listen(PORT, () => {
-      console.log(`Servidor escuchando en el puerto ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error al sincronizar la base de datos:', error.message);
-  }); */
-
-sequelize.sync({ alter: true })  
-  .then(() => {
-    console.log('Tablas sincronizadas con éxito');
+    console.log('✅ Conexión a la base de datos establecida correctamente.');
     server.listen(PORT, () => {
-      console.log(`Servidor escuchando en el puerto ${PORT}`);
+      console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('Error al sincronizar la base de datos:', error.message);
+    console.error('❌ Error al conectar con la base de datos:', error.message);
   });
+
 
 export { startDataSync };
 export { io };
