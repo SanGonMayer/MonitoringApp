@@ -105,11 +105,17 @@ export const syncHostsFromInventory22 = async (filial) => {
         });
 
         const newStatus = calculateHostStatus({...existingHost.get(), jobSummaries}, 'wst');
+        console.log(`🔍 Host: ${host.name} | Estado Calculado: ${newStatus}`);
 
         if (existingHost.status !== newStatus) {
-          console.log(`🔄 El estado del host ${host.name} ha cambiado de ${existingHost.status} a ${newStatus}`);
-          existingHost.status = newStatus;
-          await existingHost.save();
+          console.log(`🔄 Estado cambiado: ${existingHost.status} → ${newStatus}`);
+          await Workstation.update(
+            { status: newStatus },
+            { where: { id: existingHost.id } }
+          );
+          console.log(`✅ Estado actualizado en la base de datos: ${newStatus}`);
+        } else {
+          console.log(`ℹ️ El estado del host ${host.name} no ha cambiado (${existingHost.status})`);
         }
       }
 
@@ -161,11 +167,17 @@ export const syncHostsFromInventory22 = async (filial) => {
       });
 
       const newStatus = calculateHostStatus({ ...existingHost.get(), jobSummaries }, 'cctv');
+      console.log(`🔍 Host: ${host.name} | Estado Calculado: ${newStatus}`);
 
       if (existingHost.status !== newStatus) {
-        console.log(`🔄 El estado del host ${host.name} ha cambiado de ${existingHost.status} a ${newStatus}`);
-        existingHost.status = newStatus;
-        await existingHost.save();
+        console.log(`🔄 Estado cambiado: ${existingHost.status} → ${newStatus}`);
+        await CCTV.update(
+          { status: newStatus },
+          { where: { id: existingHost.id } }
+        );
+        console.log(`✅ Estado actualizado en la base de datos: ${newStatus}`);
+      } else {
+        console.log(`ℹ️ El estado del host ${host.name} no ha cambiado (${existingHost.status})`);
       }
       }
 
