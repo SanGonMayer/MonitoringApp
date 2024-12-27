@@ -6,6 +6,7 @@ import JobHostSummary from '../models/jobHostSummary.js';
 import Inventory from '../models/inventory.js';
 import { Op } from 'sequelize';
 import { io } from '../app.js';
+import { calculateHostStatus } from './utils/hostStatus.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
