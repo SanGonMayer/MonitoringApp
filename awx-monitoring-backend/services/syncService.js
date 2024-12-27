@@ -89,15 +89,27 @@ export const syncHostsFromInventory22 = async (filial) => {
       const enabledHostIdsFromAPI = hostsWST.map(host => host.id);
   
       for (const host of hostsWST) {
-        await Workstation.upsert({
+        const [existingHost] = await Workstation.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 22, 
           filial_id: filial.id, 
           enabled: host.enabled
-        });
+        }, {returning: true});
         await syncJobHostSummaries(host.id, 22); 
+
+        const jobSummaries = await JobHostSummary.findAll({
+          where: { workstation_id: host.id }
+        });
+
+        const newStatus = calculateHostStatus({...existingHost.get(), jobSummaries}, 'wst');
+
+        if (existingHost.status !== newStatus) {
+          console.log(`🔄 El estado del host ${host.name} ha cambiado de ${existingHost.status} a ${newStatus}`);
+          existingHost.status = newStatus;
+          await existingHost.save();
+        }
       }
 
       await Workstation.destroy({
@@ -133,15 +145,27 @@ export const syncHostsFromInventory22 = async (filial) => {
       const enabledHostIdsFromAPI = hostsCCTV.map(host => host.id);
   
       for (const host of hostsCCTV) {
-        await CCTV.upsert({
+        const [existingHost] = await CCTV.upsert({
           id: host.id,
           name: host.name,
           description: host.description,
           inventory_id: 347,  
           filial_id: filial.id,
           enabled: host.enabled
-        });
+        }, { returning: true });
         await syncJobHostSummaries(host.id, 347);
+
+      const jobSummaries = await JobHostSummary.findAll({
+        where: { cctv_id: host.id }
+      });
+
+      const newStatus = calculateHostStatus({ ...existingHost.get(), jobSummaries }, 'cctv');
+
+      if (existingHost.status !== newStatus) {
+        console.log(`🔄 El estado del host ${host.name} ha cambiado de ${existingHost.status} a ${newStatus}`);
+        existingHost.status = newStatus;
+        await existingHost.save();
+      }
       }
 
       await CCTV.destroy({
