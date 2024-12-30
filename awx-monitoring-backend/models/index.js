@@ -30,11 +30,10 @@ JobHostSummary.belongsTo(Workstation, { foreignKey: 'workstation_id', as: 'works
 CCTV.hasMany(JobHostSummary, { foreignKey: 'cctv_id', as: 'jobSummaries' });
 JobHostSummary.belongsTo(CCTV, { foreignKey: 'cctv_id', allowNull: true }); 
 
-//Workstation.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
-//HostStatusHistory.belongsTo(Workstation, { foreignKey: 'host_id' });
+Workstation.hasMany(HostSnapshot, { foreignKey: 'host_id', as: 'snapshots' });
+CCTV.hasMany(HostSnapshot, { foreignKey: 'host_id', as: 'snapshots' });
+HostSnapshot.belongsTo(Workstation, { foreignKey: 'host_id', as: 'workstation', allowNull: true });
+HostSnapshot.belongsTo(CCTV, { foreignKey: 'host_id', as: 'cctv', allowNull: true });
 
-//CCTV.hasMany(HostStatusHistory, { foreignKey: 'host_id' });
-//HostStatusHistory.belongsTo(CCTV, { foreignKey: 'host_id' });
 
-
-export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary };
+export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary, HostSnapshot };
