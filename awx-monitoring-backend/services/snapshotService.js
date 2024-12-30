@@ -1,6 +1,6 @@
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
-import HostSnapshot from '../models/hostSnapshot.js';
+import HostSnapshot from '../models/hostsSnapshot.js';
 import { Op } from 'sequelize';
 
 /**
