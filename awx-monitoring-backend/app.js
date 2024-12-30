@@ -79,6 +79,7 @@ const startDataSync = async () => {
 cron.schedule('0 9 * * *', async () => {
   console.log('Ejecutando sincronización de datos programada a las 09:00...');
   await startDataSync();
+  await takeDailySnapshot();
 });
 
 io.on('connection', (socket) => {
