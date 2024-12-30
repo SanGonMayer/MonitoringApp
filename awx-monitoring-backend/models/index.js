@@ -7,7 +7,8 @@ import Workstation from './workstations.js';
 import CCTV from './cctv.js';
 //import Job from './jobs.js';
 import JobHostSummary from './jobHostSummary.js';
-//import HostStatusHistory from './hostStatusHistory.js';
+import HostSnapshot from './hostsSnapshot.js';
+
 
 Filial.hasMany(Workstation, { foreignKey: 'filial_id' });
 Workstation.belongsTo(Filial, { foreignKey: 'filial_id' });
