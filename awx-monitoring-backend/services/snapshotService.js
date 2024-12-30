@@ -13,12 +13,16 @@ export const takeDailySnapshot = async () => {
 
     // 1️⃣ Snapshot de Workstations
     const workstations = await Workstation.findAll();
+    console.log(`🔍 Encontrados ${workstations.length} Workstations para snapshot.`);
+
     for (const workstation of workstations) {
       await handleHostSnapshot(workstation, 'workstation');
     }
 
     // 2️⃣ Snapshot de CCTV
     const cctvs = await CCTV.findAll();
+    console.log(`🔍 Encontrados ${cctvs.length} CCTV para snapshot.`);
+
     for (const cctv of cctvs) {
       await handleHostSnapshot(cctv, 'cctv');
     }
@@ -38,6 +42,8 @@ const handleHostSnapshot = async (host, tipo) => {
   try {
     const { id, name, status, enabled, inventory_id, filial_id } = host;
 
+    console.log(`📝 Intentando crear snapshot para ${tipo} - ID: ${id}, Nombre: ${name}`);
+
     // Crear un nuevo snapshot
     await HostSnapshot.create({
       host_id: id,
@@ -48,7 +54,7 @@ const handleHostSnapshot = async (host, tipo) => {
       filial_id,
     });
 
-    console.log(`📝 Snapshot creado para ${tipo} ${name} (ID: ${id}).`);
+    console.log(`✅ Snapshot creado para ${tipo} ${name} (ID: ${id}).`);
 
     // Mantener solo los dos snapshots más recientes por host
     const snapshots = await HostSnapshot.findAll({
