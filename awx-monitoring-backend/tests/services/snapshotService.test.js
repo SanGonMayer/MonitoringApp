@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import { test, beforeEach } from 'node:test';
 import { checkForChanges } from '../../services/snapshotService.js';
 import { handleHostSnapshot } from '../../services/snapshotService.js';
-import { setupTestDB } from '../../config/setupTestDB.js';
+import SequelizeMock from 'sequelize-mock';
 
 
 // ===============================
@@ -52,13 +52,24 @@ test('checkForChanges - Debe detectar cambios si no hay snapshot previo', () => 
 });
 
 // ===============================
+// Mock de la base de datos
+// ===============================
 
-let HostSnapshot;
+const dbMock = new SequelizeMock();
+const MockHostSnapshot = dbMock.define('HostSnapshot', {
+    host_id: 999,
+    host_name: 'new-host',
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 3,
+    snapshot_date: new Date(),
+  });
 
+// **Antes de cada prueba, limpia los datos en el mock**
 beforeEach(async () => {
-  const db = await setupTestDB();
-  HostSnapshot = db.HostSnapshot;
-});
+    await MockHostSnapshot.destroy({ where: {} });
+  });
 
 // ===============================
 // Test: Nuevo Host Sin Registro Previo
@@ -66,6 +77,34 @@ beforeEach(async () => {
 
 test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registros previos', async () => {
     const newHost = {
+        id: 999,
+        name: 'new-host',
+        status: 'pendiente',
+        enabled: true,
+        inventory_id: 22,
+        filial_id: 3,
+    };
+
+    // Ejecutar la función
+    await handleHostSnapshot(newHost, 'workstation');
+
+    // Verificar si se creó el snapshot
+    const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 999 } });
+    console.log('📊 Snapshots:', snapshots);
+
+    assert.strictEqual(snapshots.length, 1, 'Se esperaba exactamente un snapshot');
+    assert.strictEqual(snapshots[0].get('host_name'), 'new-host', 'El nombre no coincide');
+    assert.strictEqual(snapshots[0].get('status'), 'pendiente', 'El estado no coincide');
+});
+
+  
+  
+  // ===============================
+// Test: Detectar Cambio en Número de Filial
+// ===============================
+test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', async () => {
+    // Primer snapshot
+    const initialHost = {
       id: 999,
       name: 'new-host',
       status: 'pendiente',
@@ -73,46 +112,29 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
       inventory_id: 22,
       filial_id: 3,
     };
-  
-    await handleHostSnapshot(newHost, 'workstation');
-    const snapshots = await HostSnapshot.findAll({ where: { host_id: 999 } });
-  
-    assert.strictEqual(snapshots.length, 1, 'Se esperaba un snapshot');
-    assert.strictEqual(snapshots[0].host_name, 'new-host');
-  });
-
-  
-  
-// ===============================
-// Test: Detectar Cambio en Número de Filial
-// ===============================
-test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', async () => {
-    const initialHost = {
-      id: 1,
-      name: 'test-host',
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
     await handleHostSnapshot(initialHost, 'workstation');
-  
+
+    // Segundo snapshot con cambio en filial
     const updatedHost = {
-      id: 1,
-      name: 'test-host',
+      id: 999,
+      name: 'new-host',
       status: 'pendiente',
       enabled: true,
       inventory_id: 22,
-      filial_id: 2,
+      filial_id: 2, // Cambio en filial
     };
     await handleHostSnapshot(updatedHost, 'workstation');
-  
-    const snapshots = await HostSnapshot.findAll({ where: { host_id: 1 } });
-  
-    assert.strictEqual(snapshots.length, 2, 'Se esperaban dos snapshots');
-    assert.strictEqual(snapshots[0].filial_id, 2);
-    assert.strictEqual(snapshots[1].filial_id, 1);
-  });
+
+    const snapshots = await MockHostSnapshot.findAll({
+        where: { host_id: 999 },
+        order: [['snapshot_date', 'DESC']],
+    });
+    console.log('📊 Snapshots después del cambio de filial:', snapshots);
+
+    assert.strictEqual(snapshots.length, 2, 'Se esperaban exactamente dos snapshots');
+    assert.strictEqual(snapshots[0].get('filial_id'), 2, 'El nuevo snapshot no tiene el filial_id correcto');
+    assert.strictEqual(snapshots[1].get('filial_id'), 1, 'El snapshot anterior no conserva el filial_id original');
+});
 
   
   
