@@ -98,10 +98,9 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
   
   
   // ===============================
-  // Test: Detectar Cambio en Número de Filial
-  // ===============================
-  
-  test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', async () => {
+// Test: Detectar Cambio en Número de Filial
+// ===============================
+test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', async () => {
     // Primer snapshot
     const initialHost = {
       id: 1,
@@ -112,6 +111,10 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
       filial_id: 1,
     };
     await handleHostSnapshot(initialHost, 'workstation');
+  
+    // Validar que el primer snapshot se creó
+    let snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
+    assert.strictEqual(snapshots.length, 1, 'El primer snapshot no se creó correctamente');
   
     // Modificación en filial
     const updatedHost = {
@@ -124,10 +127,13 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
     };
     await handleHostSnapshot(updatedHost, 'workstation');
   
-    const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
-    assert.strictEqual(snapshots.length, 2); // Se debe haber creado un nuevo snapshot
-    assert.strictEqual(snapshots[1].filial_id, 2); // Validar el nuevo valor de filial
+    // Validar que el segundo snapshot se creó
+    snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 }, order: [['snapshot_date', 'DESC']] });
+    assert.strictEqual(snapshots.length, 2, 'El segundo snapshot no se creó correctamente');
+    assert.strictEqual(snapshots[0].get('filial_id'), 2, 'El nuevo snapshot no tiene el filial_id correcto');
+    assert.strictEqual(snapshots[1].get('filial_id'), 1, 'El snapshot anterior no conserva el filial_id original');
   });
+  
   
   // ===============================
   // Test: Detectar Cambio en Enabled
