@@ -71,10 +71,6 @@ beforeEach(async () => {
     await MockHostSnapshot.destroy({ where: {} });
   });
   
-  afterEach(async () => {
-    await MockHostSnapshot.destroy({ where: {} });
-  });
-  
 
 
 // ===============================
