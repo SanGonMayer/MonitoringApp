@@ -1,61 +1,61 @@
+import assert from 'node:assert';
+import { test, beforeEach } from 'node:test';
 import { checkForChanges } from '../../services/snapshotService.js';
 import { handleHostSnapshot } from '../../services/snapshotService.js';
-import HostSnapshot from '../../models/hostsSnapshot.js';
 import SequelizeMock from 'sequelize-mock';
 
-describe('checkForChanges', () => {
-  test('Debe detectar cambios cuando hay diferencias en el estado', () => {
-    const lastSnapshot = {
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
 
-    const currentData = {
-      status: 'actualizado',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+test('checkForChanges - Debe detectar cambios cuando hay diferencias en el estado', () => {
+  const lastSnapshot = {
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-    expect(checkForChanges(lastSnapshot, currentData)).toBe(true);
-  });
+  const currentData = {
+    status: 'actualizado',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-  test('No debe detectar cambios cuando todo es igual', () => {
-    const lastSnapshot = {
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+  assert.strictEqual(checkForChanges(lastSnapshot, currentData), true);
+});
 
-    const currentData = {
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+test('checkForChanges - No debe detectar cambios cuando todo es igual', () => {
+  const lastSnapshot = {
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-    expect(checkForChanges(lastSnapshot, currentData)).toBe(false);
-  });
+  const currentData = {
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-  test('Debe detectar cambios si no hay snapshot previo', () => {
-    const lastSnapshot = null;
+  assert.strictEqual(checkForChanges(lastSnapshot, currentData), false);
+});
 
-    const currentData = {
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+test('checkForChanges - Debe detectar cambios si no hay snapshot previo', () => {
+  const lastSnapshot = null;
 
-    expect(checkForChanges(lastSnapshot, currentData)).toBe(true);
-  });
+  const currentData = {
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
+
+  assert.strictEqual(checkForChanges(lastSnapshot, currentData), true);
 });
 
 
-// Crear un mock de la base de datos
+// **Mock de la base de datos**
 const dbMock = new SequelizeMock();
 const MockHostSnapshot = dbMock.define('HostSnapshot', {
   host_id: 1,
@@ -66,39 +66,75 @@ const MockHostSnapshot = dbMock.define('HostSnapshot', {
   filial_id: 1,
 });
 
-jest.mock('../../models/hostsSnapshot.js', () => MockHostSnapshot);
+// **Antes de cada prueba, limpia los datos en el mock**
+beforeEach(async () => {
+  await MockHostSnapshot.destroy({ where: {} });
+});
 
-describe('handleHostSnapshot', () => {
-  test('Debe crear un nuevo snapshot si hay cambios', async () => {
-    const host = {
-      id: 1,
-      name: 'test-host',
-      status: 'actualizado',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+// **Tests para handleHostSnapshot**
 
-    await handleHostSnapshot(host, 'workstation');
+test('handleHostSnapshot - Debe crear un nuevo snapshot si hay cambios', async () => {
+  const host = {
+    id: 1,
+    name: 'test-host',
+    status: 'actualizado', // Cambio en el estado
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-    const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
-    expect(snapshots.length).toBe(1);
-    expect(snapshots[0].status).toBe('actualizado');
-  });
+  // Primer snapshot
+  await handleHostSnapshot(host, 'workstation');
 
-  test('No debe crear un nuevo snapshot si no hay cambios', async () => {
-    const host = {
-      id: 1,
-      name: 'test-host',
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 1,
-    };
+  const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
+  assert.strictEqual(snapshots.length, 1); // Se ha creado un snapshot
+  assert.strictEqual(snapshots[0].status, 'actualizado'); // Validar el estado
+});
 
-    await handleHostSnapshot(host, 'workstation');
+test('handleHostSnapshot - No debe crear un nuevo snapshot si no hay cambios', async () => {
+  const host = {
+    id: 1,
+    name: 'test-host',
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
 
-    const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
-    expect(snapshots.length).toBe(1);
-  });
+  // Primer snapshot
+  await handleHostSnapshot(host, 'workstation');
+
+  // Segundo snapshot (sin cambios)
+  await handleHostSnapshot(host, 'workstation');
+
+  const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
+  assert.strictEqual(snapshots.length, 1); // No debe haberse creado un nuevo snapshot
+});
+
+test('handleHostSnapshot - Debe mantener solo los 2 snapshots más recientes', async () => {
+  const host = {
+    id: 1,
+    name: 'test-host',
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 1,
+  };
+
+  // 🔄 Crear tres snapshots con cambios en cada uno
+  host.status = 'actualizado';
+  await handleHostSnapshot(host, 'workstation');
+  
+  host.status = 'pendiente';
+  await handleHostSnapshot(host, 'workstation');
+  
+  host.status = 'fallido';
+  await handleHostSnapshot(host, 'workstation');
+
+  const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
+  assert.strictEqual(snapshots.length, 2); // Solo deben quedar 2 snapshots
+
+  // Validar que los estados sean los más recientes
+  assert.strictEqual(snapshots[0].status, 'fallido');
+  assert.strictEqual(snapshots[1].status, 'pendiente');
 });
