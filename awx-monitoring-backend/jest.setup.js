@@ -14,8 +14,3 @@ global.MockHostSnapshot = dbMock.define('HostSnapshot', {
 beforeEach(async () => {
   await MockHostSnapshot.destroy({ where: {} });
 });
-
-afterAll(async () => {
-    await dbMock.close(); // Cerrar el mock de Sequelize
-  });
-  
