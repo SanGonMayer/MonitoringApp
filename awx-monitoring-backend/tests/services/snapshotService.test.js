@@ -50,24 +50,24 @@ describe('📊 Snapshot Service Tests', () => {
   // ✅ Tests para handleHostSnapshot
   // ==========================
   describe('📝 handleHostSnapshot', () => {
-    test('Debe agregar un snapshot si el host no tiene registros previos', async () => {
-      const newHost = {
-        id: 999,
-        name: 'new-host',
-        status: 'pendiente',
-        enabled: true,
-        inventory_id: 22,
-        filial_id: 3,
-      };
-
-      await handleHostSnapshot(newHost, 'workstation');
-
-      const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 999 } });
-
-      expect(snapshots.length).toBe(1);
-      expect(snapshots[0].get('host_name')).toBe('new-host');
-      expect(snapshots[0].get('status')).toBe('pendiente');
-    });
+    test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registros previos', async () => {
+        const newHost = {
+          id: 999,
+          name: 'new-host',
+          status: 'pendiente',
+          enabled: true,
+          inventory_id: 22,
+          filial_id: 3,
+        };
+      
+        await handleHostSnapshot(newHost, 'workstation');
+      
+        const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 999 } });
+      
+        expect(snapshots.length).toBe(1);
+        expect(snapshots[0].getDataValue('host_name')).toBe('new-host'); // 🔄 Usar getDataValue
+        expect(snapshots[0].getDataValue('status')).toBe('pendiente');
+      });
 
     test('Debe crear un nuevo snapshot si cambia la filial', async () => {
       const initialHost = {
