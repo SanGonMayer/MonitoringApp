@@ -76,12 +76,6 @@ const MockHostSnapshot = dbMock.define('HostSnapshot', {
 beforeEach(async () => {
     await MockHostSnapshot.destroy({ where: {} });
   });
-  
-
-
-// ===============================
-// Tests para handleHostSnapshot
-// ===============================
 
 // ===============================
 // Test: Nuevo Host Sin Registro Previo
