@@ -57,17 +57,17 @@ test('checkForChanges - Debe detectar cambios si no hay snapshot previo', () => 
 
 const dbMock = new SequelizeMock();
 const MockHostSnapshot = dbMock.define('HostSnapshot', {
-    host_id: { type: 'INTEGER' },
-    host_name: { type: 'STRING' },
-    status: { type: 'STRING' },
-    enabled: { type: 'BOOLEAN' },
-    inventory_id: { type: 'INTEGER' },
-    filial_id: { type: 'INTEGER' },
-    snapshot_date: { type: 'DATE' },
+    host_id: 999,
+    host_name: 'new-host',
+    status: 'pendiente',
+    enabled: true,
+    inventory_id: 22,
+    filial_id: 3,
+    snapshot_date: new Date(),
   }, {
     instanceMethods: {
-      get: function (field) {
-        return this.dataValues[field];
+      get(field) {
+        return this.getDataValue(field);
       }
     }
   });
