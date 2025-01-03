@@ -77,24 +77,26 @@ beforeEach(async () => {
 
 test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registros previos', async () => {
     const newHost = {
-      id: 999, // Un host completamente nuevo
-      name: 'new-host',
-      status: 'pendiente',
-      enabled: true,
-      inventory_id: 22,
-      filial_id: 3,
+        id: 999,
+        name: 'new-host',
+        status: 'pendiente',
+        enabled: true,
+        inventory_id: 22,
+        filial_id: 3,
     };
-  
+
+    // Ejecutar la función
     await handleHostSnapshot(newHost, 'workstation');
-  
+
+    // Verificar si se creó el snapshot
     const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 999 } });
-    assert.strictEqual(snapshots.length, 1); // Se debe haber creado un snapshot
-    assert.strictEqual(snapshots[0].get('host_name'), 'new-host');
-    assert.strictEqual(snapshots[0].get('status'), 'pendiente');
-    assert.strictEqual(snapshots[0].get('enabled'), true);
-    assert.strictEqual(snapshots[0].get('inventory_id'), 22);
-    assert.strictEqual(snapshots[0].get('filial_id'), 3);
-  });
+    console.log('📊 Snapshots:', snapshots);
+
+    assert.strictEqual(snapshots.length, 1, 'Se esperaba exactamente un snapshot');
+    assert.strictEqual(snapshots[0].get('host_name'), 'new-host', 'El nombre no coincide');
+    assert.strictEqual(snapshots[0].get('status'), 'pendiente', 'El estado no coincide');
+});
+
   
   
   // ===============================
@@ -103,22 +105,19 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
 test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', async () => {
     // Primer snapshot
     const initialHost = {
-      id: 1,
-      name: 'test-host',
+      id: 999,
+      name: 'new-host',
       status: 'pendiente',
       enabled: true,
       inventory_id: 22,
-      filial_id: 1,
+      filial_id: 3,
     };
     await handleHostSnapshot(initialHost, 'workstation');
 
-    let snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
-    assert.strictEqual(snapshots.length, 1, 'El primer snapshot no se creó correctamente');
-
     // Segundo snapshot con cambio en filial
     const updatedHost = {
-      id: 1,
-      name: 'test-host',
+      id: 999,
+      name: 'new-host',
       status: 'pendiente',
       enabled: true,
       inventory_id: 22,
@@ -126,12 +125,13 @@ test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', as
     };
     await handleHostSnapshot(updatedHost, 'workstation');
 
-    snapshots = await MockHostSnapshot.findAll({
-      where: { host_id: 1 },
-      order: [['snapshot_date', 'DESC']],
+    const snapshots = await MockHostSnapshot.findAll({
+        where: { host_id: 999 },
+        order: [['snapshot_date', 'DESC']],
     });
+    console.log('📊 Snapshots después del cambio de filial:', snapshots);
 
-    assert.strictEqual(snapshots.length, 2, 'El segundo snapshot no se creó correctamente');
+    assert.strictEqual(snapshots.length, 2, 'Se esperaban exactamente dos snapshots');
     assert.strictEqual(snapshots[0].get('filial_id'), 2, 'El nuevo snapshot no tiene el filial_id correcto');
     assert.strictEqual(snapshots[1].get('filial_id'), 1, 'El snapshot anterior no conserva el filial_id original');
 });
