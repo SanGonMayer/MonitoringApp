@@ -1,4 +1,4 @@
-import { checkForChanges, handleHostSnapshot } from '../../services/snapshotService.js';
+import { handleHostSnapshot, checkForChanges } from '../../services/snapshotService.js';
 
 describe('📊 Snapshot Service Tests', () => {
   // 🧹 Limpieza antes de cada prueba

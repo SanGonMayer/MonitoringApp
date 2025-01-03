@@ -1,6 +1,6 @@
-import SequelizeMock from 'sequelize-mock';
+const SequelizeMock = await import('sequelize-mock');
 
-const dbMock = new SequelizeMock();
+global.dbMock = new SequelizeMock.default();
 global.MockHostSnapshot = dbMock.define('HostSnapshot', {
   host_id: { type: 'INTEGER' },
   host_name: { type: 'STRING' },
