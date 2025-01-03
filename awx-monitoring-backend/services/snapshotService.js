@@ -39,58 +39,59 @@ const takeDailySnapshot = async () => {
  * @param {string} tipo - Tipo de host ('workstation' o 'cctv').
  */
 const handleHostSnapshot = async (host, tipo) => {
-  try {
-    const { id, name, status, enabled, inventory_id, filial_id } = host;
-
-    console.log(`📝 Procesando snapshot para ${tipo} - ID: ${id}, Nombre: ${name}`);
-
-    // Obtener el snapshot más reciente del host
-    const lastSnapshot = await HostSnapshot.findOne({
-      where: { host_id: id },
-      order: [['snapshot_date', 'DESC']],
-    });
-
-    const hasChanges = checkForChanges(lastSnapshot, {
-      status,
-      enabled,
-      inventory_id,
-      filial_id,
-    });
-
-    if (hasChanges || !lastSnapshot) {
-      // Si hay cambios o es el primer snapshot, crear uno nuevo
-      await HostSnapshot.create({
-        host_id: id,
-        host_name: name,
+    try {
+      const { id, name, status, enabled, inventory_id, filial_id } = host;
+  
+      console.log(`📝 Procesando snapshot para ${tipo} - ID: ${id}, Nombre: ${name}`);
+  
+      // Obtener el snapshot más reciente del host
+      const lastSnapshot = await HostSnapshot.findOne({
+        where: { host_id: id },
+        order: [['snapshot_date', 'DESC']],
+      });
+  
+      const hasChanges = checkForChanges(lastSnapshot, {
         status,
         enabled,
         inventory_id,
         filial_id,
-        snapshot_date: new Date(),
       });
-
-      console.log(`✅ Nuevo snapshot creado para ${tipo} ${name} (ID: ${id}).`);
-
-      // Mantener solo los 2 snapshots más recientes
-      const snapshots = await HostSnapshot.findAll({
-        where: { host_id: id },
-        order: [['snapshot_date', 'DESC']],
-      });
-
-      if (snapshots.length > 2) {
-        const oldestSnapshot = snapshots.slice(2); // Obtener los más antiguos después de los dos primeros
-        for (const snapshot of oldestSnapshot) {
-          await snapshot.destroy();
-          console.log(`🗑️ Snapshot más antiguo eliminado para ${tipo} ${name} (ID: ${id}).`);
+  
+      if (!lastSnapshot || hasChanges) {
+        await HostSnapshot.create({
+          host_id: id,
+          host_name: name, 
+          status,
+          enabled,
+          inventory_id,
+          filial_id,
+          snapshot_date: new Date(),
+        });
+  
+        console.log(`✅ Nuevo snapshot creado para ${tipo} ${name} (ID: ${id}).`);
+  
+        // Mantener solo los 2 snapshots más recientes
+        const snapshots = await HostSnapshot.findAll({
+          where: { host_id: id },
+          order: [['snapshot_date', 'DESC']],
+        });
+  
+        if (snapshots.length > 2) {
+          const oldestSnapshot = snapshots.slice(2); // Obtener los más antiguos después de los dos primeros
+          for (const snapshot of oldestSnapshot) {
+            await snapshot.destroy();
+            console.log(`🗑️ Snapshot más antiguo eliminado para ${tipo} ${name} (ID: ${id}).`);
+          }
         }
+      } else {
+        console.log(`⚠️ No se detectaron cambios en ${tipo} ${name}. No se creó un nuevo snapshot.`);
       }
-    } else {
-      console.log(`⚠️ No se detectaron cambios en ${tipo} ${name}. No se creó un nuevo snapshot.`);
+    } catch (error) {
+      console.error(`❌ Error al manejar snapshot de host (${host.name}):`, error.message);
+      throw error; 
     }
-  } catch (error) {
-    console.error(`❌ Error al manejar snapshot de host (${host.name}):`, error.message);
-  }
-};
+  };
+  
 
 /**
  * Compara el último snapshot con los datos actuales para detectar cambios.

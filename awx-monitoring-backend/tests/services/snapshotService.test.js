@@ -93,7 +93,7 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
   
     const snapshots = await MockHostSnapshot.findAll({ where: { host_id: 999 } });
     assert.strictEqual(snapshots.length, 1); // Se debe haber creado un snapshot
-    assert.strictEqual(snapshots[0].host_name, 'new-host');
+    assert.strictEqual(snapshots[0].host_name, 'new-host'); // Validar el nombre correcto
     assert.strictEqual(snapshots[0].status, 'pendiente');
   });
   
