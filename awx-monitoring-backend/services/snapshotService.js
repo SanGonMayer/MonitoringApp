@@ -7,7 +7,7 @@ import { Op } from 'sequelize';
  * Toma un snapshot diario de los hosts (Workstations y CCTV).
  * Guarda su estado actual en la tabla HostSnapshots.
  */
-export const takeDailySnapshot = async () => {
+const takeDailySnapshot = async () => {
   try {
     console.log('📸 Iniciando snapshot diario de hosts...');
 
@@ -110,3 +110,5 @@ const checkForChanges = (lastSnapshot, currentData) => {
     lastSnapshot.filial_id !== currentData.filial_id
   );
 };
+
+export { handleHostSnapshot, checkForChanges, takeDailySnapshot };
