@@ -57,18 +57,24 @@ test('checkForChanges - Debe detectar cambios si no hay snapshot previo', () => 
 
 const dbMock = new SequelizeMock();
 const MockHostSnapshot = dbMock.define('HostSnapshot', {
-  host_id: 1,
-  host_name: 'test-host',
-  status: 'pendiente',
-  enabled: true,
-  inventory_id: 22,
-  filial_id: 1,
+  host_id: { type: 'INTEGER' },
+  host_name: { type: 'STRING' },
+  status: { type: 'STRING' },
+  enabled: { type: 'BOOLEAN' },
+  inventory_id: { type: 'INTEGER' },
+  filial_id: { type: 'INTEGER' },
+  snapshot_date: { type: 'DATE' },
 });
 
 // **Antes de cada prueba, limpia los datos en el mock**
 beforeEach(async () => {
-  await MockHostSnapshot.destroy({ where: {} });
-});
+    await MockHostSnapshot.destroy({ where: {} });
+  });
+  
+  afterEach(async () => {
+    await MockHostSnapshot.destroy({ where: {} });
+  });
+  
 
 
 // ===============================
@@ -85,7 +91,7 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
       name: 'new-host',
       status: 'pendiente',
       enabled: true,
-      inventory_id: 55,
+      inventory_id: 22,
       filial_id: 3,
     };
   
@@ -95,7 +101,11 @@ test('handleHostSnapshot - Debe agregar un snapshot si el host no tiene registro
     assert.strictEqual(snapshots.length, 1); // Se debe haber creado un snapshot
     assert.strictEqual(snapshots[0].host_name, 'new-host'); // Validar el nombre correcto
     assert.strictEqual(snapshots[0].status, 'pendiente');
+    assert.strictEqual(snapshots[0].enabled, true);
+    assert.strictEqual(snapshots[0].inventory_id, 22);
+    assert.strictEqual(snapshots[0].filial_id, 3);
   });
+  
   
   // ===============================
   // Test: Detectar Cambio en Número de Filial
