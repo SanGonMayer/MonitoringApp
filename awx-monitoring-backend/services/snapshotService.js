@@ -77,14 +77,14 @@ const handleHostSnapshot = async (host, tipo) => {
         });
   
         if (snapshots.length > 2) {
-          const oldestSnapshot = snapshots.slice(2); // Obtener los más antiguos después de los dos primeros
-          for (const snapshot of oldestSnapshot) {
-            await snapshot.destroy();
-            console.log(`🗑️ Snapshot más antiguo eliminado para ${tipo} ${name} (ID: ${id}).`);
+            const oldestSnapshot = snapshots.slice(2); // Obtener los más antiguos después de los dos primeros
+            for (const snapshot of oldestSnapshot) {
+              await snapshot.destroy();
+              console.log(`🗑️ Snapshot más antiguo eliminado para ${tipo} ${name} (ID: ${id}).`);
+            }
           }
-        }
       } else {
-        console.log(`⚠️ No se detectaron cambios en ${tipo} ${name}. No se creó un nuevo snapshot.`);
+          console.log(`⚠️ No se detectaron cambios en ${tipo} ${name}. No se creó un nuevo snapshot.`);
       }
     } catch (error) {
       console.error(`❌ Error al manejar snapshot de host (${host.name}):`, error.message);

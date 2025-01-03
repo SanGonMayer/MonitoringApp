@@ -111,12 +111,11 @@ test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', as
       filial_id: 1,
     };
     await handleHostSnapshot(initialHost, 'workstation');
-  
-    // Validar que el primer snapshot se creó
+
     let snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 } });
     assert.strictEqual(snapshots.length, 1, 'El primer snapshot no se creó correctamente');
-  
-    // Modificación en filial
+
+    // Segundo snapshot con cambio en filial
     const updatedHost = {
       id: 1,
       name: 'test-host',
@@ -126,13 +125,17 @@ test('handleHostSnapshot - Debe crear un nuevo snapshot si cambia la filial', as
       filial_id: 2, // Cambio en filial
     };
     await handleHostSnapshot(updatedHost, 'workstation');
-  
-    // Validar que el segundo snapshot se creó
-    snapshots = await MockHostSnapshot.findAll({ where: { host_id: 1 }, order: [['snapshot_date', 'DESC']] });
+
+    snapshots = await MockHostSnapshot.findAll({
+      where: { host_id: 1 },
+      order: [['snapshot_date', 'DESC']],
+    });
+
     assert.strictEqual(snapshots.length, 2, 'El segundo snapshot no se creó correctamente');
     assert.strictEqual(snapshots[0].get('filial_id'), 2, 'El nuevo snapshot no tiene el filial_id correcto');
     assert.strictEqual(snapshots[1].get('filial_id'), 1, 'El snapshot anterior no conserva el filial_id original');
-  });
+});
+
   
   
   // ===============================
