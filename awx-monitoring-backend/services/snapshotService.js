@@ -113,26 +113,4 @@ const handleHostSnapshot = async (host, tipo) => {
     }
   };
 
-
-  
-
-/**
- * Compara el último snapshot con los datos actuales para detectar cambios.
- * @param {Object|null} lastSnapshot - Último snapshot del host.
- * @param {Object} currentData - Datos actuales del host.
- * @returns {boolean} - Verdadero si hay cambios, falso si no.
- */
-const checkForChanges = (lastSnapshot, currentData) => {
-  if (!lastSnapshot) {
-    return true; // Si no hay snapshot previo, siempre hay cambios
-  }
-
-  return (
-    lastSnapshot.status !== currentData.status ||
-    lastSnapshot.enabled !== currentData.enabled ||
-    lastSnapshot.inventory_id !== currentData.inventory_id ||
-    lastSnapshot.filial_id !== currentData.filial_id
-  );
-};
-
-export { handleHostSnapshot, checkForChanges, takeDailySnapshot, getLastSnapshot, hasSnapshotChanged, createAndManageSnapshots };
+export { handleHostSnapshot, takeDailySnapshot, getLastSnapshot, hasSnapshotChanged, createAndManageSnapshots };
