@@ -59,6 +59,7 @@ import sequelize from 'sequelize';
         enabled: true,
         inventory_id: 22,
         filial_id: 3,
+        snapshot_date: new Date(),
       };
   
       await handleHostSnapshot(newHost, 'workstation');
@@ -127,15 +128,32 @@ import sequelize from 'sequelize';
   
     // ✅ 6. Mantener solo los 2 snapshots más recientes
     test('Debe mantener solo los 2 snapshots más recientes', async () => {
-      const host = { id: 1, name: 'test-host', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 1 };
-  
-      for (let state of ['pendiente', 'actualizado', 'fallido']) {
-        host.status = state;
-        await handleHostSnapshot(host, 'workstation');
-      }
-  
-      const snapshots = await HostSnapshot.findAll({ where: { host_id: 1 } });
-  
+      const host = { 
+        id: 999, 
+        name: 'test', 
+        status: 'pendiente', 
+        enabled: true, 
+        inventory_id: 22, 
+        filial_id: 1 
+      };
+    
+      host.status = 'actualizado';
+      await handleHostSnapshot({ ...host, snapshot_date: new Date(Date.now() - 3000) }, 'workstation');
+    
+      host.status = 'fallido';
+      await handleHostSnapshot({ ...host, snapshot_date: new Date(Date.now() - 2000) }, 'workstation');
+    
+      host.status = 'operativo';
+      await handleHostSnapshot({ ...host, snapshot_date: new Date(Date.now() - 1000) }, 'workstation');
+    
+      const snapshots = await HostSnapshot.findAll({
+        where: { host_id: 999 },
+        order: [['snapshot_date', 'DESC']],
+      });
+    
       expect(snapshots.length).toBe(2);
+      expect(snapshots[0].status).toBe('operativo');
+      expect(snapshots[1].status).toBe('fallido');
     });
+    
   });
