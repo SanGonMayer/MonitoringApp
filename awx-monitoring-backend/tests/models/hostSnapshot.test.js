@@ -1,10 +1,6 @@
 import HostSnapshot from '../../models/hostsSnapshot.js';
-import { setupTestDB } from '../../config/setupTestDB.js';
 import { beforeAll, describe, expect, test } from '@jest/globals';
 
-beforeAll(async () => {
-  await setupTestDB();
-});
 
 describe('📊 Modelo HostSnapshot', () => {
   test('Debe crear un snapshot correctamente', async () => {
