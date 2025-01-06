@@ -67,15 +67,30 @@ const createAndManageSnapshots = async (snapshotData) => {
     console.log(`✅ Nuevo snapshot creado para host ID: ${snapshotData.host_id}`);
   
     // Mantener solo los 2 snapshots más recientes
-    const snapshots = await HostSnapshot.findAll({
+    /*const snapshots = await HostSnapshot.findAll({
       where: { host_id: snapshotData.host_id },
       order: [['snapshot_date', 'DESC']],
-    });
-  
-    while (snapshots.length > 2) {
+    });*/
+    /*while (snapshots.length > 2) {
       const oldestSnapshot = snapshots.pop(); // Elimina el último snapshot de la lista ordenada
       await oldestSnapshot.destroy();
       console.log(`🗑️ Snapshot más antiguo eliminado para host ID: ${snapshotData.host_id}`);
+    }*/
+
+    const snapshotCount = await HostSnapshot.count({
+      where: { host_id: snapshotData.host_id },
+    });
+
+    if (snapshotCount > 2) {
+      const oldestSnapshot = await HostSnapshot.findOne({
+        where: { host_id: snapshotData.host_id },
+        order: [['snapshot_date', 'ASC']], // Obtener el más antiguo
+      });
+  
+      if (oldestSnapshot) {
+        await oldestSnapshot.destroy();
+        console.log(`🗑️ Snapshot más antiguo eliminado para host ID: ${snapshotData.host_id}`);
+      }
     }
   };
 
