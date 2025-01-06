@@ -104,15 +104,25 @@ import sequelize from 'sequelize';
     test('Debe crear un nuevo snapshot si cambia enabled', async () => {
       const initialHost = { id: 1, name: 'test-host', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 1 };
       await handleHostSnapshot(initialHost, 'workstation');
-  
+    
       const updatedHost = { ...initialHost, enabled: false };
       await handleHostSnapshot(updatedHost, 'workstation');
-  
-      const snapshots = await HostSnapshot.findAll({ where: { host_id: 1 } });
-  
+    
+      const snapshots = await HostSnapshot.findAll({
+        where: { host_id: 1 },
+        order: [['snapshot_date', 'DESC']],
+      });
+    
+      console.log('📊 Snapshots después del cambio en enabled:', snapshots.map(s => ({
+        id: s.id,
+        enabled: s.enabled,
+        snapshot_date: s.snapshot_date,
+      })));
+    
       expect(snapshots.length).toBe(2);
-      expect(snapshots[0].enabled).toBe(false);
+      expect(snapshots[0].enabled).toBe(false); // Validar el snapshot más reciente
     });
+    
   
     // ✅ 5. No crear snapshot si no hay cambios
     test('No debe crear un nuevo snapshot si no hay cambios', async () => {

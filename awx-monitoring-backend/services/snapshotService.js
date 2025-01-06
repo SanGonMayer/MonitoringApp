@@ -111,6 +111,15 @@ const handleHostSnapshot = async (host, tipo) => {
       });
   
       if (!lastSnapshot || hasChanges) {
+        console.log(`📝 Datos del snapshot que se van a crear:`, {
+          id,
+          name,
+          status,
+          enabled,
+          inventory_id,
+          filial_id,
+        });
+        
         await createAndManageSnapshots({
           host_id: id,
           host_name: name,
