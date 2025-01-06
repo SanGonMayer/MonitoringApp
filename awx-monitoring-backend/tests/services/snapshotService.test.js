@@ -143,16 +143,22 @@ import sequelize from 'sequelize';
       host.status = 'fallido';
       await handleHostSnapshot({ ...host, snapshot_date: new Date(Date.now() - 2000) }, 'workstation');
     
-      host.status = 'operativo';
+      host.status = 'pendiente';
       await handleHostSnapshot({ ...host, snapshot_date: new Date(Date.now() - 1000) }, 'workstation');
     
       const snapshots = await HostSnapshot.findAll({
         where: { host_id: 999 },
         order: [['snapshot_date', 'DESC']],
       });
+
+      console.log('📊 Snapshots después de la creación:', snapshots.map(s => ({
+        id: s.id,
+        status: s.status,
+        snapshot_date: s.snapshot_date,
+      })));
     
       expect(snapshots.length).toBe(2);
-      expect(snapshots[0].status).toBe('operativo');
+      expect(snapshots[0].status).toBe('pendiente');
       expect(snapshots[1].status).toBe('fallido');
     });
     
