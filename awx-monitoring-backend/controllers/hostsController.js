@@ -406,7 +406,7 @@ export const getHostsByFilialSNRO = async (req, res) => {
     
       const hostsWithStatus = hosts.map(host => {
         const jobSummaries = (host.jobSummaries || [])
-          .filter(summary => new Date(summary.jobCreationDate) >= new Date('2024-11-28')) // Filtrar trabajos a partir del 11/11/2024
+          .filter(summary => new Date(summary.jobCreationDate) >= new Date('2025-01-06')) // Filtrar trabajos a partir del 11/11/2024
           .sort((a, b) => new Date(b.jobCreationDate) - new Date(a.jobCreationDate));
     
         console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos ordenados por fecha de creación.`);
