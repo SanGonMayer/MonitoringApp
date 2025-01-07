@@ -45,6 +45,17 @@ const getLastSnapshot = async (hostId) => {
     });
   };
 
+  const determineChangeReason = (lastSnapshot, currentData) => {
+    if (!lastSnapshot) return 'Host agregado';
+  
+    if (lastSnapshot.status !== currentData.status) return 'Modificación de estado';
+    if (lastSnapshot.inventory_id !== currentData.inventory_id) return 'Modificación de inventario';
+    if (lastSnapshot.filial_id !== currentData.filial_id) return 'Modificación de filial';
+    if (lastSnapshot.enabled !== currentData.enabled) return 'Modificación de habilitación';
+  
+    return 'Otro cambio';
+  };
+
 /**
  * Compara el último snapshot con los datos actuales.
  */
@@ -113,6 +124,14 @@ const handleHostSnapshot = async (host, tipo) => {
       });
   
       if (!lastSnapshot || hasChanges) {
+
+        const motivo = determineChangeReason(lastSnapshot, {
+          status,
+          enabled,
+          inventory_id,
+          filial_id,
+        });
+
         console.log(`📝 Datos del snapshot que se van a crear:`, {
           id,
           name,
@@ -120,6 +139,7 @@ const handleHostSnapshot = async (host, tipo) => {
           enabled,
           inventory_id,
           filial_id,
+          motivo,
         });
         
         await createAndManageSnapshots({
@@ -129,6 +149,7 @@ const handleHostSnapshot = async (host, tipo) => {
           enabled,
           inventory_id,
           filial_id,
+          motivo,
         });
 
         modifiedHosts.push({
@@ -140,6 +161,7 @@ const handleHostSnapshot = async (host, tipo) => {
           filial_id,
           tipo,
           snapshot_date: new Date(),
+          motivo,
       });
 
       } else {
