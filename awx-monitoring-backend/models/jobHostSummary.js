@@ -32,11 +32,6 @@ const JobHostSummary = sequelize.define('JobHostSummary', {
     type: DataTypes.DATE,
     allowNull: false
   },
-  motivo: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-    defaultValue: null,
-  }
 });
 
 

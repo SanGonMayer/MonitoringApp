@@ -36,6 +36,11 @@ const HostSnapshot = sequelize.define('HostSnapshot', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  motivo: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    defaultValue: null,
+  }
 });
 
 export default HostSnapshot;
