@@ -3,6 +3,8 @@ import CCTV from '../models/cctv.js';
 import HostSnapshot from '../models/hostsSnapshot.js';
 import { Op } from 'sequelize';
 
+const modifiedHosts = [];
+
 /**
  * Toma un snapshot diario de los hosts (Workstations y CCTV).
  * Guarda su estado actual en la tabla HostSnapshots.
@@ -128,6 +130,18 @@ const handleHostSnapshot = async (host, tipo) => {
           inventory_id,
           filial_id,
         });
+
+        modifiedHosts.push({
+          id,
+          name,
+          status,
+          enabled,
+          inventory_id,
+          filial_id,
+          tipo,
+          snapshot_date: new Date(),
+      });
+
       } else {
         console.log(`⚠️ No se detectaron cambios en ${tipo} ${name}. No se creó un nuevo snapshot.`);
       }
@@ -137,4 +151,12 @@ const handleHostSnapshot = async (host, tipo) => {
     }
   };
 
-export { handleHostSnapshot, takeDailySnapshot, getLastSnapshot, hasSnapshotChanged, createAndManageSnapshots };
+  const getModifiedHostsReport = () => {
+    return modifiedHosts;
+};
+
+const clearModifiedHosts = () => {
+  modifiedHosts.length = 0;
+};
+
+export { handleHostSnapshot, takeDailySnapshot, getLastSnapshot, hasSnapshotChanged, createAndManageSnapshots, getModifiedHostsReport, clearModifiedHosts };

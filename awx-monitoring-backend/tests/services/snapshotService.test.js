@@ -2,9 +2,11 @@ import { handleHostSnapshot, takeDailySnapshot, getLastSnapshot, hasSnapshotChan
 import { beforeEach, describe, expect, test } from '@jest/globals';
 import { HostSnapshot } from '../../models/index.js';
 import sequelize from 'sequelize';
-  // ==========================
-  // ✅ Tests para hasSnapshotChanged
-  // ==========================
+  
+// ==========================
+// Tests para hasSnapshotChanged
+// ==========================
+
   describe('🔄 hasSnapshotChanged', () => {
     test('Debe detectar cambios cuando varía el estado', () => {
       const lastSnapshot = { status: 'pendiente' };
@@ -42,15 +44,16 @@ import sequelize from 'sequelize';
     });
   });
 
-  // ==========================
-  // ✅ Tests para handleHostSnapshot
-  // ==========================
+// ==========================
+// Tests para handleHostSnapshot
+// ==========================
+
   describe('📝 handleHostSnapshot', () => {
     beforeEach(async () => {
       await HostSnapshot.destroy({ where: {} });
     });
   
-    // ✅ 1. Agregar snapshot si no hay registros previos
+    // 1. Agregar snapshot si no hay registros previos
     test('Debe agregar un snapshot si el host no tiene registros previos', async () => {
       const newHost = {
         id: 999,
@@ -70,7 +73,7 @@ import sequelize from 'sequelize';
       expect(snapshots[0].status).toBe('pendiente');
     });
   
-    // ✅ 2. Crear snapshot si cambia la filial
+    // 2. Crear snapshot si cambia la filial
     test('Debe crear un nuevo snapshot si cambia la filial', async () => {
       const initialHost = { id: 999, name: 'test', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 3 };
       await handleHostSnapshot(initialHost, 'workstation');
@@ -85,7 +88,7 @@ import sequelize from 'sequelize';
       expect(snapshots[1].filial_id).toBe(3);
     });
   
-    // ✅ 3. Crear snapshot si cambia el estado
+    // 3. Crear snapshot si cambia el estado
     test('Debe crear un nuevo snapshot si cambia el estado', async () => {
       const initialHost = { id: 999, name: 'test', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 1 };
       await handleHostSnapshot(initialHost, 'workstation');
@@ -100,7 +103,7 @@ import sequelize from 'sequelize';
       expect(snapshots[1].status).toBe('pendiente');
     });
   
-    // ✅ 4. Crear snapshot si cambia enabled
+    // 4. Crear snapshot si cambia enabled
     test('Debe crear un nuevo snapshot si cambia enabled', async () => {
       const initialHost = { id: 1, name: 'test-host', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 1 };
       await handleHostSnapshot(initialHost, 'workstation');
@@ -124,7 +127,7 @@ import sequelize from 'sequelize';
     });
     
   
-    // ✅ 5. No crear snapshot si no hay cambios
+    // 5. No crear snapshot si no hay cambios
     test('No debe crear un nuevo snapshot si no hay cambios', async () => {
       const host = { id: 1, name: 'test-host', status: 'pendiente', enabled: true, inventory_id: 22, filial_id: 1 };
       await handleHostSnapshot(host, 'workstation');
@@ -136,7 +139,7 @@ import sequelize from 'sequelize';
       expect(snapshots.length).toBe(1);
     });
   
-    // ✅ 6. Mantener solo los 2 snapshots más recientes
+    // 6. Mantener solo los 2 snapshots más recientes
     test('Debe mantener solo los 2 snapshots más recientes', async () => {
       const host = { 
         id: 999, 
