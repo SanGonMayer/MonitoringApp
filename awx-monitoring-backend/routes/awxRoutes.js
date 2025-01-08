@@ -19,6 +19,7 @@ awxRoutes.post('/api/sync', async (req, res) => {
     try {
         await startDataSync();
         res.status(200).json({ message: 'Sincronización de datos completada.' });
+        const { takeDailySnapshot } = await import('../services/snapshotService.js');
         takeDailySnapshot()
           .then(() => console.log('Snapshot diario completado.'))
           .catch((error) => console.error('Error al tomar snapshot diario:', error.message));
