@@ -19,11 +19,15 @@ awxRoutes.post('/api/sync', async (req, res) => {
     try {
         await startDataSync();
         res.status(200).json({ message: 'Sincronización de datos completada.' });
-        await takeDailySnapshot();
+        takeDailySnapshot()
+          .then(() => console.log('Snapshot diario completado.'))
+          .catch((error) => console.error('Error al tomar snapshot diario:', error.message));
     } catch (error) {
         console.error('Error en la sincronización manual:', error.message);
+        if(!res.headersSent){
         res.status(500).json({ error: 'Error en la sincronización manual: ' + error.message });
     }
+  }
 });
 
 awxRoutes.get('/api/db/filiales', async (req, res) => {
