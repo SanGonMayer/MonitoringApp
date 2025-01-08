@@ -9,7 +9,6 @@ import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 import { getLatestCSV } from '../services/notificadorService.js';
-import { takeDailySnapshot } from '../services/snapshotService.js';
 
 export const awxRoutes = Router();
 
@@ -19,8 +18,8 @@ awxRoutes.get('/api/awx/inventories/:inventoryId/groups/:groupId/hosts', GroupHo
 awxRoutes.post('/api/sync', async (req, res) => {
     try {
         await startDataSync();
-        await takeDailySnapshot();
         res.status(200).json({ message: 'Sincronización de datos completada.' });
+        await takeDailySnapshot();
     } catch (error) {
         console.error('Error en la sincronización manual:', error.message);
         res.status(500).json({ error: 'Error en la sincronización manual: ' + error.message });

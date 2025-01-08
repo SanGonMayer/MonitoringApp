@@ -9,7 +9,7 @@ const modifiedHosts = [];
  * Toma un snapshot diario de los hosts (Workstations y CCTV).
  * Guarda su estado actual en la tabla HostSnapshots.
  */
-const takeDailySnapshot = async () => {
+export const takeDailySnapshot = async () => {
   try {
     console.log('📸 Iniciando snapshot diario de hosts...');
 
@@ -38,7 +38,7 @@ const takeDailySnapshot = async () => {
 /**
  * Obtiene el último snapshot de un host.
  */
-const getLastSnapshot = async (hostId) => {
+export const getLastSnapshot = async (hostId) => {
     return await HostSnapshot.findOne({
       where: { host_id: hostId },
       order: [['snapshot_date', 'DESC']],
@@ -59,7 +59,7 @@ const getLastSnapshot = async (hostId) => {
 /**
  * Compara el último snapshot con los datos actuales.
  */
-const hasSnapshotChanged = (lastSnapshot, currentData) => {
+export const hasSnapshotChanged = (lastSnapshot, currentData) => {
     if (!lastSnapshot) return true;
     return (
       lastSnapshot.status !== currentData.status ||
@@ -72,7 +72,7 @@ const hasSnapshotChanged = (lastSnapshot, currentData) => {
 /**
  * Crea un nuevo snapshot y asegura que solo existan los dos más recientes.
  */
-const createAndManageSnapshots = async (snapshotData) => {
+export const createAndManageSnapshots = async (snapshotData) => {
     await HostSnapshot.create({
       ...snapshotData,
       snapshot_date: new Date(),
@@ -110,7 +110,7 @@ const createAndManageSnapshots = async (snapshotData) => {
 /**
  * Maneja el snapshot para un host específico.
  */
-const handleHostSnapshot = async (host, tipo) => {
+export const handleHostSnapshot = async (host, tipo) => {
     try {
       const { id, name, status, enabled, inventory_id, filial_id } = host;
       console.log(`📝 Procesando snapshot para ${tipo} - ID: ${id}, Nombre: ${name}`);
@@ -177,8 +177,6 @@ const handleHostSnapshot = async (host, tipo) => {
     return modifiedHosts;
 };
 
-const clearModifiedHosts = () => {
+export const clearModifiedHosts = () => {
   modifiedHosts.length = 0;
 };
-
-export { handleHostSnapshot, takeDailySnapshot, getLastSnapshot, hasSnapshotChanged, createAndManageSnapshots, getModifiedHostsReport, clearModifiedHosts };
