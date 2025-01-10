@@ -1,3 +1,5 @@
+const Swal = require('sweetalert2');
+
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
@@ -74,6 +76,13 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 
   async function launchJobWol(hostname,fromPage) {
     try {
+
+    // Validar credenciales
+    const credentials = await validateCredentials();
+    if (!credentials) {
+      alert("No se puede ejecutar el job sin credenciales válidas.");
+      return; 
+    }
 
       console.log("Iniciando ejecución del job para el host:", hostname);
 
@@ -192,6 +201,43 @@ async function fetchHostsFromDBSrno(filialId, tipoTerminal) {
     return [];
   }
 }
+
+async function validateCredentials() {
+  return new Promise((resolve) => {
+
+    Swal.fire({
+      title: "Ingrese sus credenciales",
+      html:
+        '<input id="swal-username" class="swal2-input" placeholder="Usuario">' +
+        '<input id="swal-password" class="swal2-input" placeholder="Contraseña" type="password">',
+      focusConfirm: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Aceptar",
+      preConfirm: () => {
+        const username = document.getElementById("swal-username").value;
+        const password = document.getElementById("swal-password").value;
+
+        const validUsername = process.env.USUARIO_PARCIAL;
+        const validPassword = process.env.PASSWORD_PARCIAL;
+
+        if (username !== validUsername || password !== validPassword) {
+          Swal.showValidationMessage("Credenciales incorrectas");
+          return null;
+        }
+
+        return { username, password };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        resolve(result.value); 
+      } else {
+        resolve(null); 
+      }
+    });
+  });
+}
+
   
   window.fetchHostsFromDB = fetchHostsFromDB;
   window.displayHosts = displayHosts;
