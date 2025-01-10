@@ -232,8 +232,12 @@ export async function validateCredentials() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
         });
-
-        const result = await response.json();
+        
+        // Inspecciona la respuesta completa
+        console.log("Response completa:", response);
+        
+        const result = await response.json(); 
+        console.log("Resultado:", result);
 
         if (!result.success) {
           Swal.showValidationMessage("Credenciales incorrectas");
