@@ -1,5 +1,3 @@
-import { credentialsJobs } from '../app.js';
-
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
@@ -224,11 +222,20 @@ export async function validateCredentials() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Aceptar",
-      preConfirm: () => {
+      preConfirm: async () => {
         const username = document.getElementById("swal-username").value;
         const password = document.getElementById("swal-password").value;
 
-        if (username !== credentials.username || password !== credentials.password) {
+        // Enviar credenciales al backend
+        const response = await fetch('/api/validate-credentials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
           Swal.showValidationMessage("Credenciales incorrectas");
           return null;
         }
@@ -244,6 +251,7 @@ export async function validateCredentials() {
     });
   });
 }
+
 
 
 

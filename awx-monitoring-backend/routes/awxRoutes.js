@@ -83,6 +83,20 @@ awxRoutes.get('/test', (req, res) => {
   res.send('La ruta está funcionando');
 });
 
+awxRoutes.post('/api/validate-credentials', (req, res) => {
+  const { username, password } = req.body;
+
+  if (
+    username === process.env.USUARIO_PARCIAL &&
+    password === process.env.PASSWORD_PARCIAL
+  ) {
+    return res.status(200).json({ success: true });
+  }
+
+  return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
+});
+
+
 
 export default awxRoutes;
 
