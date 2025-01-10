@@ -78,9 +78,20 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     // Validar credenciales
     const credentials = await validateCredentials();
     if (!credentials) {
-      alert("No se puede ejecutar el job sin credenciales válidas.");
-      return; 
+
+      Swal.fire({
+        icon: "error",
+        title: "Acceso denegado",
+        text: "No se pudo validar las credenciales",
+      });
+      return;
     }
+
+    Swal.fire({
+      icon: "success",
+      title: "Credenciales aceptadas",
+      text: `Usuario: ${credentials.username}`,
+    });
 
       console.log("Iniciando ejecución del job para el host:", hostname);
 
@@ -219,21 +230,22 @@ export async function validateCredentials() {
         const validPassword = process.env.PASSWORD_PARCIAL;
 
         if (username !== validUsername || password !== validPassword) {
-          Swal.showValidationMessage("Credenciales incorrectas");
+          Swal.showValidationMessage("Credenciales incorrectas"); // Muestra un mensaje de error
           return null;
         }
 
-        return { username, password };
+        return { username, password }; // Retorna las credenciales válidas
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        resolve(result.value); // Credenciales válidas
+        resolve(result.value); // Si las credenciales son válidas, las devuelve
       } else {
-        resolve(null); // Cancelación o cierre del modal
+        resolve(null); // Si se cancela, devuelve null
       }
     });
   });
 }
+
 
   
   window.fetchHostsFromDB = fetchHostsFromDB;
