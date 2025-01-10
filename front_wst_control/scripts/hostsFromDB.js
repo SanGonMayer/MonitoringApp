@@ -1,5 +1,3 @@
-import Swal from 'sweetalert2';
-
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
