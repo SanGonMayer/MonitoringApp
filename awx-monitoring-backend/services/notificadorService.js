@@ -11,6 +11,7 @@ import { Parser } from 'json2csv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import HostSnapshot from '../models/hostsSnapshot.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -252,6 +253,58 @@ export const sendReportViaTelegram = async (report) => {
     } catch (error) {
       console.error('Error al obtener el CSV más reciente:', error.message);
       res.status(500).send('Error al obtener el CSV más reciente.');
+    }
+  };
+
+  export const generateSnapshotChangeReport = async (startDate, outputPath) => {
+    try {
+      console.log('📊 Generando reporte de cambios en snapshots...');
+  
+      // Buscar los snapshots creados desde la fecha proporcionada
+      const changedSnapshots = await HostSnapshot.findAll({
+        where: {
+          snapshot_date: {
+            [Op.gte]: new Date(startDate),
+          },
+        },
+        order: [['snapshot_date', 'DESC']],
+      });
+  
+      if (changedSnapshots.length === 0) {
+        console.log('🔍 No se encontraron cambios recientes en snapshots.');
+        throw new Error('No hay cambios recientes para generar un reporte.');
+      }
+  
+      // Estructurar los datos para el CSV
+      const rows = changedSnapshots.map(snapshot => ({
+        HostID: snapshot.host_id,
+        HostName: snapshot.host_name,
+        Status: snapshot.status,
+        Enabled: snapshot.enabled,
+        InventoryID: snapshot.inventory_id,
+        FilialID: snapshot.filial_id,
+        Motivo: snapshot.motivo,
+        SnapshotDate: snapshot.snapshot_date,
+      }));
+  
+      // Convertir a CSV
+      const parser = new Parser({ fields: Object.keys(rows[0]) });
+      const csvContent = parser.parse(rows);
+  
+      // Asegurar que el directorio de reportes existe
+      if (!fs.existsSync(outputPath)) {
+        fs.mkdirSync(outputPath, { recursive: true });
+      }
+  
+      // Guardar el CSV
+      const filePath = path.join(outputPath, `Snapshot_Changes_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`);
+      fs.writeFileSync(filePath, csvContent, 'utf8');
+  
+      console.log(`✅ CSV de cambios generado en: ${filePath}`);
+      return filePath;
+    } catch (error) {
+      console.error('❌ Error al generar el reporte de cambios en snapshots:', error.message);
+      throw new Error('Error al generar el reporte de cambios en snapshots.');
     }
   };
   
