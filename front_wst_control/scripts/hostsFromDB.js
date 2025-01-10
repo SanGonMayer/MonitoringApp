@@ -1,4 +1,5 @@
-import Swal from 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.mjs';
+<script src="js/sweetalert2.all.min.js"></script>
+
 
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
