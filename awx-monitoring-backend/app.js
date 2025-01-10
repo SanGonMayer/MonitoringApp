@@ -17,6 +17,10 @@ import { Server } from 'socket.io'; // WebSocket con ESModules
 
 dotenv.config();
 
+export const credentialsJobs = {
+  username: process.env.USUARIO_PARCIAL,
+  password: process.env.PASSWORD_PARCIAL,
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

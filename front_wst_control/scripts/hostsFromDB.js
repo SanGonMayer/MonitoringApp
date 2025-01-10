@@ -1,3 +1,5 @@
+import { credentialsJobs } from '../app.js';
+
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
@@ -222,19 +224,11 @@ export async function validateCredentials() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Aceptar",
-      preConfirm: async () => {
+      preConfirm: () => {
         const username = document.getElementById("swal-username").value;
         const password = document.getElementById("swal-password").value;
 
-        const response = await fetch("http://localhost:3000/validate-credentials", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const result = await response.json();
-
-        if (!result.success) {
+        if (username !== credentials.username || password !== credentials.password) {
           Swal.showValidationMessage("Credenciales incorrectas");
           return null;
         }
@@ -243,9 +237,9 @@ export async function validateCredentials() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        resolve(result.value); // Si las credenciales son válidas, las devuelve
+        resolve(result.value); // Credenciales válidas
       } else {
-        resolve(null); // Si se cancela, devuelve null
+        resolve(null); // Usuario canceló o cerró el diálogo
       }
     });
   });
