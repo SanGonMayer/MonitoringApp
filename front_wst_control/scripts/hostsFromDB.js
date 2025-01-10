@@ -1,4 +1,4 @@
-<script src="js/sweetalert2.all.min.js"></script>
+import Swal from '../js/sweetalert2.all.min.js';
 
 
 async function fetchHostsFromDB(filialId, tipoTerminal) {
