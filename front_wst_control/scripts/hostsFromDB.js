@@ -1,5 +1,3 @@
-import Swal from '../js/sweetalert2.all.js';
-
 async function fetchHostsFromDB(filialId, tipoTerminal) {
     try {
       console.log(`Fetching hosts for filial ${filialId} and tipo ${tipoTerminal}`);
@@ -202,9 +200,8 @@ async function fetchHostsFromDBSrno(filialId, tipoTerminal) {
   }
 }
 
-async function validateCredentials() {
+export async function validateCredentials() {
   return new Promise((resolve) => {
-
     Swal.fire({
       title: "Ingrese sus credenciales",
       html:
@@ -230,9 +227,9 @@ async function validateCredentials() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        resolve(result.value); 
+        resolve(result.value); // Credenciales válidas
       } else {
-        resolve(null); 
+        resolve(null); // Cancelación o cierre del modal
       }
     });
   });
