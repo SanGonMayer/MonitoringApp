@@ -222,19 +222,24 @@ export async function validateCredentials() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonText: "Aceptar",
-      preConfirm: () => {
+      preConfirm: async () => {
         const username = document.getElementById("swal-username").value;
         const password = document.getElementById("swal-password").value;
 
-        const validUsername = process.env.USUARIO_PARCIAL;
-        const validPassword = process.env.PASSWORD_PARCIAL;
+        const response = await fetch("http://localhost:3000/validate-credentials", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
 
-        if (username !== validUsername || password !== validPassword) {
-          Swal.showValidationMessage("Credenciales incorrectas"); // Muestra un mensaje de error
+        const result = await response.json();
+
+        if (!result.success) {
+          Swal.showValidationMessage("Credenciales incorrectas");
           return null;
         }
 
-        return { username, password }; // Retorna las credenciales válidas
+        return { username, password };
       },
     }).then((result) => {
       if (result.isConfirmed) {
@@ -245,6 +250,7 @@ export async function validateCredentials() {
     });
   });
 }
+
 
 
   
