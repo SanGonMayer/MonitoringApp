@@ -227,7 +227,7 @@ export async function validateCredentials() {
         const password = document.getElementById("swal-password").value;
 
         // Enviar credenciales al backend
-        const response = await fetch('/api/validate-credentials', {
+        const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/validate-credentials', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
