@@ -9,6 +9,7 @@ import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 import { getLatestCSV } from '../services/notificadorService.js';
+import {generateSnapshotChangeReport} from '../services/notificadorService.js';
 
 export const awxRoutes = Router();
 
@@ -95,6 +96,25 @@ awxRoutes.post('/api/validate-credentials', (req, res) => {
 
   return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
 });
+
+import path from 'path';
+
+awxRoutes.post('/api/generateSnapshotChangeReport', async (req, res) => {
+  const outputPath = path.join(__dirname, 'reports'); 
+  const startDate = new Date().toISOString().split('T')[0]; 
+
+  try {
+    const reportPath = await generateSnapshotChangeReport(startDate, outputPath);
+    res.status(200).json({
+      message: 'Reporte generado exitosamente.',
+      reportPath,
+    });
+  } catch (error) {
+    console.error('Error al generar el reporte:', error.message);
+    res.status(500).json({ error: 'Error al generar el reporte: ' + error.message });
+  }
+});
+
 
 
 
