@@ -98,6 +98,10 @@ awxRoutes.post('/api/validate-credentials', (req, res) => {
 });
 
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 awxRoutes.post('/api/generateSnapshotChangeReport', async (req, res) => {
   const outputPath = path.join(__dirname, 'reports'); 
@@ -114,8 +118,6 @@ awxRoutes.post('/api/generateSnapshotChangeReport', async (req, res) => {
     res.status(500).json({ error: 'Error al generar el reporte: ' + error.message });
   }
 });
-
-
 
 
 export default awxRoutes;
