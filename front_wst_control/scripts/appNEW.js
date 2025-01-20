@@ -1,4 +1,5 @@
 /* ------------------------------------- */
+
 // Variables globales para el estado
 
 window.totalFiliales = 0;

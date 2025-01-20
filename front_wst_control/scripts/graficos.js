@@ -66,6 +66,7 @@
     });
 } */
 
+
 async function crearGraficoCircular(canvaId, tipoTerminal) {
     const labels = ['Actualizadas', 'Pendientes', 'Fallidas'];
     const colors = ['rgb(26,194,23)', 'rgb(255,165,0)', 'rgb(255,0,0)'];
