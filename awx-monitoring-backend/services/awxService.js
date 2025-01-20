@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const username = process.env.AWX_USER_TEST;
-const password = process.env.AWX_USER_TEST_PASS;
+const username = process.env.AWX_SERVER_USER;
+const password = process.env.AWX_SERVER_PASS;
 
 const authConfig = {
   headers: {
