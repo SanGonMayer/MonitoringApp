@@ -128,30 +128,18 @@ awxRoutes.post('/test-email', async (req, res) => {
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: false, // Cambiar a true si usas SSL/TLS
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+    const filePath = path.join(__dirname, 'reports', 'Snapshot_Changes_2025-01-16T18-28-13-347Z.csv');
 
-    const mailOptions = {
-      from: `"Prueba SMTP" <${process.env.SMTP_USER}>`,
-      to: Array.isArray(recipientEmails) ? recipientEmails.join(',') : recipientEmails,
-      subject: 'Correo de Prueba',
-      text: 'Este es un correo de prueba enviado desde la configuración SMTP.',
-    };
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: `El archivo ${filePath} no existe.` });
+    }
 
-    await transporter.sendMail(mailOptions);
+    await sendReportByEmail(filePath, recipientEmails);
 
-    console.log('✅ Correo de prueba enviado exitosamente.');
-    return res.status(200).json({ message: 'Correo de prueba enviado exitosamente.' });
+    return res.status(200).json({ message: 'Correo enviado exitosamente.' });
   } catch (error) {
-    console.error('❌ Error al enviar el correo de prueba:', error.message);
-    return res.status(500).json({ error: 'Error al enviar el correo de prueba.' });
+    console.error('❌ Error al enviar el correo:', error.message);
+    return res.status(500).json({ error: 'Error al enviar el correo.' });
   }
 });
 

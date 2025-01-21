@@ -326,7 +326,7 @@ export const sendReportViaTelegram = async (report) => {
         from: `"Santiago Gonzalez Mayer" <${process.env.SMTP_USER}>`,
         to: Array.isArray(recipientEmails) ? recipientEmails.join(',') : recipientEmails,
         subject: 'Reporte de Cambios en Snapshots',
-        text: 'Adjunto encontrarás el reporte de cambios en snapshots.',
+        text: 'Adjunto se encuentra el reporte de cambios en los hosts en el día de la fecha.',
         attachments: [
           {
             filename: path.basename(filePath),
