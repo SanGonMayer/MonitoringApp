@@ -119,6 +119,42 @@ awxRoutes.post('/api/generateSnapshotChangeReport', async (req, res) => {
   }
 });
 
+awxRoutes.post('/test-email', async (req, res) => {
+  const { recipientEmails } = req.body;
+
+  if (!recipientEmails || recipientEmails.length === 0) {
+    return res.status(400).json({ error: 'Debes proporcionar al menos un correo.' });
+  }
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false, // Cambiar a true si usas SSL/TLS
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `"Prueba SMTP" <${process.env.SMTP_USER}>`,
+      to: Array.isArray(recipientEmails) ? recipientEmails.join(',') : recipientEmails,
+      subject: 'Correo de Prueba',
+      text: 'Este es un correo de prueba enviado desde la configuración SMTP.',
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    console.log('✅ Correo de prueba enviado exitosamente.');
+    return res.status(200).json({ message: 'Correo de prueba enviado exitosamente.' });
+  } catch (error) {
+    console.error('❌ Error al enviar el correo de prueba:', error.message);
+    return res.status(500).json({ error: 'Error al enviar el correo de prueba.' });
+  }
+});
+
+
 
 export default awxRoutes;
 
