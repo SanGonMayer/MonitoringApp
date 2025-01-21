@@ -50,25 +50,25 @@ export const getLastSnapshot = async (hostId) => {
   
     if (lastSnapshot.status !== currentData.status) {
       if (lastSnapshot.status === 'pendiente' && currentData.status === 'actualizado') {
-        return 'Modificación de estado pendiente a actualizado';
+        return 'Modificacion de estado pendiente a actualizado';
       } else if (lastSnapshot.status === 'pendiente' && currentData.status === 'fallido') {
-        return 'Modificación de estado pendiente a fallido';
+        return 'Modificacion de estado pendiente a fallido';
       } else if (lastSnapshot.status === 'fallido' && currentData.status === 'actualizado') {
-        return 'Modificación de estado fallido a actualizado';
+        return 'Modificacion de estado fallido a actualizado';
       } else {
-        return `Modificación de estado ${lastSnapshot.status} a ${currentData.status}`;
+        return `Modificacion de estado ${lastSnapshot.status} a ${currentData.status}`;
       }
     }
     if (lastSnapshot.inventory_id !== currentData.inventory_id) {
-      return 'Modificación de inventario';
+      return 'Modificacion de inventario';
     }
     if (lastSnapshot.filial_id !== currentData.filial_id) {
-      return 'Modificación de filial';
+      return 'Modificacion de filial';
     }
     if (lastSnapshot.enabled !== currentData.enabled) {
       return lastSnapshot.enabled
-        ? 'Modificación de habilitado a deshabilitado'
-        : 'Modificación de deshabilitado a habilitado';
+        ? 'Modificacion de habilitado a deshabilitado'
+        : 'Modificacion de deshabilitado a habilitado';
     }
   
     return 'Otro cambio';
