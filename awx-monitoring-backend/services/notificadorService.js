@@ -310,7 +310,7 @@ export const sendReportViaTelegram = async (report) => {
     }
   };
 
-  
+
   export const generateEmailBody = (snapshots) => {
 
     const groupedChanges = {
@@ -376,7 +376,7 @@ export const sendReportViaTelegram = async (report) => {
   });
 
   const formatHosts = (hosts) =>
-    hosts.map(host => `host: '${host.host_id}', hostname: '${host.host_name}', Filial: '${host.filial_id}'`).join('\n');
+    hosts.map(host => `host_id: '${host.host_id}', host_name: '${host.host_name}', Filial: '${host.filial_id}', Inventario: '${host.inventory_id}, Estado: '${host.status}`).join('\n');
 
   const emailBody = [];
 
