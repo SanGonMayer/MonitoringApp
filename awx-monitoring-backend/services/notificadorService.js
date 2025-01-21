@@ -12,6 +12,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import HostSnapshot from '../models/hostsSnapshot.js';
+import nodemailer from 'nodemailer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -307,4 +308,40 @@ export const sendReportViaTelegram = async (report) => {
       throw new Error('Error al generar el reporte de cambios en snapshots.');
     }
   };
+
+
+  export const sendReportByEmail = async (filePath, recipientEmails) => {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: false,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+  
+      const mailOptions = {
+        from: `"Santiago Gonzalez Mayer" <${process.env.SMTP_USER}>`,
+        to: Array.isArray(recipientEmails) ? recipientEmails.join(',') : recipientEmails,
+        subject: 'Reporte de Cambios en Snapshots',
+        text: 'Adjunto encontrarás el reporte de cambios en snapshots.',
+        attachments: [
+          {
+            filename: path.basename(filePath),
+            path: filePath,
+          },
+        ],
+      };
+  
+      await transporter.sendMail(mailOptions);
+      console.log('✅ Correo enviado exitosamente.');
+    } catch (error) {
+      console.error('❌ Error al enviar el correo:', error.message);
+      throw new Error('Error al enviar el correo.');
+    }
+  };
+  
+
   
