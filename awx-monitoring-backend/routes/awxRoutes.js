@@ -10,6 +10,7 @@ import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 import { getLatestCSV } from '../services/notificadorService.js';
 import {generateSnapshotChangeReport} from '../services/notificadorService.js';
+import nodemailer from 'nodemailer';
 
 export const awxRoutes = Router();
 
