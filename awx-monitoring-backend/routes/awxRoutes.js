@@ -12,7 +12,6 @@ import { getLatestCSV } from '../services/notificadorService.js';
 import {generateSnapshotChangeReport} from '../services/notificadorService.js';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
-import path from 'path';
 import { sendReportByEmail } from '../services/notificadorService.js';
 
 
