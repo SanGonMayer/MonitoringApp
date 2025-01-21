@@ -275,6 +275,42 @@ export const sendReportViaTelegram = async (report) => {
         console.log('🔍 No se encontraron cambios recientes en snapshots.');
         throw new Error('No hay cambios recientes para generar un reporte.');
       }
+
+      const groupedChanges = {
+        addedHosts: [],
+        enabledToDisabled: [],
+        disabledToEnabled: [],
+        pendingToUpdated: [],
+        pendingToFailed: [],
+        failedToUpdated: [],
+        otherChanges: [],
+      };
+  
+      changedSnapshots.forEach((snapshot) => {
+        switch (snapshot.motivo) {
+          case 'Host agregado':
+            groupedChanges.addedHosts.push(snapshot);
+            break;
+          case 'Modificación de habilitado a deshabilitado':
+            groupedChanges.enabledToDisabled.push(snapshot);
+            break;
+          case 'Modificación de deshabilitado a habilitado':
+            groupedChanges.disabledToEnabled.push(snapshot);
+            break;
+          case 'Modificación de estado pendiente a actualizado':
+            groupedChanges.pendingToUpdated.push(snapshot);
+            break;
+          case 'Modificación de estado pendiente a fallido':
+            groupedChanges.pendingToFailed.push(snapshot);
+            break;
+          case 'Modificación de estado fallido a actualizado':
+            groupedChanges.failedToUpdated.push(snapshot);
+            break;
+          default:
+            groupedChanges.otherChanges.push(snapshot);
+            break;
+        }
+      });
   
       // Estructurar los datos para el CSV
       const rows = changedSnapshots.map(snapshot => ({
@@ -308,6 +344,34 @@ export const sendReportViaTelegram = async (report) => {
       throw new Error('Error al generar el reporte de cambios en snapshots.');
     }
   };
+
+  export const generateEmailBody = (groupedChanges) => {
+    const { newHosts, enabledToDisabled, disabledToEnabled } = groupedChanges;
+  
+    const formatHosts = (hosts) =>
+      hosts.map(host => `host: '${host.host_id}', hostname: '${host.host_name}', Filial: '${host.filial_id}'`).join('\n');
+  
+    const emailBody = [];
+  
+    if (enabledToDisabled.length > 0) {
+      emailBody.push('### HOSTS DESHABILITADOS: ###\n' + formatHosts(enabledToDisabled));
+    }
+  
+    if (disabledToEnabled.length > 0) {
+      emailBody.push('\n### HOSTS HABILITADOS: ###\n' + formatHosts(disabledToEnabled));
+    }
+  
+    if (newHosts.length > 0) {
+      emailBody.push('\n### HOSTS NUEVOS: ###\n' + formatHosts(newHosts));
+    }
+  
+    if (emailBody.length === 0) {
+      emailBody.push('No se detectaron cambios en los hosts.');
+    }
+  
+    return emailBody.join('\n\n');
+  };
+  
 
 
   export const sendReportByEmail = async (filePath, recipientEmails) => {
