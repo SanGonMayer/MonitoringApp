@@ -48,10 +48,10 @@ export const getLastSnapshot = async (hostId) => {
   const determineChangeReason = (lastSnapshot, currentData) => {
     if (!lastSnapshot) return 'Host agregado';
   
-    if (lastSnapshot.status !== currentData.status) return 'Modificación de estado';
-    if (lastSnapshot.inventory_id !== currentData.inventory_id) return 'Modificación de inventario';
-    if (lastSnapshot.filial_id !== currentData.filial_id) return 'Modificación de filial';
-    if (lastSnapshot.enabled !== currentData.enabled) return 'Modificación de habilitación';
+    if (lastSnapshot.status !== currentData.status) return 'Modificacion de estado';
+    if (lastSnapshot.inventory_id !== currentData.inventory_id) return 'Modificacion de inventario';
+    if (lastSnapshot.filial_id !== currentData.filial_id) return 'Modificacion de filial';
+    if (lastSnapshot.enabled !== currentData.enabled) return 'Modificacion de habilitacion';
   
     return 'Otro cambio';
   };
