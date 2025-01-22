@@ -36,7 +36,7 @@ awxRoutes.post('/api/sync', async (req, res) => {
 
         const startDate = new Date();
         const outputPath = './reports'; // Ruta donde se guarda el CSV
-        const recipientEmails = ['correo1@ejemplo.com', 'correo2@ejemplo.com']; // Ajusta los correos según sea necesario
+        const recipientEmails = ['segmayer@bancocredicoop.coop'];
 
         // Generar el reporte y obtener los snapshots
         const { filePath, snapshots } = await generateSnapshotChangeReport(startDate, outputPath);
