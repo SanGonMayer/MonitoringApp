@@ -269,6 +269,13 @@ export const sendReportViaTelegram = async (report) => {
             [Op.gte]: new Date(startDate),
           },
         },
+        include: [
+          {
+            model: Filial,
+            as: 'filial',
+            attributes: ['name'],
+          },
+        ],
         order: [['snapshot_date', 'DESC']],
       });
   
@@ -284,7 +291,7 @@ export const sendReportViaTelegram = async (report) => {
         Status: snapshot.status,
         Enabled: snapshot.enabled,
         InventoryID: snapshot.inventory_id,
-        FilialID: snapshot.filial_id,
+        FilialName: snapshot.filial?.name,
         Motivo: snapshot.motivo,
         SnapshotDate: snapshot.snapshot_date,
       }));
@@ -311,44 +318,17 @@ export const sendReportViaTelegram = async (report) => {
   };
 
 
-  export const generateEmailBody = (snapshots) => {
+const groupSnapshotsByReason = (snapshots) => {
+  const groupedChanges = {
+    addedHosts: [],
+    enabledToDisabled: [],
+    disabledToEnabled: [],
+    pendingToUpdated: [],
+    pendingToFailed: [],
+    failedToUpdated: [],
+    otherChanges: [],
+  };
 
-    const groupedChanges = {
-      addedHosts: [],
-      enabledToDisabled: [],
-      disabledToEnabled: [],
-      pendingToUpdated: [],
-      pendingToFailed: [],
-      failedToUpdated: [],
-      otherChanges: [],
-    };
-
-    changedSnapshots.forEach((snapshot) => {
-      switch (snapshot.motivo) {
-        case 'Host agregado':
-          groupedChanges.addedHosts.push(snapshot);
-          break;
-        case 'Modificacion de habilitado a deshabilitado':
-          groupedChanges.enabledToDisabled.push(snapshot);
-          break;
-        case 'Modificacion de deshabilitado a habilitado':
-          groupedChanges.disabledToEnabled.push(snapshot);
-          break;
-        case 'Modificacion de estado pendiente a actualizado':
-          groupedChanges.pendingToUpdated.push(snapshot);
-          break;
-        case 'Modificacion de estado pendiente a fallido':
-          groupedChanges.pendingToFailed.push(snapshot);
-          break;
-        case 'Modificacion de estado fallido a actualizado':
-          groupedChanges.failedToUpdated.push(snapshot);
-          break;
-        default:
-          groupedChanges.otherChanges.push(snapshot);
-          break;
-      }
-    });
-  
   snapshots.forEach((snapshot) => {
     switch (snapshot.motivo) {
       case 'Host agregado':
@@ -375,49 +355,61 @@ export const sendReportViaTelegram = async (report) => {
     }
   });
 
-  const formatHosts = (hosts) =>
-    hosts.map(host => `host_id: '${host.host_id}', host_name: '${host.host_name}', Filial: '${host.filial_id}', Inventario: '${host.inventory_id}, Estado: '${host.status}`).join('\n');
+  return groupedChanges;
+}
 
-  const emailBody = [];
+const formatHosts = (hosts) =>
+  hosts
+    .map(
+      (host) =>
+        `host_id: '${host.host_id}', host_name: '${host.host_name}', Filial: '${host.filial_id}', Inventario: '${host.inventory_id}', Estado: '${host.status}'`
+    )
+    .join('\n');
 
-  if (groupedChanges.enabledToDisabled.length > 0) {
-    emailBody.push('### HOSTS DESHABILITADOS: ###\n' + formatHosts(groupedChanges.enabledToDisabled));
-  }
 
-  if (groupedChanges.disabledToEnabled.length > 0) {
-    emailBody.push('\n### HOSTS HABILITADOS: ###\n' + formatHosts(groupedChanges.disabledToEnabled));
-  }
-
-  if (groupedChanges.pendingToUpdated.length > 0) {
-    emailBody.push('\n### HOSTS ACTUALIZADOS DESDE PENDIENTE: ###\n' + formatHosts(groupedChanges.pendingToUpdated));
-  }
-
-  if (groupedChanges.pendingToFailed.length > 0) {
-    emailBody.push('\n### HOSTS FALLIDOS DESDE PENDIENTE: ###\n' + formatHosts(groupedChanges.pendingToFailed));
-  }
-
-  if (groupedChanges.failedToUpdated.length > 0) {
-    emailBody.push('\n### HOSTS ACTUALIZADOS DESDE FALLIDO: ###\n' + formatHosts(groupedChanges.failedToUpdated));
-  }
-
-  if (groupedChanges.addedHosts.length > 0) {
-    emailBody.push('\n### HOSTS NUEVOS: ###\n' + formatHosts(groupedChanges.addedHosts));
-  }
-
-  if (groupedChanges.otherChanges.length > 0) {
-    emailBody.push('\n### OTROS CAMBIOS: ###\n' + formatHosts(groupedChanges.otherChanges));
-  }
-
-  if (emailBody.length === 0) {
-    emailBody.push('No se detectaron cambios en los hosts.');
-  }
-
-  return emailBody.join('\n\n');
+const generateSectionHtml = (title, hosts) => {
+  if (hosts.length === 0) return '';
+  return `### ${title}: ###\n${formatHosts(hosts)}`;
 };
-  
 
 
-  export const sendReportByEmail = async (filePath, recipientEmails) => {
+export const generateEmailBodyHtml = (snapshots) => {
+
+  const groupedChanges = groupSnapshotsByReason(snapshots);
+
+  const generateSectionHtml = (title, hosts) => {
+    if (hosts.length === 0) return '';
+    const hostList = hosts
+      .map(
+        (host) =>
+          `<li>host_id: '${host.host_id}', host_name: '${host.host_name}', Filial: '${host.filial?.name || 'Desconocido'}', Inventario: '${host.inventory_id}', Estado: '${host.status}'</li>`
+      )
+      .join('');
+    return `<h3 style="font-weight: bold;">${title}</h3><ul>${hostList}</ul>`;
+  };
+
+  const sectionsHtml = [
+    generateSectionHtml('HOSTS DESHABILITADOS', groupedChanges.enabledToDisabled),
+    generateSectionHtml('HOSTS HABILITADOS', groupedChanges.disabledToEnabled),
+    generateSectionHtml('HOSTS ACTUALIZADOS DESDE PENDIENTE', groupedChanges.pendingToUpdated),
+    generateSectionHtml('HOSTS FALLIDOS DESDE PENDIENTE', groupedChanges.pendingToFailed),
+    generateSectionHtml('HOSTS ACTUALIZADOS DESDE FALLIDO', groupedChanges.failedToUpdated),
+    generateSectionHtml('HOSTS NUEVOS', groupedChanges.addedHosts),
+    generateSectionHtml('OTROS CAMBIOS', groupedChanges.otherChanges),
+  ];
+
+  const bodyHtml = sectionsHtml.filter((section) => section.trim() !== '').join('<br>');
+
+  return `
+    <div style="font-family: 'Comic Sans MS', cursive; font-size: 14px;">
+      ${bodyHtml || '<p>No se detectaron cambios en los hosts.</p>'}
+    </div>
+  `;
+};
+
+
+
+  export const sendReportByEmail = async (filePath, recipientEmails, emailBodyHtml) => {
     try {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -433,7 +425,8 @@ export const sendReportViaTelegram = async (report) => {
         from: `"Santiago Gonzalez Mayer" <${process.env.SMTP_USER}>`,
         to: Array.isArray(recipientEmails) ? recipientEmails.join(',') : recipientEmails,
         subject: 'Reporte de Cambios en Snapshots',
-        text: 'Adjunto se encuentra el reporte de cambios en los hosts en el día de la fecha.',
+        html: emailBodyHtml,
+        //text: 'Adjunto se encuentra el reporte de cambios en los hosts en el día de la fecha.',
         attachments: [
           {
             filename: path.basename(filePath),

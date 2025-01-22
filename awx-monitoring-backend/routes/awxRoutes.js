@@ -13,6 +13,7 @@ import {generateSnapshotChangeReport} from '../services/notificadorService.js';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import { sendReportByEmail } from '../services/notificadorService.js';
+import { generateEmailBodyHtml } from '../services/notificadorService.js';
 
 
 export const awxRoutes = Router();
@@ -131,18 +132,54 @@ awxRoutes.post('/test-email', async (req, res) => {
   }
 
   try {
-    const filePath = path.join(__dirname, 'reports', 'Snapshot_Changes_2025-01-16T18-28-13-347Z.csv');
+    // Ruta al archivo CSV ficticio
+    const filePath = path.join(__dirname, 'reports', 'Snapshot_Changes_Test.csv');
 
+    // Generar un archivo CSV ficticio si no existe
     if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: `El archivo ${filePath} no existe.` });
+      const mockCsvData = [
+        { HostID: 'wst-1', HostName: 'Host1', Status: 'pendiente', Enabled: true, InventoryID: '22', FilialName: 'Filial1', Motivo: 'Host agregado', SnapshotDate: new Date() },
+        { HostID: 'wst-2', HostName: 'Host2', Status: 'actualizado', Enabled: false, InventoryID: '23', FilialName: 'Filial2', Motivo: 'Modificacion de habilitado a deshabilitado', SnapshotDate: new Date() },
+      ];
+      const csvContent = mockCsvData
+        .map(row => Object.values(row).join(','))
+        .join('\n');
+      fs.writeFileSync(filePath, csvContent, 'utf8');
     }
 
-    await sendReportByEmail(filePath, recipientEmails);
+    const snapshots = [
+      {
+        host_id: 'wst-1',
+        host_name: 'Host1',
+        status: 'pendiente',
+        enabled: true,
+        inventory_id: '22',
+        filial: { name: 'Filial1' },
+        motivo: 'Host agregado',
+        snapshot_date: new Date(),
+      },
+      {
+        host_id: 'wst-2',
+        host_name: 'Host2',
+        status: 'actualizado',
+        enabled: false,
+        inventory_id: '23',
+        filial: { name: 'Filial2' },
+        motivo: 'Modificacion de habilitado a deshabilitado',
+        snapshot_date: new Date(),
+      },
+    ];
 
-    return res.status(200).json({ message: 'Correo enviado exitosamente.' });
+    // Generar cuerpo del correo
+    const emailBodyHtml = generateEmailBodyHtml(snapshots);
+
+    // Enviar el correo
+    await sendReportByEmail(filePath, recipientEmails, emailBodyHtml);
+
+    return res.status(200).json({ message: 'Correo de prueba enviado exitosamente.' });
   } catch (error) {
-    console.error('❌ Error al enviar el correo:', error.message);
-    return res.status(500).json({ error: 'Error al enviar el correo.' });
+    console.error('❌ Error al enviar el correo de prueba:', error.message);
+    return res.status(500).json({ error: 'Error al enviar el correo de prueba.' });
   }
 });
 
