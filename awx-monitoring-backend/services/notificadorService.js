@@ -401,7 +401,7 @@ export const generateEmailBodyHtml = (snapshots) => {
   const bodyHtml = sectionsHtml.filter((section) => section.trim() !== '').join('<br>');
 
   return `
-    <div style="font-family: 'Comic Sans MS', cursive; font-size: 14px;">
+    <div style="font-family: 'Comic', bold; font-size: 14px;">
       ${bodyHtml || '<p>No se detectaron cambios en los hosts.</p>'}
     </div>
   `;
