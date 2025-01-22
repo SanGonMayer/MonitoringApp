@@ -32,7 +32,7 @@ awxRoutes.post('/api/sync', async (req, res) => {
         
                   // Generar reporte y enviar correo
         const { generateSnapshotChangeReport } = await import('../services/notificadorService.js');
-        const { generateEmailBodyHtml } = await import('../services/notidicadorService.js');
+        const { generateEmailBodyHtml } = await import('../services/notificadorService.js');
         const { sendReportByEmail } = await import('../services/notificadorService.js');
 
         const startDate = new Date();
