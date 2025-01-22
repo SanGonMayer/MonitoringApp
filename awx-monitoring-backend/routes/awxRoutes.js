@@ -29,6 +29,25 @@ awxRoutes.post('/api/sync', async (req, res) => {
         takeDailySnapshot()
           .then(() => console.log('Snapshot diario completado.'))
           .catch((error) => console.error('Error al tomar snapshot diario:', error.message));
+                  // Generar reporte y enviar correo
+        const { generateSnapshotChangeReport } = await import('../services/notificadorService.js');
+        const { generateEmailBodyHtml } = await import('../services/emailService.js');
+        const { sendReportByEmail } = await import('../services/notificadorService.js');
+
+        const startDate = new Date();
+        const outputPath = './reports'; // Ruta donde se guarda el CSV
+        const recipientEmails = ['correo1@ejemplo.com', 'correo2@ejemplo.com']; // Ajusta los correos según sea necesario
+
+        // Generar el reporte y obtener los snapshots
+        const { filePath, snapshots } = await generateSnapshotChangeReport(startDate, outputPath);
+        console.log('✅ Reporte generado.');
+
+        // Generar el cuerpo del email
+        const emailBodyHtml = generateEmailBodyHtml(snapshots);
+
+        // Enviar el correo
+        await sendReportByEmail(filePath, recipientEmails, emailBodyHtml);
+        console.log('✅ Correo enviado.');
     } catch (error) {
         console.error('Error en la sincronización manual:', error.message);
         if(!res.headersSent){
