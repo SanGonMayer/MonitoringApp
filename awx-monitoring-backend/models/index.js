@@ -36,5 +36,9 @@ CCTV.hasMany(HostSnapshot, { foreignKey: 'host_id', as: 'snapshots' });
 HostSnapshot.belongsTo(Workstation, { foreignKey: 'host_id', as: 'workstation', allowNull: true });
 HostSnapshot.belongsTo(CCTV, { foreignKey: 'host_id', as: 'cctv', allowNull: true });
 
+HostSnapshot.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial', through: Workstation,});
+HostSnapshot.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial',through: CCTV,});
+  
+
 
 export { sequelize, Filial, Inventory, Workstation, CCTV, JobHostSummary, HostSnapshot };
