@@ -262,7 +262,6 @@ export const sendReportViaTelegram = async (report) => {
     try {
       console.log('📊 Generando reporte de cambios en snapshots...');
   
-      // Buscar los snapshots creados desde la fecha proporcionada
       const changedSnapshots = await HostSnapshot.findAll({
         where: {
           snapshot_date: {
@@ -272,8 +271,8 @@ export const sendReportViaTelegram = async (report) => {
         include: [
           {
             model: Filial,
-            as: 'filial',
-            attributes: ['name'],
+            as: 'filial', 
+            attributes: ['name'], 
           },
         ],
         order: [['snapshot_date', 'DESC']],
