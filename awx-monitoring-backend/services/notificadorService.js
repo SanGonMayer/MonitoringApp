@@ -388,12 +388,12 @@ export const generateEmailBodyHtml = (snapshots) => {
   };
 
   const sectionsHtml = [
+    generateSectionHtml('HOSTS NUEVOS', groupedChanges.addedHosts),
     generateSectionHtml('HOSTS DESHABILITADOS', groupedChanges.enabledToDisabled),
     generateSectionHtml('HOSTS HABILITADOS', groupedChanges.disabledToEnabled),
     generateSectionHtml('HOSTS ACTUALIZADOS DESDE PENDIENTE', groupedChanges.pendingToUpdated),
     generateSectionHtml('HOSTS FALLIDOS DESDE PENDIENTE', groupedChanges.pendingToFailed),
     generateSectionHtml('HOSTS ACTUALIZADOS DESDE FALLIDO', groupedChanges.failedToUpdated),
-    generateSectionHtml('HOSTS NUEVOS', groupedChanges.addedHosts),
     generateSectionHtml('OTROS CAMBIOS', groupedChanges.otherChanges),
   ];
 
