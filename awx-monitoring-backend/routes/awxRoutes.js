@@ -160,13 +160,18 @@ awxRoutes.post('/test-email', async (req, res) => {
       const mockCsvData = [
         { HostID: 'wst-1', HostName: 'Host1', Status: 'pendiente', Enabled: true, InventoryID: '22', FilialName: 'Filial1', Motivo: 'Host agregado', SnapshotDate: new Date() },
         { HostID: 'wst-2', HostName: 'Host2', Status: 'actualizado', Enabled: false, InventoryID: '23', FilialName: 'Filial2', Motivo: 'Modificacion de habilitado a deshabilitado', SnapshotDate: new Date() },
+        { HostID: 'wst-3', HostName: 'Host3', Status: 'pendiente', Enabled: true, InventoryID: '22', FilialName: 'Filial3', Motivo: 'Modificacion de estado pendiente a actualizado', SnapshotDate: new Date() },
+        { HostID: 'wst-4', HostName: 'Host4', Status: 'fallido', Enabled: false, InventoryID: '347', FilialName: 'Filial4', Motivo: 'Modificacion de estado fallido a actualizado', SnapshotDate: new Date() },
+        { HostID: 'wst-5', HostName: 'Host5', Status: 'actualizado', Enabled: true, InventoryID: '347', FilialName: 'Filial5', Motivo: 'Modificacion de inventario', SnapshotDate: new Date() },
       ];
-      const csvContent = mockCsvData
-        .map(row => Object.values(row).join(','))
-        .join('\n');
+      const csvContent = [
+        'HostID,HostName,Status,Enabled,InventoryID,FilialName,Motivo,SnapshotDate',
+        ...mockCsvData.map(row => Object.values(row).join(',')),
+      ].join('\n');
       fs.writeFileSync(filePath, csvContent, 'utf8');
     }
 
+    // Datos ficticios para todos los casos de modificación
     const snapshots = [
       {
         host_id: 'wst-1',
@@ -188,6 +193,36 @@ awxRoutes.post('/test-email', async (req, res) => {
         motivo: 'Modificacion de habilitado a deshabilitado',
         snapshot_date: new Date(),
       },
+      {
+        host_id: 'wst-3',
+        host_name: 'Host3',
+        status: 'pendiente',
+        enabled: true,
+        inventory_id: '22',
+        filial: { name: 'Filial3' },
+        motivo: 'Modificacion de estado pendiente a actualizado',
+        snapshot_date: new Date(),
+      },
+      {
+        host_id: 'wst-4',
+        host_name: 'Host4',
+        status: 'fallido',
+        enabled: false,
+        inventory_id: '347',
+        filial: { name: 'Filial4' },
+        motivo: 'Modificacion de estado fallido a actualizado',
+        snapshot_date: new Date(),
+      },
+      {
+        host_id: 'wst-5',
+        host_name: 'Host5',
+        status: 'actualizado',
+        enabled: true,
+        inventory_id: '347',
+        filial: { name: 'Filial5' },
+        motivo: 'Modificacion de inventario',
+        snapshot_date: new Date(),
+      },
     ];
 
     // Generar cuerpo del correo
@@ -202,6 +237,7 @@ awxRoutes.post('/test-email', async (req, res) => {
     return res.status(500).json({ error: 'Error al enviar el correo de prueba.' });
   }
 });
+
 
 
 
