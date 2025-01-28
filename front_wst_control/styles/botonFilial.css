@@ -76,3 +76,77 @@
     /*margin-top: 0.1px; Espacio entre nombre y número */
     color: black
 }
+
+:root {
+    --radio: 70px; /* Tamaño del botón */
+  }
+  
+  .anillo-cont {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .anillo-animado,
+  .anillo-animado::before,
+  .anillo-animado::after {
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .anillo-animado {
+    width: var(--radio);
+    height: var(--radio);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit; /* Mantén el color dinámico del botón */
+    position: relative;
+    z-index: 2; /* Asegura que el texto esté encima */
+    text-align: center;
+    font-size: inherit; /* Usa el tamaño de fuente heredado */
+  }
+  
+  .anillo-animado::before,
+  .anillo-animado::after {
+    content: "";
+    z-index: -1;
+    margin: -10px; /* Separación del anillo */
+    border: 2px solid black; /* Color y grosor del anillo */
+    animation: girar-anillo 10s linear infinite;
+    clip-path: polygon(50% 50%, 70% 100%, 0% 100%);
+    background: transparent;
+  }
+  
+  .anillo-animado::before {
+    animation-delay: -5s; /* Retraso en la animación */
+  }
+  
+  .anillo-animado::after {
+    animation: girar-anillo-dos 15s linear infinite; /* Velocidad diferente */
+    margin: -15px; /* Tamaño más grande para el segundo anillo */
+  }
+  
+  @keyframes girar-anillo {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes girar-anillo-dos {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg); /* Rotación inversa */
+    }
+  }
+  
