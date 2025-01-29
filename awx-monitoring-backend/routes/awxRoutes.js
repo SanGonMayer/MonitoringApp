@@ -81,7 +81,7 @@ awxRoutes.get('/test', (req, res) => {
 
 
 /* ------------------- ACTUALIZACION AUTOMATICA DE DB A PARTIR DE SEÑAL DE AWX-------------- */
-wxRoutes.post('/webhook', syncDbFilialWithTemplate);
+awxRoutes.post('/webhook', syncDbFilialWithTemplate);
 
 
 export default awxRoutes;
