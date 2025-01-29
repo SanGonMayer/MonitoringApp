@@ -261,11 +261,17 @@ export const sendReportViaTelegram = async (report) => {
   export const generateSnapshotChangeReport = async (startDate, outputPath) => {
     try {
       console.log('📊 Generando reporte de cambios en snapshots...');
+      console.log(`🔍 Filtrando snapshots entre ${startOfDay} y ${endOfDay}`);
+
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0); 
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999); 
   
       const changedSnapshots = await HostSnapshot.findAll({
         where: {
           snapshot_date: {
-            [Op.gte]: new Date(startDate),
+            [Op.between]: [startOfDay, endOfDay],
           },
         },
         include: [
