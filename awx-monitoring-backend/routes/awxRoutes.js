@@ -238,6 +238,30 @@ awxRoutes.post('/test-email', async (req, res) => {
   }
 });
 
+//ruta para armar el anillo cuando hay movimientos
+awxRoutes.get('/api/filiales-con-movimientos', async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+
+    const filialesMovidas = await HostSnapshot.findAll({
+      where: {
+        snapshot_date: { [Op.gte]: today }, 
+      },
+      attributes: ['filial_id'],
+      group: ['filial_id'], 
+    });
+
+    const filialIds = filialesMovidas.map((snapshot) => snapshot.filial_id);
+
+    res.status(200).json({ filialesConMovimientos: filialIds });
+  } catch (error) {
+    console.error('Error al obtener filiales con movimientos:', error.message);
+    res.status(500).json({ error: 'Error al obtener filiales con movimientos.' });
+  }
+});
+
+
 
 
 

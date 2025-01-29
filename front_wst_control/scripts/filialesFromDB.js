@@ -119,6 +119,9 @@ async function createFilialButtons(filiales, tipoTerminal) {
   
     const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
     tableElement.style.display = 'none';
+
+    const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-movimientos')
+    const { filialesConMovimientos } = await response.json();
   
     for (const filial of filiales) {
         const button = document.createElement('button');
@@ -142,6 +145,11 @@ async function createFilialButtons(filiales, tipoTerminal) {
         // Agregar los spans al botón
         button.appendChild(nameSpan);
         button.appendChild(hostsSpan);
+
+        // Si la filial tuvo movimientos, agregar la clase de anillo animado
+        if (filialesConMovimientos.includes(filial.id)) {
+        button.classList.add('anillo-animado');
+        }
   
         // Asigna los hosts directamente al evento click sin volver a hacer fetch
         button.onclick = () => {
