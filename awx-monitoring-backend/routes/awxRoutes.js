@@ -5,10 +5,11 @@ import { startDataSync } from '../app.js';
 import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial, getHostsByFilialSNRO } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
-import { updateSingleFilial } from '../controllers/syncController.js';
+//import { updateSingleFilial } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 import { getLatestCSV } from '../services/notificadorService.js';
+import { updateSingleFilial, syncDbFilialWithTemplate } from '../controllers/syncController.js';
 
 export const awxRoutes = Router();
 
@@ -76,6 +77,11 @@ awxRoutes.post('/api/awx/launch-job-filial', (req, res, next) => {
 awxRoutes.get('/test', (req, res) => {
   res.send('La ruta está funcionando');
 });
+
+
+
+/* ------------------- ACTUALIZACION AUTOMATICA DE DB A PARTIR DE SEÑAL DE AWX-------------- */
+wxRoutes.post('/webhook', syncDbFilialWithTemplate);
 
 
 export default awxRoutes;
