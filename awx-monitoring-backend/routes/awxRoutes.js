@@ -14,6 +14,7 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import { sendReportByEmail } from '../services/notificadorService.js';
 import { generateEmailBodyHtml } from '../services/notificadorService.js';
+import { HostSnapshot } from '../models/hostsSnapshot.js'
 
 
 export const awxRoutes = Router();
