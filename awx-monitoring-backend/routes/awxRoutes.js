@@ -15,6 +15,8 @@ import fs from 'fs';
 import { sendReportByEmail } from '../services/notificadorService.js';
 import { generateEmailBodyHtml } from '../services/notificadorService.js';
 import HostSnapshot from '../models/hostsSnapshot.js'
+import { Op } from 'sequelize';
+
 
 
 export const awxRoutes = Router();
