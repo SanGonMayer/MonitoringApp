@@ -121,7 +121,9 @@ async function createFilialButtons(filiales, tipoTerminal) {
     tableElement.style.display = 'none';
 
     const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-movimientos')
+    console.log('🔍 Respuesta de la API:', response);
     const { filialesConMovimientos } = await response.json();
+    console.log('Filiales con movimientos:', filialesConMovimientos);
   
     for (const filial of filiales) {
         const button = document.createElement('button');
@@ -147,7 +149,6 @@ async function createFilialButtons(filiales, tipoTerminal) {
         button.appendChild(hostsSpan);
 
         console.log('ID de la filial actual:', filial.id);
-        console.log('Filiales con movimientos:', filialesConMovimientos);
 
         // Si la filial tuvo movimientos, agregar la clase de anillo animado
         if (filialesConMovimientos.includes(Number(filial.id))) {
