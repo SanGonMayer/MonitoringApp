@@ -146,8 +146,11 @@ async function createFilialButtons(filiales, tipoTerminal) {
         button.appendChild(nameSpan);
         button.appendChild(hostsSpan);
 
+        console.log('ID de la filial actual:', filial.id);
+        console.log('Filiales con movimientos:', filialesConMovimientos);
+
         // Si la filial tuvo movimientos, agregar la clase de anillo animado
-        if (filialesConMovimientos.includes(filial.id)) {
+        if (filialesConMovimientos.includes(Number(filial.id))) {
         button.classList.add('anillo-animado');
         }
   
