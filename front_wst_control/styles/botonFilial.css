@@ -102,16 +102,16 @@
 }
 
 .anillo-animado::before {
-  width: calc(var(--radio) + 2px); /* Anillo más cercano */
-  height: calc(var(--radio) + 2px);
+  width: calc(var(--radio) + 1px); /* Anillo más cercano */
+  height: calc(var(--radio) + 1px);
   border: 2px solid purple; /* Color del primer anillo */
   animation: girar-anillo 5s linear infinite; /* Velocidad del primer anillo */
 }
 
 .anillo-animado::after {
-  width: calc(var(--radio) + 6px); /* Anillo un poco más alejado */
-  height: calc(var(--radio) + 6px);
-  border: 2px solid orange; /* Color del segundo anillo */
+  width: calc(var(--radio) + 3px); /* Anillo un poco más alejado */
+  height: calc(var(--radio) + 3px);
+  border: 2px solid purple; /* Color del segundo anillo */
   animation: girar-anillo-dos 8s linear infinite; /* Velocidad del segundo anillo */
 }
 
@@ -129,7 +129,7 @@
     transform: translate(-50%, -50%) rotate(0deg); /* Mantén el centro */
   }
   100% {
-    transform: translate(-50%, -50%) rotate(-360deg); /* Rotación inversa */
+    transform: translate(-50%, -50%) rotate(360deg); /* Rotación inversa */
   }
 }
 
