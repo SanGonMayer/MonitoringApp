@@ -218,7 +218,6 @@ export const syncHostsFromInventory22 = async (filial) => {
 
   export const syncSingleFilial = async (filialId) => {
     try {
-
         const filial = await Filial.findByPk(filialId);
 
         if (!filial) {
@@ -230,15 +229,34 @@ export const syncHostsFromInventory22 = async (filial) => {
             const enabledHostIdsFromAPI = hostsWST.filter(host => host.enabled).map(host => host.id);
 
             for (const host of hostsWST) {
-                await Workstation.upsert({
+                const [existingHost] = await Workstation.upsert({
                     id: host.id,
                     name: host.name,
                     description: host.description,
                     inventory_id: 22,
                     filial_id: filial.id,
                     enabled: host.enabled,
-                });
+                }, { returning: true });
+
                 await syncJobHostSummaries(host.id, 22);
+
+                const jobSummaries = await JobHostSummary.findAll({
+                    where: { workstation_id: host.id }
+                });
+
+                const newStatus = calculateHostStatus({ ...existingHost.get(), jobSummaries }, 'wst');
+                console.log(`🔍 Host: ${host.name} | Estado Calculado: ${newStatus}`);
+
+                if (existingHost.status !== newStatus) {
+                    console.log(`🔄 Estado cambiado: ${existingHost.status} → ${newStatus}`);
+                    await Workstation.update(
+                        { status: newStatus },
+                        { where: { id: existingHost.id } }
+                    );
+                    console.log(`✅ Estado actualizado en la base de datos: ${newStatus}`);
+                } else {
+                    console.log(`ℹ️ El estado del host ${host.name} no ha cambiado (${existingHost.status})`);
+                }
             }
 
             await Workstation.destroy({
@@ -254,15 +272,34 @@ export const syncHostsFromInventory22 = async (filial) => {
             const enabledHostIdsFromAPI = hostsCCTV.filter(host => host.enabled).map(host => host.id);
 
             for (const host of hostsCCTV) {
-                await CCTV.upsert({
+                const [existingHost] = await CCTV.upsert({
                     id: host.id,
                     name: host.name,
                     description: host.description,
                     inventory_id: 347,
                     filial_id: filial.id,
                     enabled: host.enabled,
-                });
+                }, { returning: true });
+
                 await syncJobHostSummaries(host.id, 347);
+
+                const jobSummaries = await JobHostSummary.findAll({
+                    where: { workstation_id: host.id }
+                });
+
+                const newStatus = calculateHostStatus({ ...existingHost.get(), jobSummaries }, 'cctv');
+                console.log(`🔍 Host: ${host.name} | Estado Calculado: ${newStatus}`);
+
+                if (existingHost.status !== newStatus) {
+                    console.log(`🔄 Estado cambiado: ${existingHost.status} → ${newStatus}`);
+                    await CCTV.update(
+                        { status: newStatus },
+                        { where: { id: existingHost.id } }
+                    );
+                    console.log(`✅ Estado actualizado en la base de datos: ${newStatus}`);
+                } else {
+                    console.log(`ℹ️ El estado del host ${host.name} no ha cambiado (${existingHost.status})`);
+                }
             }
 
             await CCTV.destroy({
@@ -272,7 +309,8 @@ export const syncHostsFromInventory22 = async (filial) => {
                 }
             });
         }
-        io.emit('db-updated', { source: 'Actualizacion template db' }); /////////////////
+
+        io.emit('db-updated', { source: 'Actualizacion template db' });
         console.log(`Filial ${filialId} sincronizada correctamente.`);
     } catch (error) {
         console.error(`Error al sincronizar la filial ${filialId}:`, error.message);
