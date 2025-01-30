@@ -27,24 +27,6 @@ const Filial = sequelize.define('Filial', {
   },
 });
 
-export const obtenerIdDeFilial = async (filialName) => {
-  try {
-      const filial = await Filial.findOne({
-          where: {
-              name: filialName
-          }
-      });
 
-      if (filial) {
-          return filial.id;  // Retorna el ID si se encuentra la filial
-      } else {
-          console.log(`Filial con el nombre ${filialName} no encontrada`);
-          return null;  // Retorna null si no se encuentra
-      }
-  } catch (error) {
-      console.error('Error al obtener el ID de la filial:', error);
-      throw error;  // Lanza el error si ocurre alguno
-  }
-};
 
 export default Filial;

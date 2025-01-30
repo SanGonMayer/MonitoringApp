@@ -1,7 +1,7 @@
 import { syncSingleFilial } from '../services/syncService.js';
 import axios from 'axios';
-import { obtenerIdDeFilial } from '../models/filiales.js';
 import base64 from 'base-64';
+import Filial from '../models/filiales.js';
 
 
 const username = process.env.AWX_SERVER_USER;
@@ -114,7 +114,27 @@ const obtenerFilialPorHost = async (host,inventory) => {
         console.error('Error al obtener la filial del host:', error);
     }
 };
-  
+
+
+const obtenerIdDeFilial = async (filialName) => {
+try {
+    const filial = await Filial.findOne({
+        where: {
+            name: filialName
+        }
+    });
+
+    if (filial) {
+        return filial.id;  // Retorna el ID si se encuentra la filial
+    } else {
+        console.log(`Filial con el nombre ${filialName} no encontrada`);
+        return null;  // Retorna null si no se encuentra
+    }
+} catch (error) {
+    console.error('Error al obtener el ID de la filial:', error);
+    throw error;  // Lanza el error si ocurre alguno
+}
+};
 
 const actualizarFiliales = async (filiales) => {
     console.log(`Actualizando las filiales: ${[...filiales]}`);
