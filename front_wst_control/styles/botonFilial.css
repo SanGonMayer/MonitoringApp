@@ -82,7 +82,7 @@
 }
 
 .anillo-cont {
-  position: relative;
+  position: relative; /* Importante: Asegura que los anillos se posicionen relativos al contenedor */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,10 +94,11 @@
   position: absolute;
   border-radius: 50%;
   clip-path: polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%); /* Sector circular */
+  transform-origin: center; /* Gira desde el centro */
 }
 
 .anillo-animado::before {
-  width: calc(var(--radio) + 6px); /* Anillo más cercano */
+  width: calc(var(--radio) + 6px); /* Ajustar tamaño cercano al botón */
   height: calc(var(--radio) + 6px);
   border: 2px solid purple; /* Color del primer anillo */
   animation: girar-anillo 5s linear infinite; /* Velocidad del primer anillo */
@@ -124,11 +125,12 @@
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg); /* Rotación inversa */
+    transform: rotate(-360deg); /* Rotación inversa */
   }
 }
 
 .custom-button {
+  position: relative; /* Importante: Contenedor para los anillos */
   width: var(--radio);
   height: var(--radio);
   border-radius: 50%;
@@ -142,7 +144,6 @@
   color: white;
   border: none;
   cursor: pointer;
-  background-color: #4CAF50;
   transition: transform 0.2s ease;
   padding-top: 16px;
   z-index: 2; /* Asegura que el botón esté encima del anillo */
