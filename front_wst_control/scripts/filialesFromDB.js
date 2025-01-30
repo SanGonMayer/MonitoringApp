@@ -167,7 +167,8 @@ async function createFilialButtons(filiales, tipoTerminal) {
           console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
           window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
         };
-  
+        
+        anilloCont.appendChild(button); //agregar el botón al contenedor
         filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
         window.allButtons.push(button);
     }

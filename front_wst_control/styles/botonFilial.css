@@ -83,6 +83,8 @@
 
 .anillo-cont {
   position: relative;
+  width: var(--radio);
+  height: var(--radio);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,6 +94,9 @@
 .anillo-animado::after {
   content: '';
   position: absolute;
+  top: 50%; /* Centra verticalmente */
+  left: 50%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%); /* Ajusta el centro */
   border-radius: 50%;
   clip-path: polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%); /* Sector circular */
 }
@@ -112,19 +117,19 @@
 
 @keyframes girar-anillo {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg); /* Mantén el centro */
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg); /* Mantén el centro */
   }
 }
 
 @keyframes girar-anillo-dos {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg); /* Mantén el centro */
   }
   100% {
-    transform: rotate(-360deg); /* Rotación inversa */
+    transform: translate(-50%, -50%) rotate(-360deg); /* Rotación inversa */
   }
 }
 
