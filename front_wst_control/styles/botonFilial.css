@@ -94,37 +94,44 @@
   position: absolute;
   border-radius: 50%;
   clip-path: polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%); /* Sector circular */
+  transform-origin: center; /* Asegura que el giro sea centrado */
 }
 
 .anillo-animado::before {
-  width: calc(var(--radio) + 6px); /* Anillo más cercano */
-  height: calc(var(--radio) + 6px);
+  width: calc(var(--radio) + 10px); /* Tamaño ajustado */
+  height: calc(var(--radio) + 10px);
   border: 2px solid purple; /* Color del primer anillo */
-  animation: girar-anillo 5s linear infinite; /* Velocidad del primer anillo */
+  animation: girar-anillo 5s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg); /* Centra y gira */
 }
 
 .anillo-animado::after {
-  width: calc(var(--radio) + 12px); /* Anillo un poco más alejado */
-  height: calc(var(--radio) + 12px);
+  width: calc(var(--radio) + 18px); /* Tamaño ajustado */
+  height: calc(var(--radio) + 18px);
   border: 2px solid orange; /* Color del segundo anillo */
-  animation: girar-anillo-dos 8s linear infinite; /* Velocidad del segundo anillo */
+  animation: girar-anillo-dos 8s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg); /* Centra y gira */
 }
 
 @keyframes girar-anillo {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
 @keyframes girar-anillo-dos {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    transform: rotate(-360deg); /* Rotación inversa */
+    transform: translate(-50%, -50%) rotate(-360deg); /* Rotación inversa */
   }
 }
 
