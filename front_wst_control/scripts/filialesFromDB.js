@@ -169,7 +169,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
         };
         
         anilloCont.appendChild(button); //agregar el botón al contenedor
-        filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+        filialContainer.appendChild(anilloCont); // Asegúrate de agregar el botón al contenedor
         window.allButtons.push(button);
     }
     console.log('Mostrando botones de filiales', window.allButtons);
