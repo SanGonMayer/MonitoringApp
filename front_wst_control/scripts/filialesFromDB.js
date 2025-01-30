@@ -126,6 +126,9 @@ async function createFilialButtons(filiales, tipoTerminal) {
     console.log('Filiales con movimientos:', filialesConMovimientos);
   
     for (const filial of filiales) {
+        const anilloCont = document.createElement('div'); // Contenedor para el anillo
+        anilloCont.classList.add('anillo-cont');
+
         const button = document.createElement('button');
         button.classList.add('custom-button');
     
