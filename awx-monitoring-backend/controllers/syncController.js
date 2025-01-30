@@ -1,6 +1,7 @@
 import { syncSingleFilial } from '../services/syncService.js';
 import axios from 'axios';
 import base64 from 'base-64';
+import Filial from '../models/filiales.js';
 
 
 const username = process.env.AWX_SERVER_USER;
