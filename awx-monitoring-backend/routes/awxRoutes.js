@@ -5,7 +5,7 @@ import { startDataSync } from '../app.js';
 import { getFilialesFromDB } from '../services/dbService.js';
 import { getHostsByFilial, getHostsByFilialSNRO } from '../controllers/hostsController.js';
 import { getFilialesConHosts } from '../services/dbService.js';
-import { updateSingleFilial } from '../controllers/syncController.js';
+import { updateSingleFilial, syncDbFilialWithTemplate } from '../controllers/syncController.js';
 import { launchJob } from '../controllers/awxController.js';
 import { sendTestTelegramMessage } from '../controllers/notifierController.js';
 import { getLatestCSV } from '../services/notificadorService.js';
@@ -16,7 +16,6 @@ import { sendReportByEmail } from '../services/notificadorService.js';
 import { generateEmailBodyHtml } from '../services/notificadorService.js';
 import HostSnapshot from '../models/hostsSnapshot.js'
 import { Op } from 'sequelize';
-
 
 
 export const awxRoutes = Router();
@@ -266,6 +265,11 @@ awxRoutes.get('/api/filiales-con-movimientos', async (req, res) => {
 
 
 
+
+
+
+/* ------------------- ACTUALIZACION AUTOMATICA DE DB A PARTIR DE SEÑAL DE AWX-------------- */
+awxRoutes.post('/webhook', syncDbFilialWithTemplate);
 
 
 export default awxRoutes;
