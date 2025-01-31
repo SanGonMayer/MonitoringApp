@@ -23,8 +23,23 @@
     transform: translateY(-5px);
   }
   
-  /* Primera línea giratoria */
-  .estadistico::before,
+  .estadistico::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 15px;
+    border: 3px solid transparent;
+    background: linear-gradient(90deg, rgb(0, 183, 255), rgb(255, 48, 255));
+    background-clip: border-box;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: destination-out;
+    animation: girarBorde 3s linear infinite;
+  }
+
   .estadistico::after {
     content: '';
     position: absolute;
@@ -56,6 +71,15 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes girarBorde {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
   
   @media (max-width: 768px) {
     .estadistico {
