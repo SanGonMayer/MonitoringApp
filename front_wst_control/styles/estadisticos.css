@@ -1,0 +1,33 @@
+.estadisticos-container {
+    display: flex;
+    justify-content: space-between; /* Distribuye el espacio entre las estadisticos */
+    flex-wrap: wrap; /* Permite que las estadisticos se apilen en pantallas pequeñas */
+    gap: 20px; /* Espacio entre las estadisticos */
+    padding: 20px;
+  }
+  
+  .estadistico {
+    flex: 1 1 calc(33.333% - 40px); /* Ajusta el tamaño de las estadisticos */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .estadistico:hover {
+    transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
+  }
+  
+  @media (max-width: 768px) {
+    .estadistico {
+      flex: 1 1 calc(50% - 20px); /* Dos estadisticos por fila en pantallas medianas */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .estadistico {
+      flex: 1 1 100%; /* Una estadistico por fila en pantallas pequeñas */
+    }
+  }
