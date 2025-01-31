@@ -21,15 +21,15 @@
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
 }
 
-.item--2 {
+.estadistico--1 {
   background: #ffd8be;
 }
 
-.item--3 {
+.estadistico--2 {
   background: #a9ecbf;
 }
 
-.item--4 {
+.estadistico--3 {
   background: #f3bbe1;
 }
 
