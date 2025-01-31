@@ -15,6 +15,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     text-align: center; /* Centra el texto dentro de la card */
+    position: relative; /* Necesario para los pseudo-elementos */
+    overflow: hidden; /* Oculta las partes que sobresalen de los pseudo-elementos */
   }
   
   .estadistico:hover {
@@ -24,22 +26,33 @@
   .estadistico::before {
     content: '';
     position: absolute;
-    width: 100px;
+    width: 150%; /* Ajusta el ancho de la línea giratoria */
+    height: 150%; /* Ajusta la altura de la línea giratoria */
     background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    height: 130%;
     animation: rotBGimg 3s linear infinite;
     transition: all 0.2s linear;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg); /* Centra la línea */
   }
   
-  @keyframes rotBGimg {
-    from {
-      transform: rotate(0deg);
-    }
-  
-    to {
-      transform: rotate(360deg);
-    }
+  .estadistico::after {
+    content: '';
+    position: absolute;
+    background: #fff; /* Fondo de la card */
+    inset: 3px; /* Ajusta el tamaño del "marco" */
+    border-radius: 12px; /* Bordes redondeados del marco */
+    z-index: 1; /* Asegura que el contenido esté por encima de la línea giratoria */
   }
+
+@keyframes rotBGimg {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
   
   .estadistico::after {
     content: '';
