@@ -24,33 +24,21 @@
   }
   
   /* Primera línea giratoria */
-  .estadistico::before {
-    content: '';
-    position: absolute;
-    width: 200%; /* Cubre el contorno de la card */
-    height: 40px; /* Grosor de la línea */
-    background-image: linear-gradient(90deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    animation: rotBGimg 3s linear infinite;
-    top: -20px; /* Posición inicial fuera de la card */
-    left: -50%; /* Posición inicial fuera de la card */
-    transform-origin: center center; /* Rotación desde el centro */
-    z-index: 1; /* Asegura que esté detrás del contenido */
-  }
-  
-  /* Segunda línea giratoria */
+  .estadistico::before,
   .estadistico::after {
     content: '';
     position: absolute;
-    width: 200%; /* Cubre el contorno de la card */
-    height: 40px; /* Grosor de la línea */
-    background-image: linear-gradient(90deg, rgb(255, 48, 255), rgb(0, 183, 255));
-    animation: rotBGimgReverse 4s linear infinite; /* Animación inversa */
-    top: -20px; /* Posición inicial fuera de la card */
-    left: -50%; /* Posición inicial fuera de la card */
-    transform-origin: center center; /* Rotación desde el centro */
+    inset: 0; /* Asegura que cubra todo el contorno */
+    border-radius: 15px; /* Coincide con los bordes de la card */
+    border: 3px solid transparent; /* Borde inicial transparente */
+    background: linear-gradient(90deg, rgb(0, 183, 255), rgb(255, 48, 255)) border-box; /* Gradiente de color */
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude; /* Excluye el centro de la card */
+    -webkit-mask-composite: destination-out; /* Compatibilidad con navegadores basados en Webkit */
+    animation: rotarBorde 3s linear infinite;
     z-index: 1; /* Asegura que esté detrás del contenido */
   }
-  
+
   /* Fondo de la card (para cubrir el centro) */
   .estadistico .card-content {
     position: relative;
@@ -60,25 +48,14 @@
     border-radius: 12px; /* Bordes redondeados */
   }
   
-  /* Animación para la primera línea */
-  @keyframes rotBGimg {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+@keyframes rotarBorde {
+  from {
+    transform: rotate(0deg);
   }
-  
-  /* Animación para la segunda línea (en sentido inverso) */
-  @keyframes rotBGimgReverse {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(-360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
+}
   
   @media (max-width: 768px) {
     .estadistico {
