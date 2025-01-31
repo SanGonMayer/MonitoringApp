@@ -1,8 +1,8 @@
 .estadisticos-container {
     display: flex;
-    justify-content: space-between; /* Distribuye el espacio entre las estadisticos */
-    flex-wrap: wrap; /* Permite que las estadisticos se apilen en pantallas pequeñas */
-    gap: 20px; /* Espacio entre las estadisticos */
+    justify-content: space-between; /* Distribuye el espacio entre las cards */
+    align-items: flex-start; /* Alinea las cards en la parte superior */
+    gap: 20px; /* Espacio entre las cards */
     padding: 20px;
   }
   
@@ -14,6 +14,7 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    text-align: center; /* Centra el texto dentro de la card */
   }
   
   .estadistico:hover {
