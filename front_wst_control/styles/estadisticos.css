@@ -25,12 +25,24 @@
   background: #c7c7ff;
 }
 
+.titulo-1{
+  color: rgba(149, 149, 255, 1);
+}
+
 .estadistico--2 {
   background: #ffd8be;
 }
 
+.titulo-2{
+  color: rgba(252, 161, 71, 1);
+}
+
 .estadistico--3 {
   background: #f3bbe1;
+}
+
+.titulo-3 {
+  color: rgba(220, 91, 183, 1);
 }
 
 @media (max-width: 768px) {
