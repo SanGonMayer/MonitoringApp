@@ -21,6 +21,18 @@
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
 }
 
+.item--2 {
+  background: #ffd8be;
+}
+
+.item--3 {
+  background: #a9ecbf;
+}
+
+.item--4 {
+  background: #f3bbe1;
+}
+
 @media (max-width: 768px) {
   .estadistico {
     flex: 1 1 calc(50% - 20px); /* Dos estadisticos por fila en pantallas medianas */
