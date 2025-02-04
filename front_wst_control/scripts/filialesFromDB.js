@@ -111,10 +111,9 @@ function clearFilialContainer() {
   updateCantidadDeFiliales();
 } */
 
-async function createFilialButtons(filiales, tipoTerminal) {
+  async function createFilialButtons(filiales, tipoTerminal) {
     const filialContainer = document.querySelector('#filialContainer');
     inicializarEstadosFiliales(); 
-    //sinicializarEstadosHosts();
     inicializarEstadosHostsListas();
   
     const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
@@ -126,9 +125,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
     console.log('Filiales con movimientos:', filialesConMovimientos);
   
     for (const filial of filiales) {
-        const anilloCont = document.createElement('div'); // Contenedor para el anillo
-        anilloCont.classList.add('anillo-cont');
-
+        // Creamos el botón directamente sin contenedor extra
         const button = document.createElement('button');
         button.classList.add('custom-button');
     
@@ -153,29 +150,28 @@ async function createFilialButtons(filiales, tipoTerminal) {
 
         console.log('ID de la filial actual:', filial.id);
 
-        // Si la filial tuvo movimientos, agregar la clase de anillo animado
+        // Si la filial tuvo movimientos, agregar la clase que resalta el botón con un borde
         if (filialesConMovimientos.includes(Number(filial.id))) {
-        button.classList.add('anillo-animado');
+            button.classList.add('with-movement');
         }
   
         // Asigna los hosts directamente al evento click sin volver a hacer fetch
         button.onclick = () => {
-  
-          const filialName = filial.name; 
-          
-          sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
-          console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-          window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
+            const filialName = filial.name; 
+            sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+            console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
+            window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
         };
         
-        anilloCont.appendChild(button); //agregar el botón al contenedor
-        filialContainer.appendChild(anilloCont); // Asegúrate de agregar el botón al contenedor
+        // Agregar el botón directamente al contenedor principal
+        filialContainer.appendChild(button);
         window.allButtons.push(button);
     }
     console.log('Mostrando botones de filiales', window.allButtons);
     updateCantidadDeHosts();
     updateCantidadDeFiliales();
 }
+
 
 
 async function evaluarEstadoHosts(filialId, tipo) {
