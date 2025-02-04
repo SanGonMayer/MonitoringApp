@@ -14,6 +14,7 @@ import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTeleg
 import hostSnapshotRoutes from './routes/novedadesRoutes.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io'; // WebSocket con ESModules
+import novedadesRoutes from './routes/novedadesRoutes.js';
 
 dotenv.config();
 
