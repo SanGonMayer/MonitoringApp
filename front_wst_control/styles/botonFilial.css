@@ -100,7 +100,7 @@
   left: -3px;
   width: calc(100% + 6px);  /* Incrementa el tamaño para que el borde envuelva al botón */
   height: calc(100% + 6px);
-  border: 3px solid purple;  /* Color y grosor del contorno */
+  border: 10px solid rgb(17, 73, 255);  /* Color y grosor del contorno */
   border-radius: 50%;        /* Forma circular */
   border-right-color: transparent; /* Hace transparente la parte derecha */
   border-bottom-color: transparent; /* Hace transparente la parte inferior */
