@@ -77,7 +77,32 @@
     color: black
 }
 
+/* Definí la animación de rotación */
+@keyframes rotate {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+/* Asegurá que el botón con movimiento tenga posición relativa */
 .custom-button.with-movement {
-  outline: 6px solid rgb(39, 78, 207);
-  outline-offset: -3px; /* Ajusta el offset si es necesario */
+  position: relative; /* Crea un contexto de posicionamiento para el pseudo-elemento */
+}
+
+/* Pseudo-elemento para el contorno animado */
+.custom-button.with-movement::after {
+  content: "";
+  position: absolute;
+  top: -3px;    /* Ajustá según el grosor del borde */
+  left: -3px;
+  width: calc(100% + 6px);  /* Incrementa el tamaño para que el borde envuelva al botón */
+  height: calc(100% + 6px);
+  border: 3px solid purple;  /* Color y grosor del contorno */
+  border-radius: 50%;        /* Forma circular */
+  border-right-color: transparent; /* Hace transparente la parte derecha */
+  border-bottom-color: transparent; /* Hace transparente la parte inferior */
+  animation: rotate 1s linear infinite; /* Rota continuamente */
 }
