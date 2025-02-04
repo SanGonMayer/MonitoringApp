@@ -78,6 +78,6 @@
 }
 
 .custom-button.with-movement {
-  outline: 3px solid purple;
+  outline: 3px solid rgb(39, 78, 207);
   outline-offset: -3px; /* Ajusta el offset si es necesario */
 }
