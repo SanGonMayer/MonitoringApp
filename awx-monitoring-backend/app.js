@@ -11,7 +11,7 @@ import Filial from './models/filiales.js';
 import cron from 'node-cron';
 import { syncFiliales, syncHostsFromInventory22, syncHostsFromInventory347 } from './services/syncService.js';
 import { getOutdatedFilialesAndHosts, generateOutdatedReport, sendReportViaTelegram, generateAndSaveCSV } from './services/notificadorService.js';
-
+import hostSnapshotRoutes from './routes/novedadesRoutes.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io'; // WebSocket con ESModules
 
@@ -44,6 +44,8 @@ app.use(requestLoggerMiddleware());
 app.use(corsMiddleware());
 app.use(express.static(path.join(__dirname, 'front_wst_control')));
 app.use(awxRoutes);
+app.use('/api/hosts', novedadesRoutes);
+
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
