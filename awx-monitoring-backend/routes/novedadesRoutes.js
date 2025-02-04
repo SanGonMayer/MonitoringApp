@@ -8,8 +8,21 @@ const router = Router();
 // Ruta para obtener los registros con motivo "Host agregado"
 router.get('/agregados', async (req, res) => {
   try {
+    // Definir el inicio y fin del día de hoy
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
     const agregados = await HostSnapshot.findAll({
-      where: { motivo: 'Host agregado' },
+      where: {
+        motivo: 'Host agregado',
+        snapshot_date: {
+          [Op.gte]: startOfToday,
+          [Op.lte]: endOfToday,
+        }
+      },
       attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
     });
     res.json(agregados);
