@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionamos el contenedor para "Máquinas Agregadas"
     const containerAgregados = document.querySelector('.estadistico--1');
     if (containerAgregados) {
-      fetch('api/hosts/agregados')
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000api/hosts/agregados')
         .then(response => response.json())
         .then(data => {
           generateTable(data, containerAgregados);
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ya tienes la lógica para "deshabilitados" en la card de máquinas retiradas (estadistico--2)
     const containerDeshabilitados = document.querySelector('.estadistico--2');
     if (containerDeshabilitados) {
-      fetch('api/hosts/deshabilitados')
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000api/hosts/deshabilitados')
         .then(response => response.json())
         .then(data => {
           generateTable(data, containerDeshabilitados);
