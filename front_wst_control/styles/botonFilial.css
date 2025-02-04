@@ -87,22 +87,26 @@
   }
 }
 
-/* Asegurá que el botón con movimiento tenga posición relativa */
+/* Asegurá que el botón tenga posición relativa para que el pseudo-elemento se posicione correctamente */
 .custom-button.with-movement {
-  position: relative; /* Crea un contexto de posicionamiento para el pseudo-elemento */
+  position: relative;
+  z-index: 1; /* Para que el contenido esté por encima */
 }
 
-/* Pseudo-elemento para el contorno animado */
+/* Pseudo-elemento que simula el contorno animado */
 .custom-button.with-movement::after {
   content: "";
   position: absolute;
-  top: -3px;    /* Ajustá según el grosor del borde */
-  left: -3px;
-  width: calc(100% + 6px);  /* Incrementa el tamaño para que el borde envuelva al botón */
-  height: calc(100% + 6px);
-  border: 10px solid rgb(17, 73, 255);  /* Color y grosor del contorno */
-  border-radius: 50%;        /* Forma circular */
-  border-right-color: transparent; /* Hace transparente la parte derecha */
-  border-bottom-color: transparent; /* Hace transparente la parte inferior */
-  animation: rotate 1s linear infinite; /* Rota continuamente */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* Fondo con conic-gradient: 270° de color y 90° transparente */
+  background: conic-gradient(purple 0deg 270deg, transparent 270deg 360deg);
+  /* Aplicamos una máscara radial para que se vea solo el anillo (de 3px de grosor, por ejemplo) */
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+  z-index: -1; /* Se coloca detrás del botón */
+  animation: rotate 1s linear infinite;
 }
