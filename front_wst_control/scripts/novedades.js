@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     // Realizamos el fetch al endpoint de deshabilitados
-    fetch('/api/hosts/deshabilitados')
+    fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
       .then(response => response.json())
       .then(data => {
         generateTable(data, containerDeshabilitados);
