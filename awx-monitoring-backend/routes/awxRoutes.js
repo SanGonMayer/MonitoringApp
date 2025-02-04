@@ -59,6 +59,8 @@ awxRoutes.post('/api/sync', async (req, res) => {
   }
 });
 
+awxRoutes.post('/api/snapshot', takeDailySnapshot);
+
 awxRoutes.get('/api/db/filiales', async (req, res) => {
     try {
       const filiales = await getFilialesFromDB();
@@ -126,6 +128,7 @@ awxRoutes.post('/api/validate-credentials', (req, res) => {
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { takeDailySnapshot } from '../services/snapshotService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
