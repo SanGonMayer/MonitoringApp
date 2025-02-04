@@ -55,7 +55,7 @@
     cursor: pointer;
     /*background-color: #4CAF50; /* Color de fondo */
     transition: transform 0.2s ease; /* Animaciones suaves */
-    /*padding-top: 16px;*/
+    padding-top: 16px;
 }
 
 .custom-button:hover {
