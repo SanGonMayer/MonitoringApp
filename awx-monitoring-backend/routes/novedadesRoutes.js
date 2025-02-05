@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import HostSnapshot from '../models/hostsSnapshot.js';
+import Filial from '../models/filiales.js';
 import { Op } from 'sequelize';
 
 
