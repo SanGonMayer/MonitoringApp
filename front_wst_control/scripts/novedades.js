@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Para la card de "Máquinas Agregadas" (clase .estadistico--1)
     const containerAgregadas = document.querySelector('.estadistico--1');
     if (containerAgregadas) {
-      fetch('api/hosts/agregados')
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/agregados')
         .then(response => response.json())
         .then(data => {
           // Configuración para agregadas: mostrar host_id, host_name y status
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Para la card de "Máquinas Deshabilitadas" (clase .estadistico--2)
     const containerDeshabilitadas = document.querySelector('.estadistico--2');
     if (containerDeshabilitadas) {
-      fetch('api/hosts/deshabilitados')
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
         .then(response => response.json())
         .then(data => {
           // Configuración para deshabilitadas: mostrar host_id y host_name
