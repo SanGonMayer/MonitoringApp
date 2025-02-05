@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
           // Configuración para agregadas: mostrar host_id, host_name y status
           const configAgregadas = {
-            headers: ['ID', 'Nombre', 'Estado'],
-            rowMapper: item => [item.host_id, item.host_name, item.status]
+            headers: ['ID', 'Nombre', 'Estado', 'Filial'],
+            rowMapper: item => [item.host_id, item.host_name, item.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerAgregadas, configAgregadas);
         })
@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
         .then(response => response.json())
         .then(data => {
-          // Configuración para deshabilitadas: mostrar host_id y host_name
+          // Configuración para deshabilitadas: mostrar host_id, host_name y filial
           const configDeshabilitadas = {
-            headers: ['ID', 'Nombre'],
-            rowMapper: item => [item.host_id, item.host_name]
+            headers: ['ID', 'Nombre', 'Filial'],
+            rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerDeshabilitadas, configDeshabilitadas);
         })
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
- /**
+/**
  * Función genérica para generar una tabla a partir de datos y una configuración.
  * @param {Array} data - Array de objetos con la información.
  * @param {HTMLElement} container - Elemento del DOM donde se insertará la tabla.

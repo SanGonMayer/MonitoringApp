@@ -23,7 +23,14 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         }
       },
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
+      include: [
+        {
+          model: Filial,
+          as: 'filial',
+          attributes: ['name']
+        }
+      ]
     });
     res.json(agregados);
   } catch (error) {
@@ -37,7 +44,14 @@ router.get('/deshabilitados', async (req, res) => {
   try {
     const deshabilitados = await HostSnapshot.findAll({
       where: { motivo: 'Modificacion de habilitado a deshabilitado' },
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
+      include: [
+        {
+          model: Filial,
+          as: 'filial',
+          attributes: ['name']
+        }
+      ]
     });
     res.json(deshabilitados);
   } catch (error) {
