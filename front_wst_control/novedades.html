@@ -74,37 +74,44 @@
       <div id="advancedFilterSection">
         <h2>Filtro Avanzado</h2>
         <form id="filterForm">
-          <label for="filterHostID">Host ID:</label>
-          <input type="number" id="filterHostID" name="host_id">
-          
-          <label for="filterHostName">Host Name:</label>
-          <input type="text" id="filterHostName" name="host_name">
-          
-          <label for="filterMotivo">Motivo:</label>
-          <select id="filterMotivo" name="motivo">
-            <option value="">Todos</option>
-            <option value="Host agregado">Host agregado</option>
-            <option value="Modificacion de estado pendiente a actualizado">Modificacion de estado pendiente a actualizado</option>
-            <option value="Modificacion de estado pendiente a fallido">Modificacion de estado pendiente a fallido</option>
-            <option value="Modificacion de estado fallido a actualizado">Modificacion de estado fallido a actualizado</option>
-            <option value="Modificacion de inventario">Modificacion de inventario</option>
-            <option value="Modificacion de filial">Modificacion de filial</option>
-            <option value="Modificacion de habilitado a deshabilitado">Modificacion de habilitado a deshabilitado</option>
-            <option value="Modificacion de deshabilitado a habilitado">Modificacion de deshabilitado a habilitado</option>
-          </select>
-          
-          <label for="filterStartDate">Fecha inicio:</label>
-          <input type="date" id="filterStartDate" name="startDate">
-          
-          <label for="filterEndDate">Fecha fin:</label>
-          <input type="date" id="filterEndDate" name="endDate">
-          
-          <button type="submit">Buscar</button>
+          <div class="filter-field">
+            <label for="filterHostID">Host ID:</label>
+            <input type="number" id="filterHostID" name="host_id" placeholder="Ej. 123">
+          </div>
+          <div class="filter-field">
+            <label for="filterHostName">Host Name:</label>
+            <input type="text" id="filterHostName" name="host_name" placeholder="Ej. Nombre del Host">
+          </div>
+          <div class="filter-field">
+            <label for="filterMotivo">Motivo:</label>
+            <select id="filterMotivo" name="motivo">
+              <option value="">Todos</option>
+              <option value="Host agregado">Host agregado</option>
+              <option value="Modificacion de estado pendiente a actualizado">Modificacion de estado pendiente a actualizado</option>
+              <option value="Modificacion de estado pendiente a fallido">Modificacion de estado pendiente a fallido</option>
+              <option value="Modificacion de estado fallido a actualizado">Modificacion de estado fallido a actualizado</option>
+              <option value="Modificacion de inventario">Modificacion de inventario</option>
+              <option value="Modificacion de filial">Modificacion de filial</option>
+              <option value="Modificacion de habilitado a deshabilitado">Modificacion de habilitado a deshabilitado</option>
+              <option value="Modificacion de deshabilitado a habilitado">Modificacion de deshabilitado a habilitado</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="filterStartDate">Fecha inicio:</label>
+            <input type="date" id="filterStartDate" name="startDate" placeholder="Inicio">
+          </div>
+          <div class="filter-field">
+            <label for="filterEndDate">Fecha fin:</label>
+            <input type="date" id="filterEndDate" name="endDate" placeholder="Fin">
+          </div>
+          <div class="filter-field">
+            <button type="submit">Buscar</button>
+          </div>
         </form>
         
         <div id="filteredTableContainer"></div>
-        
       </div>
+      
 
     </div>
   </div>

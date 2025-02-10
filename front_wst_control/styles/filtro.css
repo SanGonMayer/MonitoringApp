@@ -4,52 +4,53 @@
     margin-top: 20px;
   }
 
-  /* Contenedor del formulario */
+/* Estilos para el formulario de filtro avanzado */
 #filterForm {
     display: flex;
-    flex-wrap: wrap;         /* Permite que se ajusten en varias filas si es necesario */
-    gap: 15px;               /* Espacio entre elementos */
-    align-items: center;
-    margin-bottom: 20px;
+    flex-wrap: nowrap; /* Para mantenerlos en una sola línea */
+    align-items: flex-end; /* Alinea etiquetas e inputs por la parte inferior */
+    gap: 15px;
     padding: 10px;
-    background-color: #f8f8ff;  /* Un fondo muy claro, opcional */
-    border: 1px solid #8a2be2;  /* Borde violeta */
+    background-color: #f8f8ff; /* Fondo muy claro (opcional) */
+    border: 1px solid #8a2be2; /* Borde violeta */
     border-radius: 8px;
+    margin-bottom: 20px;
   }
   
-  /* Estilos para etiquetas */
-  #filterForm label {
-    font-weight: bold;
-    margin-right: 5px;
+  /* Cada campo se agrupa en un contenedor */
+  .filter-field {
+    display: flex;
+    flex-direction: column;
   }
   
-  /* Estilos para inputs y select */
+  /* Inputs y select con estilo violeta */
   #filterForm input,
   #filterForm select {
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #8a2be2; /* Borde violeta */
+    border: 1px solid #8a2be2;
     border-radius: 4px;
     outline: none;
     transition: border-color 0.3s ease;
+    width: 150px; /* Ancho fijo, ajusta según lo que necesites */
   }
   
-  /* Placeholder personalizado */
+  /* Placeholder */
   #filterForm input::placeholder {
     color: #bbb;
     font-style: italic;
   }
   
-  /* Efecto al enfocar */
+  /* Enfoque en inputs y select */
   #filterForm input:focus,
   #filterForm select:focus {
-    border-color: #5e0099; /* Un violeta más oscuro al enfocar */
+    border-color: #5e0099; /* Violeta más oscuro al enfocar */
   }
   
-  /* Estilo del botón */
+  /* Botón con fondo violeta */
   #filterForm button {
     padding: 10px 20px;
-    background-color: #8a2be2; /* Fondo violeta */
+    background-color: #8a2be2;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -58,15 +59,17 @@
     transition: background-color 0.3s ease;
   }
   
-  /* Hover para el botón */
+  /* Hover en el botón */
   #filterForm button:hover {
     background-color: #7a1bd1;
   }
   
-  /* Opcional: Estilos para el contenedor de la tabla (ya lo tenías) */
+  /* Contenedor de la tabla con scroll */
   #filteredTableContainer {
-    max-height: 350px;
+    max-height: 350px; /* Aproximadamente para 7 filas, ajustar según tus estilos */
     overflow-y: auto;
     margin-top: 20px;
   }
+  
+  
   
