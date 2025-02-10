@@ -73,7 +73,7 @@ router.get('/filter', async (req, res) => {
   try {
     const results = await HostSnapshot.findAll({
       where: whereClause,
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date', 'motivo']
     });
     res.json(results);
   } catch (error) {

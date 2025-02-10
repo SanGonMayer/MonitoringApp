@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = document.createElement('tr');
       // Mapear los valores a las columnas
       const fecha = new Date(item.snapshot_date).toLocaleString();
-      const cellValues = [item.host_id, item.host_name, item.status, fecha];
+      const cellValues = [item.host_id, item.host_name, item.status, fecha, item.motivo];
       cellValues.forEach(val => {
         const td = document.createElement('td');
         td.textContent = val;
