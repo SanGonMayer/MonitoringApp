@@ -4,17 +4,22 @@
     margin-top: 20px;
   }
 
-/* Estilos para el formulario de filtro avanzado */
+#advancedFilterSection {
+  text-align: center; /* Centra el contenido textual y en línea dentro del contenedor */
+}
+
 #filterForm {
     display: flex;
-    flex-wrap: nowrap; /* Para mantenerlos en una sola línea */
-    align-items: flex-end; /* Alinea etiquetas e inputs por la parte inferior */
+    flex-wrap: nowrap;
+    align-items: flex-end;
     gap: 15px;
     padding: 10px;
-    background-color: #f8f8ff; /* Fondo muy claro (opcional) */
-    border: 1px solid #8a2be2; /* Borde violeta */
+    background-color: #f8f8ff;
+    border: 1px solid #8a2be2;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto; /* Esto centra el formulario dentro de su contenedor */
+    justify-content: center; /* Centra los elementos internos horizontalmente */
+    max-width: 900px; /* Puedes ajustar un ancho máximo para evitar que se extienda demasiado */
   }
   
   /* Cada campo se agrupa en un contenedor */
