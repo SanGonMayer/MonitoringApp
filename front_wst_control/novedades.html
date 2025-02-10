@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles/searchbar.css">
   <link rel="stylesheet" href="styles/botonFilial.css">
   <link rel="stylesheet" href="styles/estadisticos.css">
+  <link rel="stylesheet" href="styles/filtro.css">
   <link rel="shortcut icon" href="images/Logo_Banco_Credicoop.svg.png" />
 </head>
 <body>
@@ -69,6 +70,18 @@
           <p>Descripción o valor del estadístico 3.</p>
         </div>
       </div>
+
+      <!-- Sección de Filtro de Búsqueda -->
+      <div id="filterSection">
+        <h2>Buscar en HostSnapshot</h2>
+        <form id="filterForm">
+          <input type="text" id="filterInput" name="hostName" placeholder="Buscar por nombre de host">
+          <button type="submit">Buscar</button>
+        </form>
+        <!-- Contenedor para la tabla filtrada -->
+        <div id="filteredTableContainer"></div>
+      </div>
+
     </div>
   </div>
   <script type="module" src="scripts/appNEW.js"></script>
