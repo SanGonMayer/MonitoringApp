@@ -61,4 +61,24 @@ router.get('/deshabilitados', async (req, res) => {
   }
 });
 
+router.get('/filter', async (req, res) => {
+  const { hostName } = req.query;
+  const whereClause = {};
+
+  if (hostName) {
+    whereClause.host_name = { [Op.like]: `%${hostName}%` };
+  }
+
+  try {
+    const results = await HostSnapshot.findAll({
+      where: whereClause,
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
+    });
+    res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al filtrar los datos' });
+  }
+});
+
 export default router;
