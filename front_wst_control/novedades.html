@@ -71,15 +71,39 @@
         </div>
       </div>
 
-      <!-- Sección de Filtro de Búsqueda -->
-      <div id="filterSection">
-        <h2>Buscar en HostSnapshot</h2>
+      <div id="advancedFilterSection">
+        <h2>Filtro Avanzado</h2>
         <form id="filterForm">
-          <input type="text" id="filterInput" name="hostName" placeholder="Buscar por nombre de host">
+          <label for="filterHostID">Host ID:</label>
+          <input type="number" id="filterHostID" name="host_id">
+          
+          <label for="filterHostName">Host Name:</label>
+          <input type="text" id="filterHostName" name="host_name">
+          
+          <label for="filterMotivo">Motivo:</label>
+          <select id="filterMotivo" name="motivo">
+            <option value="">Todos</option>
+            <option value="Host agregado">Host agregado</option>
+            <option value="Modificacion de estado pendiente a actualizado">Modificacion de estado pendiente a actualizado</option>
+            <option value="Modificacion de estado pendiente a fallido">Modificacion de estado pendiente a fallido</option>
+            <option value="Modificacion de estado fallido a actualizado">Modificacion de estado fallido a actualizado</option>
+            <option value="Modificacion de inventario">Modificacion de inventario</option>
+            <option value="Modificacion de filial">Modificacion de filial</option>
+            <option value="Modificacion de habilitado a deshabilitado">Modificacion de habilitado a deshabilitado</option>
+            <option value="Modificacion de deshabilitado a habilitado">Modificacion de deshabilitado a habilitado</option>
+          </select>
+          
+          <label for="filterStartDate">Fecha inicio:</label>
+          <input type="date" id="filterStartDate" name="startDate">
+          
+          <label for="filterEndDate">Fecha fin:</label>
+          <input type="date" id="filterEndDate" name="endDate">
+          
           <button type="submit">Buscar</button>
         </form>
-        <!-- Contenedor para la tabla filtrada -->
+        
         <div id="filteredTableContainer"></div>
+        
       </div>
 
     </div>

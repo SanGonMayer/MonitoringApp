@@ -62,18 +62,42 @@ router.get('/deshabilitados', async (req, res) => {
 });
 
 router.get('/filter', async (req, res) => {
-  console.log('Endpoint /filter llamado con query:', req.query);
-  const { hostName } = req.query;
+  const { host_id, host_name, motivo, startDate, endDate } = req.query;
   const whereClause = {};
-
-  if (hostName) {
-    whereClause.host_name = { [Op.like]: `%${hostName}%` };
+  
+  if (host_id) {
+    // Convertir host_id a número, si es necesario
+    whereClause.host_id = host_id;
   }
-
+  
+  if (host_name) {
+    whereClause.host_name = { [Op.like]: `%${host_name}%` };
+  }
+  
+  if (motivo) {
+    whereClause.motivo = motivo; // Asumiendo coincidencia exacta
+  }
+  
+  if (startDate && endDate) {
+    whereClause.snapshot_date = {
+      [Op.gte]: new Date(startDate),
+      [Op.lte]: new Date(endDate)
+    };
+  } else if (startDate) {
+    // Si solo se proporciona la fecha de inicio, filtrar por ese día
+    const start = new Date(startDate);
+    const end = new Date(startDate);
+    end.setHours(23, 59, 59, 999);
+    whereClause.snapshot_date = {
+      [Op.gte]: start,
+      [Op.lte]: end
+    };
+  }
+  
   try {
     const results = await HostSnapshot.findAll({
       where: whereClause,
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date', 'motivo']
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date']
     });
     res.json(results);
   } catch (error) {

@@ -1,5 +1,6 @@
 #filteredTableContainer {
-    max-height: 350px; /* Ajusta este valor según el tamaño de tus filas */
+    max-height: 350px; /* Ajusta este valor según la altura de tus filas */
     overflow-y: auto;
     margin-top: 20px;
   }
+  
