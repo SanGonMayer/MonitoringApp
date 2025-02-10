@@ -81,7 +81,7 @@
     border-collapse: separate;  /* Necesario para aplicar border-radius */
     border-spacing: 0;
     margin-top: 15px;
-    border: 1px solid #8a2be2;   /* Borde violeta */
+    border: 1px solid #904dce;   /* Borde violeta */
     border-radius: 8px;          /* Bordes redondeados */
     overflow: hidden;            /* Asegura que los bordes redondeados se apliquen correctamente */
   }
