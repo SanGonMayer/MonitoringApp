@@ -1,24 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('El script de filtro se ha cargado correctamente.');
     const filterForm = document.getElementById('filterForm');
     const filterInput = document.getElementById('filterInput');
     const tableContainer = document.getElementById('filteredTableContainer');
   
     filterForm.addEventListener('submit', function(e) {
-      e.preventDefault();  // Prevenir recarga de página
-      const hostName = filterInput.value.trim();
-      // Construir los parámetros de consulta
-      const params = new URLSearchParams();
-      if (hostName) params.append('hostName', hostName);
-      console.log('Filtro iniciado');
-  
-      // Realizar la petición al endpoint de filtrado
-      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/filter?' + params.toString())
-        .then(response => response.json())
-        .then(data => {
-          renderFilteredTable(data, tableContainer);
-        })
-        .catch(error => console.error('Error al filtrar:', error));
-    });
+        console.log('Evento submit capturado.');
+        e.preventDefault();  // Esto evita que la página se recargue
+        const hostName = document.getElementById('filterInput').value.trim();
+        console.log('Valor del input:', hostName);
+      
+        const params = new URLSearchParams();
+        if (hostName) params.append('hostName', hostName);
+        console.log('Parámetros de consulta:', params.toString());
+      
+        fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/filter?' + params.toString())
+          .then(response => {
+            console.log('Respuesta recibida del servidor');
+            return response.json();
+          })
+          .then(data => {
+            console.log('Datos recibidos:', data);
+            renderFilteredTable(data, document.getElementById('filteredTableContainer'));
+          })
+          .catch(error => console.error('Error al filtrar:', error));
+      });
   });
   
   /**

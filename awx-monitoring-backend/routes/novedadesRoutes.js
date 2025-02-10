@@ -62,6 +62,7 @@ router.get('/deshabilitados', async (req, res) => {
 });
 
 router.get('/filter', async (req, res) => {
+  console.log('Endpoint /filter llamado con query:', req.query);
   const { hostName } = req.query;
   const whereClause = {};
 
