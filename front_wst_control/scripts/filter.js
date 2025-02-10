@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Crear la tabla y asignarle la clase para estilos
     const table = document.createElement('table');
-    table.classList.add('data-table');
+    table.classList.add('data-table-filtro-busqueda');
     
     // Crear el encabezado de la tabla
     const thead = document.createElement('thead');

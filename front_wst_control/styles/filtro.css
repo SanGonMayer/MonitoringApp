@@ -76,7 +76,7 @@
     margin-top: 20px;
   }
 
-  .data-table {
+  .data-table-filtro-busqueda {
     width: 100%;
     border-collapse: separate;  /* Necesario para aplicar border-radius */
     border-spacing: 0;
@@ -86,22 +86,22 @@
     overflow: hidden;            /* Asegura que los bordes redondeados se apliquen correctamente */
   }
   
-  .data-table th,
-  .data-table td {
+  .data-table-filtro-busqueda th,
+  .data-table-filtro-busqueda td {
     padding: 8px;
     text-align: center;
   }
   
-  .data-table th {
+  .data-table-filtro-busqueda th {
     background-color: #8a2be2;   /* Fondo violeta para el encabezado */
     color: #fff;
   }
   
-  .data-table tr:nth-child(even) {
+  .data-table-filtro-busqueda tr:nth-child(even) {
     background-color: #f3e5ff;   /* Un violeta muy claro para filas pares */
   }
   
-  .data-table tr:hover {
+  .data-table-filtro-busqueda tr:hover {
     background-color: #d1c4e9;   /* Un tono intermedio para el hover */
   }
   
