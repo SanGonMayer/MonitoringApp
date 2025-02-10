@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // Construir los parámetros de consulta
       const params = new URLSearchParams();
       if (hostName) params.append('hostName', hostName);
+      console.log('Filtro iniciado');
   
       // Realizar la petición al endpoint de filtrado
-      fetch('api/hosts/filter?' + params.toString())
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/filter?' + params.toString())
         .then(response => response.json())
         .then(data => {
           renderFilteredTable(data, tableContainer);
