@@ -75,6 +75,36 @@
     overflow-y: auto;
     margin-top: 20px;
   }
+
+  .data-table {
+    width: 100%;
+    border-collapse: separate;  /* Necesario para aplicar border-radius */
+    border-spacing: 0;
+    margin-top: 15px;
+    border: 1px solid #8a2be2;   /* Borde violeta */
+    border-radius: 8px;          /* Bordes redondeados */
+    overflow: hidden;            /* Asegura que los bordes redondeados se apliquen correctamente */
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .data-table th {
+    background-color: #8a2be2;   /* Fondo violeta para el encabezado */
+    color: #fff;
+  }
+  
+  .data-table tr:nth-child(even) {
+    background-color: #f3e5ff;   /* Un violeta muy claro para filas pares */
+  }
+  
+  .data-table tr:hover {
+    background-color: #d1c4e9;   /* Un tono intermedio para el hover */
+  }
+  
   
   
   
