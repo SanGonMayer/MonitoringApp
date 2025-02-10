@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
     // Definimos los encabezados; puedes ajustar según lo que necesites
-    const headers = ['ID', 'Nombre', 'Estado', 'Fecha'];
+    const headers = ['ID', 'Nombre', 'Estado', 'Fecha', 'Motivo'];
     headers.forEach(text => {
       const th = document.createElement('th');
       th.textContent = text;
