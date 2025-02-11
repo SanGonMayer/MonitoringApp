@@ -112,7 +112,7 @@ export const createAndManageSnapshots = async (snapshotData) => {
       where: { host_id: snapshotData.host_id },
     });
 
-    if (snapshotCount > 2) {
+    if (snapshotCount > 4) {
       const oldestSnapshot = await HostSnapshot.findOne({
         where: { host_id: snapshotData.host_id },
         order: [['snapshot_date', 'ASC']], // Obtener el más antiguo
