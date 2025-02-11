@@ -81,7 +81,6 @@ router.get('/deshabilitados', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los registros de deshabilitados' });
   }
 });
-});
 
 router.get('/filter', async (req, res) => {
   const { host_id, host_name, motivo, startDate, endDate } = req.query;
