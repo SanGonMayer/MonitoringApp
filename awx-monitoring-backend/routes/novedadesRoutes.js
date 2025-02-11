@@ -43,8 +43,19 @@ router.get('/agregados', async (req, res) => {
 // Ruta para obtener los registros con motivo "Modificacion de habilitado a deshabilitado"
 router.get('/deshabilitados', async (req, res) => {
   try {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
     const deshabilitados = await HostSnapshot.findAll({
-      where: { motivo: 'Modificacion de habilitado a deshabilitado' },
+      where: { motivo: 'Modificacion de habilitado a deshabilitado',
+        snapshot_date: {
+          [Op.gte]: startOfToday,
+          [Op.lte]: endOfToday,
+        }
+       },
       attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
