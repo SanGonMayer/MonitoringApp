@@ -36,6 +36,11 @@ const HostSnapshot = sequelize.define('HostSnapshot', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  old_filial_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null,
+  },
   motivo: {
     type: DataTypes.TEXT,
     allowNull: true,

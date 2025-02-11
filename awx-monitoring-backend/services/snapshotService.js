@@ -160,7 +160,7 @@ export const handleHostSnapshot = async (host, tipo) => {
           motivo,
         });
         
-        await createAndManageSnapshots({
+        let snapshotData = {
           host_id: id,
           host_name: name,
           status,
@@ -168,7 +168,13 @@ export const handleHostSnapshot = async (host, tipo) => {
           inventory_id,
           filial_id,
           motivo,
-        });
+        };
+
+        if (lastSnapshot && lastSnapshot.filial_id !== filial_id) {
+          snapshotData.old_filial_id = lastSnapshot.filial_id;
+        }
+        
+        await createAndManageSnapshots(snapshotData);
 
         modifiedHosts.push({
           id,
@@ -177,6 +183,7 @@ export const handleHostSnapshot = async (host, tipo) => {
           enabled,
           inventory_id,
           filial_id,
+          old_filial_id: snapshotData.old_filial_id || null,
           tipo,
           snapshot_date: new Date(),
           motivo,
