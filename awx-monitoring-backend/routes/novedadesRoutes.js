@@ -24,6 +24,7 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         }
       },
+      order: [['snapshot_date', 'DESC']],
       attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
