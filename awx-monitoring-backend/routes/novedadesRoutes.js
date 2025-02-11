@@ -2,6 +2,7 @@ import { Router } from 'express';
 import HostSnapshot from '../models/hostsSnapshot.js';
 import Filial from '../models/filiales.js';
 import { Op } from 'sequelize';
+import sequelize from '../config/database.js';
 
 
 const router = Router();
@@ -17,6 +18,13 @@ router.get('/agregados', async (req, res) => {
     endOfToday.setHours(23, 59, 59, 999);
 
     const agregados = await HostSnapshot.findAll({
+      attributes: [
+        'host_id',
+        'host_name',
+        'status',
+        // Obtenemos el valor máximo de snapshot_date para cada host
+        [sequelize.fn('max', sequelize.col('snapshot_date')), 'snapshot_date']
+      ],
       where: {
         motivo: 'Host agregado',
         snapshot_date: {
@@ -24,13 +32,19 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         }
       },
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
           model: Filial,
           as: 'filial',
           attributes: ['name']
         }
+      ],
+      group: [
+        'HostSnapshot.host_id',
+        'HostSnapshot.host_name',
+        'HostSnapshot.status',
+        'filial.id',
+        'filial.name'
       ]
     });
     res.json(agregados);
