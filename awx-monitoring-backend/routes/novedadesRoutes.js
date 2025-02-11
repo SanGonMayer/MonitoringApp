@@ -24,12 +24,17 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         }
       },
-      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
+      attributes: ['host_id', 'host_name', 'snapshot_date'],
       include: [
         {
           model: Filial,
           as: 'filial',
           attributes: ['name']
+        },
+        {
+          model: Workstation,
+          as:'workstation',
+          attributes: ['status']
         }
       ]
     });
