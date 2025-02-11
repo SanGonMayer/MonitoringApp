@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Configuración para agregadas: mostrar host_id, host_name y status
           const configAgregadas = {
             headers: ['ID', 'Nombre', 'Estado', 'Filial'],
-            rowMapper: item => [item.host_id, item.host_name, item.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
+            rowMapper: item => [item.host_id, item.host_name, item.workstation.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerAgregadas, configAgregadas);
         })
