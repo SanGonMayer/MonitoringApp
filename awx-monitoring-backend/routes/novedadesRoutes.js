@@ -9,18 +9,14 @@ const router = Router();
 // Ruta para obtener los registros con motivo "Host agregado"
 router.get('/agregados', async (req, res) => {
   try {
+    // Definir el inicio y fin del día de hoy
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
+
     const endOfToday = new Date();
     endOfToday.setHours(23, 59, 59, 999);
 
     const agregados = await HostSnapshot.findAll({
-      attributes: [
-        'host_id',
-        'host_name',
-        'status',
-        [sequelize.fn('max', sequelize.col('snapshot_date')), 'snapshot_date']
-      ],
       where: {
         motivo: 'Host agregado',
         snapshot_date: {
@@ -28,7 +24,7 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         }
       },
-      group: ['host_id', 'host_name', 'status'],
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
           model: Filial,
@@ -49,24 +45,18 @@ router.get('/deshabilitados', async (req, res) => {
   try {
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
+
     const endOfToday = new Date();
     endOfToday.setHours(23, 59, 59, 999);
 
     const deshabilitados = await HostSnapshot.findAll({
-      attributes: [
-        'host_id',
-        'host_name',
-        'status',
-        [sequelize.fn('max', sequelize.col('snapshot_date')), 'snapshot_date']
-      ],
-      where: {
-        motivo: 'Modificacion de habilitado a deshabilitado',
-        snapshot_date: {
+      where: { motivo: 'Modificacion de habilitado a deshabilitado',
+                snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
         }
-      },
-      group: ['host_id', 'host_name', 'status'],
+       },
+      attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
           model: Filial,
