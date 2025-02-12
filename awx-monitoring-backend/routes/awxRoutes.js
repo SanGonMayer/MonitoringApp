@@ -149,7 +149,7 @@ awxRoutes.post('/api/generateSnapshotChangeReport', async (req, res) => {
   }
 });
 
-awxRoutes.post('/test-email', async (req, res) => {
+/*awxRoutes.post('/test-email', async (req, res) => {
   const { recipientEmails } = req.body;
 
   if (!recipientEmails || recipientEmails.length === 0) {
@@ -241,7 +241,7 @@ awxRoutes.post('/test-email', async (req, res) => {
     console.error('❌ Error al enviar el correo de prueba:', error.message);
     return res.status(500).json({ error: 'Error al enviar el correo de prueba.' });
   }
-});
+});*/
 
 //ruta para armar el anillo cuando hay movimientos
 awxRoutes.get('/api/filiales-con-movimientos', async (req, res) => {
