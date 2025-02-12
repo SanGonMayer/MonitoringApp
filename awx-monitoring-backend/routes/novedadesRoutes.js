@@ -123,4 +123,64 @@ router.get('/filter', async (req, res) => {
   }
 });
 
+router.get('/reemplazos', async (req, res) => {
+  try {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
+    // 1. Obtener las filiales en las que se registró una baja hoy.
+    // Se considera baja el motivo "Modificacion de habilitado a deshabilitado".
+    const bajas = await HostSnapshot.findAll({
+      attributes: ['filial_id'],
+      where: {
+        snapshot_date: {
+          [Op.gte]: startOfToday,
+          [Op.lte]: endOfToday,
+        },
+        motivo: 'Modificacion de habilitado a deshabilitado'
+      },
+      group: ['filial_id']
+    });
+    const filialIdsConBaja = bajas.map(registro => registro.filial_id);
+
+    // 2. Consultar los eventos de entrada, ya sea por "Host agregado" o "Modificacion de filial",
+    // que cumplan alguna de las siguientes condiciones:
+    //   - Que tengan old_filial_id definido (lo que indica que provienen de otra filial).
+    //   - O que la filial de ingreso (filial_id) esté en la lista de filiales donde se registró baja.
+    const reemplazos = await HostSnapshot.findAll({
+      attributes: ['host_id', 'host_name', 'status'],
+      where: {
+        snapshot_date: {
+          [Op.gte]: startOfToday,
+          [Op.lte]: endOfToday,
+        },
+        motivo: { [Op.in]: ['Host agregado', 'Modificacion de filial'] },
+        [Op.or]: [
+          { old_filial_id: { [Op.ne]: null } },
+          { filial_id: { [Op.in]: filialIdsConBaja } }
+        ]
+      },
+      include: [
+        {
+          model: Filial,
+          as: 'filial',
+          attributes: ['name']
+        },
+        {
+          model: Workstation,
+          as:'workstation',
+          attributes: ['status']
+        }
+      ]
+    });
+
+    res.json(reemplazos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los registros de reemplazos' });
+  }
+});
+
 export default router;

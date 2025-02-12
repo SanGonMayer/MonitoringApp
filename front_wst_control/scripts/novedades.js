@@ -30,6 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error al obtener los deshabilitados:', error));
     }
+
+    const containerReemplazadas = document.querySelector('.estadistico--3');
+    if (containerReemplazadas) {
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazados')
+        .then(response => response.json())
+        .then(data => {
+          // Configuración para reemplazadas: mostrar host_id, host_name y filial
+          const configReemplazadas = {
+            headers: ['ID', 'Nombre', 'Estado', 'Filial'],
+            rowMapper: item => [item.host_id, item.host_name, item.workstation.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
+          };
+          generateCustomTable(data, containerReemplazadas, configReemplazadas);
+        })
+        .catch(error => console.error('Error al obtener los reemplazados:', error));
+      }
   });
   
 /**
