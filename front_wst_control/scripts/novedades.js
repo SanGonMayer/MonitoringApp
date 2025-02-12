@@ -84,6 +84,12 @@ function generateCustomTable(data, container, config) {
       tbody.appendChild(row);
     });
     table.appendChild(tbody);
+
+
+    // Crear un contenedor para la tabla y aplicar el scroll
+    const tableContainer = document.createElement('div');
+    tableContainer.classList.add('table-container-estadisticos');
+    tableContainer.appendChild(table);
   
     // Insertar la tabla en el contenedor.
     container.appendChild(table);

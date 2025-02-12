@@ -83,3 +83,9 @@
 .data-table tr:hover {
   background-color: #ddd;
 }
+
+.table-container-estadisticos {
+  max-height: 400px; /* Ajustá según la altura deseada para 10 filas */
+  overflow-y: auto;
+}
+
