@@ -85,7 +85,7 @@
 }
 
 .table-container-estadisticos {
-  max-height: 300px; /* Ajustá según la altura deseada para 10 filas */
+  max-height: 400px; /* Ajustá según la altura deseada para 10 filas */
   overflow-y: auto;
 }
 
