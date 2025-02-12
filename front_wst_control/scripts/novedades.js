@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const containerReemplazadas = document.querySelector('.estadistico--3');
     if (containerReemplazadas) {
-      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazados')
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazos')
         .then(response => response.json())
         .then(data => {
           // Configuración para reemplazadas: mostrar host_id, host_name y filial
