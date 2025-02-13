@@ -311,7 +311,7 @@ function actualizarRecuperarHosts(){
           if (fromPage === 'wst') {
               actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
           } else if (fromPage === 'cctv') {
-              actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+              actionButton.textContent = 'Aplicar ctv_upd_v0.3.1';
           } else {
               actionButton.textContent = 'Aplicar actualización genérica';
           }
