@@ -78,7 +78,8 @@ export const getFilialesConHosts = async (tipoTerminal) => {
                     model: modelo,
                     required: true, // Solo incluye filiales que tienen al menos un registro en CCTV
                     where: {
-                        filial_id: { [Op.col]: 'Filial.id' } // Verifica que CCTV.filial_id coincida con Filial.id
+                        filial_id: { [Op.col]: 'Filial.id' }, // Verifica que CCTV.filial_id coincida con Filial.id
+                        enabled: true
                     },
                     attributes: [] // No necesitas datos de CCTV, solo verificar la existencia
                 },
