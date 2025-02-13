@@ -307,19 +307,19 @@ export const getHostsByFilial = async (req, res) => {
         const jobSummaries = (host.jobSummaries || []).sort((a, b) => new Date(b.jobCreationDate) - new Date(a.jobCreationDate));
         console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos ordenados por fecha de creación.`);
     
-        // Filtrar todos los "ctv_upd_v0.2.0" exitosos
+        // Filtrar todos los "ctv_upd_v0.3.1" exitosos
         const succesfulUpdates = jobSummaries.filter(
-          summary => summary.job_name === 'ctv_upd_v0.2.0' && !summary.failed
+          summary => summary.job_name === 'ctv_upd_v0.3.1' && !summary.failed
         );
 
     
-        // Si existe un "ctv_upd_v0.2.0" exitoso, el host está actualizado
+        // Si existe un "ctv_upd_v0.3.1" exitoso, el host está actualizado
         if (succesfulUpdates.length > 0) {
           const oldestSuccessfulUpdate = succesfulUpdates.reduce((oldest, current) =>
             new Date(current.jobCreationDate) < new Date(oldest.jobCreationDate) ? current : oldest
           );
       
-          console.log(`Host ${host.id} - ${host.name} tiene un "ctv_upd_v0.2.0" exitoso más antiguo. Marcado como actualizado.`);
+          console.log(`Host ${host.id} - ${host.name} tiene un "ctv_upd_v0.3.1" exitoso más antiguo. Marcado como actualizado.`);
       
           const rawDate = new Date(oldestSuccessfulUpdate.jobCreationDate);
           const formattedDate = rawDate.toISOString().split('T')[0].replace(/-/g, '/');
@@ -334,9 +334,9 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
     
-        // Si hay un "ctv_upd_v0.2.0" pero todos fallaron, el host está fallido
-        if (jobSummaries.some(summary => summary.job_name === 'ctv_upd_v0.2.0' && summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "ctv_upd_v0.2.0" fallido. Marcado como fallido.`);
+        // Si hay un "ctv_upd_v0.3.1" pero todos fallaron, el host está fallido
+        if (jobSummaries.some(summary => summary.job_name === 'ctv_upd_v0.3.1' && summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "ctv_upd_v0.3.1" fallido. Marcado como fallido.`);
           return {
             id: host.id,
             name: host.name,
@@ -346,8 +346,8 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
     
-        // Si no hay un "ctv_upd_v0.2.0" exitoso ni fallido, está pendiente
-        console.log(`Host ${host.id} - ${host.name} está pendiente de un "ctv_upd_v0.2.0".`);
+        // Si no hay un "ctv_upd_v0.3.1" exitoso ni fallido, está pendiente
+        console.log(`Host ${host.id} - ${host.name} está pendiente de un "ctv_upd_v0.3.1".`);
     
         return {
           id: host.id,
