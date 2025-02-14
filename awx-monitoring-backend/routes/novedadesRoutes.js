@@ -36,6 +36,11 @@ router.get('/agregados', async (req, res) => {
           model: Workstation,
           as:'workstation',
           attributes: ['status']
+        },
+        {
+          model: CCTV,
+          as: 'cctv',
+          attributes: ['status']
         }
       ]
     });

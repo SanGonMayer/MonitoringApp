@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Para la card de "Máquinas Agregadas" (clase .estadistico--1)
+
     const containerAgregadas = document.querySelector('.estadistico--1');
     if (containerAgregadas) {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/agregados')
@@ -8,14 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
           // Configuración para agregadas: mostrar host_id, host_name y status
           const configAgregadas = {
             headers: ['ID', 'Nombre', 'Estado', 'Filial'],
-            rowMapper: item => [item.host_id, item.host_name, item.workstation.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
+            rowMapper: item => [item.host_id, item.host_name, 
+              item.workstation && item.workstation.status 
+              ? item.workstation.status 
+              : (item.cctv && item.cctv.status ? item.cctv.status : item.status), 
+              item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerAgregadas, configAgregadas);
         })
         .catch(error => console.error('Error al obtener los agregados:', error));
     }
   
-    // --- Para la card de "Máquinas Deshabilitadas" (clase .estadistico--2)
+
     const containerDeshabilitadas = document.querySelector('.estadistico--2');
     if (containerDeshabilitadas) {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
