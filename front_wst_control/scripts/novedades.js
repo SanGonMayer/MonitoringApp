@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
         .then(response => response.json())
         .then(data => {
-          updateCounter(containerAgregadas, data.length);
+          updateCounter(containerDeshabilitadas, data.length);
           // Configuración para deshabilitadas: mostrar host_id, host_name y filial
           const configDeshabilitadas = {
             headers: ['ID', 'Nombre', 'Filial'],
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazos')
         .then(response => response.json())
         .then(data => {
-          updateCounter(containerAgregadas, data.length);
+          updateCounter(containerReemplazadas, data.length);
           // Configuración para reemplazadas: mostrar host_id, host_name y filial
           const configReemplazadas = {
             headers: ['ID', 'Nombre', 'Estado', 'Filial'],
