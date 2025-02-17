@@ -90,7 +90,7 @@
 }
 
 .contador-hoy {
-  font-size: 2em;           /* Tamaño normal para la palabra "Hoy:" */
+  font-size: 1em;           /* Tamaño normal para la palabra "Hoy:" */
   color: rgb(0, 0, 0);             /* Color blanco para todo el contenido */
   margin-top: 5px;
   text-align: center;
