@@ -97,7 +97,7 @@
 }
 
 .contador-numero {
-  font-size: 2em;           /* Número en grande */
+  font-size: 4em;           /* Número en grande */
   font-weight: bold;
   color: rgb(255, 255, 255);
 }
