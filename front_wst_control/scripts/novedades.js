@@ -106,7 +106,17 @@ function generateCustomTable(data, container, config) {
   function updateCounter(container, count) {
     const counterElement = document.createElement('div');
     counterElement.classList.add('contador-hoy');
-    counterElement.innerHTML = `Hoy: <span class="contador-numero">${count}</span>`;
+    
+    // Crear elementos separados para "Hoy:" y el número
+    const textElement = document.createElement('div');
+    textElement.textContent = "Hoy:";
+    
+    const numberElement = document.createElement('div');
+    numberElement.classList.add('contador-numero');
+    numberElement.textContent = count;
+
+    counterElement.appendChild(textElement);
+    counterElement.appendChild(numberElement);
     
     const title = container.querySelector('h2');
     if (title) {
@@ -114,5 +124,4 @@ function generateCustomTable(data, container, config) {
     } else {
       container.insertAdjacentElement('afterbegin', counterElement);
     }
-  }
-  
+}
