@@ -104,17 +104,15 @@ function generateCustomTable(data, container, config) {
   
 
   function updateCounter(container, count) {
-    // Crear el elemento contenedor para el contador
     const counterElement = document.createElement('div');
     counterElement.classList.add('contador-hoy');
     counterElement.innerHTML = `Hoy: <span class="contador-numero">${count}</span>`;
     
-    // Insertarlo inmediatamente después del título (h2)
     const title = container.querySelector('h2');
     if (title) {
       title.insertAdjacentElement('afterend', counterElement);
     } else {
-      container.insertBefore(counterElement, container.firstChild);
+      container.insertAdjacentElement('afterbegin', counterElement);
     }
   }
   
