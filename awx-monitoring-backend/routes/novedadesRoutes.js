@@ -20,7 +20,9 @@ router.get('/agregados', async (req, res) => {
 
     const agregados = await HostSnapshot.findAll({
       where: {
-        motivo: 'Host agregado',
+        motivo: {
+          [Op.in]: ['Host agregado', 'Modificacion de desactualizado a actualizado']
+        },
         snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
