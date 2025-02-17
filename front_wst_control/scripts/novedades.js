@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/agregados')
         .then(response => response.json())
         .then(data => {
+          updateCounter(containerAgregadas, data.length);
           // Configuración para agregadas: mostrar host_id, host_name y status
           const configAgregadas = {
             headers: ['ID', 'Nombre', 'Estado', 'Filial'],
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
         .then(response => response.json())
         .then(data => {
+          updateCounter(containerAgregadas, data.length);
           // Configuración para deshabilitadas: mostrar host_id, host_name y filial
           const configDeshabilitadas = {
             headers: ['ID', 'Nombre', 'Filial'],
@@ -40,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazos')
         .then(response => response.json())
         .then(data => {
+          updateCounter(containerAgregadas, data.length);
           // Configuración para reemplazadas: mostrar host_id, host_name y filial
           const configReemplazadas = {
             headers: ['ID', 'Nombre', 'Estado', 'Filial'],
@@ -97,5 +100,21 @@ function generateCustomTable(data, container, config) {
   
     // Insertar la tabla en el contenedor.
     container.appendChild(table);
+  }
+  
+
+  function updateCounter(container, count) {
+    // Crear el elemento contenedor para el contador
+    const counterElement = document.createElement('div');
+    counterElement.classList.add('contador-hoy');
+    counterElement.innerHTML = `Hoy: <span class="contador-numero">${count}</span>`;
+    
+    // Insertarlo inmediatamente después del título (h2)
+    const title = container.querySelector('h2');
+    if (title) {
+      title.insertAdjacentElement('afterend', counterElement);
+    } else {
+      container.insertBefore(counterElement, container.firstChild);
+    }
   }
   

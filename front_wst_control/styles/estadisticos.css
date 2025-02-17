@@ -89,3 +89,14 @@
   overflow-y: auto;
 }
 
+.contador-hoy {
+  font-size: 1em;           /* Tamaño normal para la palabra "Hoy:" */
+  color: white;             /* Color blanco para todo el contenido */
+  margin-top: 5px;
+  text-align: center;
+}
+
+.contador-numero {
+  font-size: 2em;           /* Número en grande */
+  font-weight: bold;
+}
