@@ -15,6 +15,7 @@ import hostSnapshotRoutes from './routes/novedadesRoutes.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io'; // WebSocket con ESModules
 import novedadesRoutes from './routes/novedadesRoutes.js';
+import { takeDailySnapshot } from './services/snapshotService.js';
 
 dotenv.config();
 
