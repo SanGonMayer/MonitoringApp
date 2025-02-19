@@ -8,11 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
           updateCounter(containerAgregadas, data.length);
           // Configuración para agregadas: mostrar host_id, host_name y status
           const configAgregadas = {
-            headers: ['ID', 'Nombre', 'Estado', 'Filial'],
+            headers: ['ID', 'Nombre', 'Filial'],
             rowMapper: item => [item.host_id, item.host_name, 
-              item.workstation && item.workstation.status 
-              ? item.workstation.status 
-              : (item.cctv && item.cctv.status ? item.cctv.status : item.status), 
+              item.workstation, 
+              //&& item.workstation.status 
+              //? item.workstation.status 
+              //: (item.cctv && item.cctv.status ? item.cctv.status : item.status), 
               item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerAgregadas, configAgregadas);
@@ -45,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
           updateCounter(containerReemplazadas, data.length);
           // Configuración para reemplazadas: mostrar host_id, host_name y filial
           const configReemplazadas = {
-            headers: ['ID', 'Nombre', 'Estado', 'Filial'],
-            rowMapper: item => [item.host_id, item.host_name, item.workstation.status, item.filial && item.filial.name ? item.filial.name : 'N/D']
+            headers: ['ID', 'Nombre', 'Filial'],
+            rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
           generateCustomTable(data, containerReemplazadas, configReemplazadas);
         })
