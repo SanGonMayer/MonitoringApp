@@ -252,6 +252,13 @@ awxRoutes.get('/api/filiales-con-movimientos', async (req, res) => {
     const filialesMovidas = await HostSnapshot.findAll({
       where: {
         snapshot_date: { [Op.gte]: today }, 
+        motivo: { 
+          [Op.notIn]: [
+            'Modificacion de estado pendiente a actualizado',
+            'Modificacion de estado pendiente a fallido',
+            'Modificacion de estado fallido a actualizado'
+          ]
+        }
       },
       attributes: ['filial_id'],
       group: ['filial_id'], 
