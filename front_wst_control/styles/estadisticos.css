@@ -61,6 +61,8 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  max-height: 300px; /* Aproximadamente para 7 filas, ajustar según tus estilos */
+  overflow-y: auto;
 }
 
 .data-table th,
