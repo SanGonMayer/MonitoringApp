@@ -71,7 +71,7 @@
   
   /* Contenedor de la tabla con scroll */
   #filteredTableContainer {
-    max-height: 350px; /* Aproximadamente para 7 filas, ajustar según tus estilos */
+    max-height: 450px; /* Aproximadamente para 7 filas, ajustar según tus estilos */
     overflow-y: auto;
     margin-top: 20px;
   }
