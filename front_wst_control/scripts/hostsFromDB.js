@@ -143,6 +143,24 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 
   async function launchJobUpd(hostname, fromPage) {
     try {
+    
+      // Validar credenciales
+    const credentials = await validateCredentials();
+    if (!credentials) {
+
+      Swal.fire({
+        icon: "error",
+        title: "Acceso denegado",
+        text: "No se pudo validar las credenciales",
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Credenciales aceptadas",
+      text: `Usuario: ${credentials.username}`,
+    });
 
       console.log("Iniciando ejecución del job para el host:", hostname);
 
