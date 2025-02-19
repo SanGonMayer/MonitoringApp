@@ -1,20 +1,19 @@
 .estadisticos-container {
   display: flex;
-  justify-content: space-between; /* Distribuye el espacio entre las cards */
-  align-items: flex-start; /* Alinea las cards en la parte superior */
+  flex-direction: column; /* Dispone las cards en columna */
   gap: 20px; /* Espacio entre las cards */
   padding: 20px;
 }
 
 .estadistico {
-  flex: 1 1 calc(33.333% - 40px); /* Ajusta el tamaño de las estadisticos */
+  width: 100%; /* Hace que cada card ocupe todo el ancho del contenedor */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  text-align: center; /* Centra el texto dentro de la card */
+  text-align: center;
 }
 
 .estadistico:hover {
