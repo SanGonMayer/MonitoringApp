@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const configAgregadas = {
             headers: ['ID', 'Nombre', 'Filial'],
             rowMapper: item => [item.host_id, item.host_name, 
-              item.workstation, 
+              //item.workstation, 
               //&& item.workstation.status 
               //? item.workstation.status 
               //: (item.cctv && item.cctv.status ? item.cctv.status : item.status), 
