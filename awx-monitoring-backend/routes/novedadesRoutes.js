@@ -154,9 +154,7 @@ router.get('/reemplazos', async (req, res) => {
     const filialIdsConBaja = bajas.map(registro => registro.filial_id);
 
     // 2. Consultar los eventos de entrada, ya sea por "Host agregado" o "Modificacion de filial",
-    // que cumplan alguna de las siguientes condiciones:
-    //   - Que tengan old_filial_id definido (lo que indica que provienen de otra filial).
-    //   - O que la filial de ingreso (filial_id) esté en la lista de filiales donde se registró baja.
+    // que se consideran reemplazo únicamente si la filial de ingreso está en la lista de filiales donde se registró baja.
     const reemplazos = await HostSnapshot.findAll({
       attributes: ['host_id', 'host_name', 'status'],
       where: {
@@ -165,10 +163,8 @@ router.get('/reemplazos', async (req, res) => {
           [Op.lte]: endOfToday,
         },
         motivo: { [Op.in]: ['Host agregado', 'Modificacion de filial'] },
-        [Op.or]: [
-          { old_filial_id: { [Op.ne]: null } },
-          { filial_id: { [Op.in]: filialIdsConBaja } }
-        ]
+        // Únicamente se clasifica como reemplazo si la filial de ingreso tuvo baja
+        filial_id: { [Op.in]: filialIdsConBaja }
       },
       include: [
         {
@@ -178,7 +174,7 @@ router.get('/reemplazos', async (req, res) => {
         },
         {
           model: Workstation,
-          as:'workstation',
+          as: 'workstation',
           attributes: ['status']
         }
       ]
@@ -190,5 +186,6 @@ router.get('/reemplazos', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los registros de reemplazos' });
   }
 });
+
 
 export default router;
