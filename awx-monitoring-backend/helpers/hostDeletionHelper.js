@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { handleHostSnapshot } from '../services/snapshotsService.js';
+import { handleHostSnapshot } from '../services/snapshotService.js';
 
 /**
  * Captura el snapshot de los hosts que ya no están presentes en la API y luego los elimina.
