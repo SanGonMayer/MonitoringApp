@@ -7,6 +7,7 @@ import Inventory from '../models/inventory.js';
 import { Op } from 'sequelize';
 import { io } from '../app.js';
 import { calculateHostStatus } from '../utils/hostStatus.js';
+import { captureAndDeleteMissingHosts } from '../helpers/hostDeletionHelper.js';
 
 const baseApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/inventories';
 const hostsApiUrl = 'http://sawx0001lx.bancocredicoop.coop/api/v2/groups';
@@ -119,12 +120,15 @@ export const syncHostsFromInventory22 = async (filial) => {
         }
       }
 
-      await Workstation.destroy({
+      /*await Workstation.destroy({
         where: {
           filial_id: filial.id,
           id: { [Op.notIn]: enabledHostIdsFromAPI }  
         }
-      });
+      });*/
+
+      await captureAndDeleteMissingHosts(Workstation, filial.id, enabledHostIdsFromAPI, 'workstation');
+
   
       console.log(`Hosts WST de la filial ${filial.name} sincronizados.`);
     } catch (error) {
@@ -181,12 +185,14 @@ export const syncHostsFromInventory22 = async (filial) => {
       }
       }
 
-      await CCTV.destroy({
+      /*await CCTV.destroy({
         where: {
           filial_id: filial.id,
           id: { [Op.notIn]: enabledHostIdsFromAPI }  
         }
-      });
+      });*/
+
+      await captureAndDeleteMissingHosts(CCTV, filial.id, enabledHostIdsFromAPI, 'cctv');
   
       console.log(`Hosts CCTV de la filial ${filial.name} sincronizados.`);
     } catch (error) {
@@ -259,12 +265,14 @@ export const syncHostsFromInventory22 = async (filial) => {
                 }
             }
 
-            await Workstation.destroy({
+            /*await Workstation.destroy({
                 where: {
                     filial_id: filial.id,
                     id: { [Op.notIn]: enabledHostIdsFromAPI },
                 }
-            });
+            });*/
+
+            await captureAndDeleteMissingHosts(Workstation, filial.id, enabledHostIdsFromAPI, 'workstation');
         }
 
         if (filial.awx_id_cctv) {
@@ -302,12 +310,14 @@ export const syncHostsFromInventory22 = async (filial) => {
                 }
             }
 
-            await CCTV.destroy({
+            /*await CCTV.destroy({
                 where: {
                     filial_id: filial.id,
                     id: { [Op.notIn]: enabledHostIdsFromAPI },
                 }
-            });
+            });*/
+
+            await captureAndDeleteMissingHosts(CCTV, filial.id, enabledHostIdsFromAPI, 'cctv');
         }
 
         io.emit('db-updated', { source: 'Actualizacion template db' });
