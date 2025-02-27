@@ -21,7 +21,8 @@ export const captureAndDeleteMissingHosts = async (model, filialId, enabledHostI
 
   // Para cada host a eliminar: actualizar a disabled y generar snapshot
   for (const host of hostsToRemove) {
-    if (host.enabled) {
+    console.log(`Procesando host para eliminación: ID ${host.id}, Nombre: ${host.name}, enabled: ${host.enabled}`);
+    if (host.enabled === true || host.enabled === 't') {
       console.log(`Actualizando host ${host.id} (${host.name}) a disabled y generando snapshot`);
       await host.update({ enabled: false });
       // Aquí se genera el snapshot, que con la lógica actual debería detectar el cambio de enabled
