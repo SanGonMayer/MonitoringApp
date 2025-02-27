@@ -223,18 +223,23 @@ export const syncHostsFromInventory22 = async (filial) => {
   
 
   export const syncSingleFilial = async (filialId) => {
+    console.log(`Iniciando sincronización de la filial con ID: ${filialId}`);
     try {
         const filial = await Filial.findByPk(filialId);
 
         if (!filial) {
             throw new Error(`Filial con ID ${filialId} no encontrada`);
         }
+        console.log(`Filial encontrada: ${filial.name}`);
 
         if (filial.awx_id_wst) {
+            console.log(`Procesando hosts WST para la filial ${filial.name}`);
             const hostsWST = await fetchAllPages(`http://sawx0001lx.bancocredicoop.coop/api/v2/groups/${filial.awx_id_wst}/hosts/`);
             const enabledHostIdsFromAPI = hostsWST.filter(host => host.enabled).map(host => host.id);
+            console.log(`Hosts WST recibidos: ${hostsWST.length}`);
 
             for (const host of hostsWST) {
+              console.log(`Procesando host WST: ${host.name}`);
                 const [existingHost] = await Workstation.upsert({
                     id: host.id,
                     name: host.name,
@@ -271,7 +276,7 @@ export const syncHostsFromInventory22 = async (filial) => {
                     id: { [Op.notIn]: enabledHostIdsFromAPI },
                 }
             });*/
-
+            console.log(`Ejecutando helper para capturar y eliminar hosts WST que ya no están en la API`);
             await captureAndDeleteMissingHosts(Workstation, filial.id, enabledHostIdsFromAPI, 'workstation');
         }
 

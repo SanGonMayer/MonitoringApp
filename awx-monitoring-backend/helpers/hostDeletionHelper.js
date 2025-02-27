@@ -9,6 +9,7 @@ import { handleHostSnapshot } from '../services/snapshotService.js';
  * @param {string} type - Tipo de host ('workstation' o 'cctv').
  */
 export const captureAndDeleteMissingHosts = async (model, filialId, enabledHostIds, type) => {
+  console.log(`Capturando hosts a eliminar para ${type} en filial ${filialId}`);
   // Obtener los hosts que no están en la lista de la API
   const hostsToRemove = await model.findAll({
     where: {
@@ -16,20 +17,23 @@ export const captureAndDeleteMissingHosts = async (model, filialId, enabledHostI
       id: { [Op.notIn]: enabledHostIds }
     }
   });
+  console.log(`Hosts identificados para eliminación: ${hostsToRemove.length}`);
 
   // Para cada host a eliminar: actualizar a disabled y generar snapshot
   for (const host of hostsToRemove) {
     if (host.enabled) {
+      console.log(`Actualizando host ${host.id} (${host.name}) a disabled y generando snapshot`);
       await host.update({ enabled: false });
       // Aquí se genera el snapshot, que con la lógica actual debería detectar el cambio de enabled
       await handleHostSnapshot(host, type);
     }
   }
-
+  console.log(`Eliminando hosts de la base de datos para ${type}`);
   await model.destroy({
     where: {
       filial_id: filialId,
       id: { [Op.notIn]: enabledHostIds }
     }
   });
+  console.log(`Eliminación completada para ${type}`);
 };
