@@ -173,7 +173,7 @@ function mostrarHostsDefilialHtml(){
         if (fromPage === 'wst') {
             actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
         } else if (fromPage === 'cctv') {
-            actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+            actionButton.textContent = 'Aplicar ctv_upd_v0.3.1';
         } else {
             actionButton.textContent = 'Aplicar actualización genérica';
         }
@@ -311,7 +311,7 @@ function actualizarRecuperarHosts(){
           if (fromPage === 'wst') {
               actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
           } else if (fromPage === 'cctv') {
-              actionButton.textContent = 'Aplicar ctv_upd_v0.2.0';
+              actionButton.textContent = 'Aplicar ctv_upd_v0.3.1';
           } else {
               actionButton.textContent = 'Aplicar actualización genérica';
           }
@@ -507,7 +507,7 @@ async function launchJobUpdFilial(hostsPendientesFallidos,fromPage) {  // 'hostn
         template_id = 1678;
         console.log("fromPage recibido:", fromPage);
       } else if (fromPage === 'cctv'){
-        template_id = 1613;
+        template_id = 1695;
         console.log("fromPage recibido:", fromPage);
       }
 

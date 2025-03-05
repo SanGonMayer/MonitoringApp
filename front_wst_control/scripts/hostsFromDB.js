@@ -169,7 +169,7 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
         template_id = 1678;
         console.log("fromPage recibido:", fromPage);
       } else if (fromPage === 'cctv'){
-        template_id = 1613;
+        template_id = 1695;
         console.log("fromPage recibido:", fromPage);
       }
 

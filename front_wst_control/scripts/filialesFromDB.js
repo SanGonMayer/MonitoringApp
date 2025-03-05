@@ -24,6 +24,12 @@ const gruposExcluidos = [
   'wst', 'pve','f0999'
 ];
 
+const gruposExcluidosCCTV = [
+  'f0000',
+  'f0071', 'f0603', 'f0661', 'f0662','f0665', 'f0668', 'f0299',
+  'wst', 'pve','f0999'
+];
+
 
 async function fetchFilialesConHostsFromDB(tipoTerminal) {
   try {
@@ -52,7 +58,7 @@ async function fetchFilialesConHostsFromDB(tipoTerminal) {
           filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
       } else if (tipoTerminal === 'cctv.html') {
           console.log('Estoy evaluando las filiales para cctv')
-          filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+          filialesFiltradas = filiales.filter(filial => filial.hasCCTV && !gruposExcluidosCCTV.includes(filial.name.toLowerCase()));
       }
 
       console.log('Filiales filtradas:', filialesFiltradas);
@@ -262,8 +268,8 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
     if (tipoTerminal === 'wst.html') {
       filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
     } else if (tipoTerminal === 'cctv.html') {
-      console.log('Estoy evaluando las filiales para cctv')
-      filialesFiltradas = filiales.filter(filial => filial.hasCCTV );
+        console.log('Estoy evaluando las filiales para cctv')
+        filialesFiltradas = filiales.filter(filial => filial.hasCCTV && !gruposExcluidosCCTV.includes(filial.name.toLowerCase()));
     }
 
     console.log('Filiales filtradas:', filialesFiltradas);
