@@ -47,6 +47,16 @@ export const getLastSnapshot = async (hostId) => {
 
   const determineChangeReason = (lastSnapshot, currentData) => {
     if (!lastSnapshot) return 'Host agregado';
+    
+    if (lastSnapshot.enabled !== currentData.enabled) {
+      return lastSnapshot.enabled
+        ? 'Modificacion de habilitado a deshabilitado'
+        : 'Modificacion de deshabilitado a habilitado';
+    }
+    
+    if (lastSnapshot.filial_id !== currentData.filial_id) {
+      return 'Modificacion de filial';
+    }
   
     if (lastSnapshot.status !== currentData.status) {
       if (lastSnapshot.status === 'pendiente' && currentData.status === 'actualizado') {
@@ -61,14 +71,6 @@ export const getLastSnapshot = async (hostId) => {
     }
     if (lastSnapshot.inventory_id !== currentData.inventory_id) {
       return 'Modificacion de inventario';
-    }
-    if (lastSnapshot.filial_id !== currentData.filial_id) {
-      return 'Modificacion de filial';
-    }
-    if (lastSnapshot.enabled !== currentData.enabled) {
-      return lastSnapshot.enabled
-        ? 'Modificacion de habilitado a deshabilitado'
-        : 'Modificacion de deshabilitado a habilitado';
     }
   
     return 'Otro cambio';
