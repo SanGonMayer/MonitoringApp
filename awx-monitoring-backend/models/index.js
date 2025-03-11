@@ -37,6 +37,8 @@ HostSnapshot.belongsTo(Workstation, { foreignKey: 'host_id', as: 'workstation', 
 HostSnapshot.belongsTo(CCTV, { foreignKey: 'host_id', as: 'cctv', allowNull: true });
 
 HostSnapshot.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial' });
+HostSnapshot.belongsTo(Filial, { foreignKey: 'old_filial_id', as: 'oldFilial' });
+
 
 // Relación de Novedad con Filial
 // Filial.hasMany(Novedad, { foreignKey: 'filial_id', as: 'novedades' });

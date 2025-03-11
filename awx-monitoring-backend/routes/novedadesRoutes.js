@@ -4,6 +4,7 @@ import Filial from '../models/filiales.js';
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import { Op } from 'sequelize';
+import sequelize from '../config/database.js';
 
 
 const router = Router();
@@ -64,12 +65,23 @@ router.get('/deshabilitados', async (req, res) => {
     endOfToday.setHours(23, 59, 59, 999);
 
     const deshabilitados = await HostSnapshot.findAll({
-      where: { motivo: 'Modificacion de habilitado a deshabilitado',
-                snapshot_date: {
+      where: { 
+        snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
-        }
-       },
+        },        
+        [Op.or]: [
+          { motivo: 'Modificacion de habilitado a deshabilitado' },
+
+          // Caso de movimiento: se modifica la filial y se registra old_filial_id (es decir, la máquina sale de la filial de origen)
+          {
+            [Op.and]: [
+              { motivo: 'Modificacion de filial' },
+              { old_filial_id: { [Op.ne]: null } }
+            ]
+          }
+        ]
+      },
       attributes: ['host_id', 'host_name', 'status', 'snapshot_date'],
       include: [
         {
@@ -139,19 +151,40 @@ router.get('/reemplazos', async (req, res) => {
     endOfToday.setHours(23, 59, 59, 999);
 
     // 1. Obtener las filiales en las que se registró una baja hoy.
-    // Se considera baja el motivo "Modificacion de habilitado a deshabilitado".
+    // Se consideran bajas:
+    //   a) Directa: motivo "Modificacion de habilitado a deshabilitado"
+    //   b) Por movimiento: motivo "Modificacion de filial" y old_filial_id no nulo
     const bajas = await HostSnapshot.findAll({
-      attributes: ['filial_id'],
+      attributes: [
+        [
+          sequelize.literal(`
+            CASE 
+              WHEN "motivo" = 'Modificacion de filial' AND "old_filial_id" IS NOT NULL 
+              THEN "old_filial_id" 
+              ELSE "filial_id" 
+            END
+          `),
+          'bajaFilialId'
+        ]
+      ],
       where: {
         snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
         },
-        motivo: 'Modificacion de habilitado a deshabilitado'
+        [Op.or]: [
+          { motivo: 'Modificacion de habilitado a deshabilitado' },
+          {
+            [Op.and]: [
+              { motivo: 'Modificacion de filial' },
+              { old_filial_id: { [Op.ne]: null } }
+            ]
+          }
+        ]
       },
-      group: ['filial_id']
+      group: ['bajaFilialId']
     });
-    const filialIdsConBaja = bajas.map(registro => registro.filial_id);
+    const filialIdsConBaja = bajas.map(registro => registro.get('bajaFilialId'));
 
     // 2. Consultar los eventos de entrada, ya sea por "Host agregado" o "Modificacion de filial",
     // que se consideran reemplazo únicamente si la filial de ingreso está en la lista de filiales donde se registró baja.

@@ -276,8 +276,8 @@ export const syncHostsFromInventory22 = async (filial) => {
                     id: { [Op.notIn]: enabledHostIdsFromAPI },
                 }
             });*/
-            console.log(`Ejecutando helper para capturar y eliminar hosts WST que ya no están en la API`);
-            await captureAndDeleteMissingHosts(Workstation, filial.id, enabledHostIdsFromAPI, 'workstation');
+            //console.log(`Ejecutando helper para capturar y eliminar hosts WST que ya no están en la API`);
+            //await captureAndDeleteMissingHosts(Workstation, filial.id, enabledHostIdsFromAPI, 'workstation');
         }
 
         if (filial.awx_id_cctv) {
@@ -322,7 +322,7 @@ export const syncHostsFromInventory22 = async (filial) => {
                 }
             });*/
 
-            await captureAndDeleteMissingHosts(CCTV, filial.id, enabledHostIdsFromAPI, 'cctv');
+            //await captureAndDeleteMissingHosts(CCTV, filial.id, enabledHostIdsFromAPI, 'cctv');
         }
 
         io.emit('db-updated', { source: 'Actualizacion template db' });
