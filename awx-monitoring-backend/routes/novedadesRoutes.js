@@ -5,6 +5,7 @@ import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
 import { Op } from 'sequelize';
 import sequelize from '../config/database.js';
+import { processNovedades } from '../services/novedadesProcessor.js';
 
 
 const router = Router();
@@ -220,7 +221,7 @@ router.get('/reemplazos', async (req, res) => {
   }
 });
 
-router.post('/api/snapshot', takeDailySnapshot);
+router.post('/api/novedeades', processNovedades);
 
 
 export default router;
