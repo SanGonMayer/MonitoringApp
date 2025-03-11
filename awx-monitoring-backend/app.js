@@ -16,6 +16,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io'; // WebSocket con ESModules
 import novedadesRoutes from './routes/novedadesRoutes.js';
 import { takeDailySnapshot } from './services/snapshotService.js';
+import { processNovedades } from './services/snapshotService.js';
 
 dotenv.config();
 
@@ -88,6 +89,7 @@ cron.schedule('0 9 * * *', async () => {
   console.log('Ejecutando sincronización de datos programada a las 09:00...');
   await startDataSync();
   await takeDailySnapshot();
+  await processNovedades();
 });
 
 io.on('connection', (socket) => {

@@ -220,5 +220,7 @@ router.get('/reemplazos', async (req, res) => {
   }
 });
 
+router.post('/api/snapshot', takeDailySnapshot);
+
 
 export default router;

@@ -41,8 +41,8 @@ HostSnapshot.belongsTo(Filial, { foreignKey: 'old_filial_id', as: 'oldFilial' })
 
 
 // Relación de Novedad con Filial
-// Filial.hasMany(Novedad, { foreignKey: 'filial_id', as: 'novedades' });
-// Novedad.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial' });
+Filial.hasMany(Novedad, { foreignKey: 'filial_id', as: 'novedades' });
+Novedad.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial' });
   
 
 
