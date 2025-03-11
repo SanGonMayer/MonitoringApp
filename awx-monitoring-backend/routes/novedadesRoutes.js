@@ -221,7 +221,16 @@ router.get('/reemplazos', async (req, res) => {
   }
 });
 
-router.post('/api/novedeades', processNovedades);
-
+router.get('/test-novedades', async (req, res) => {
+  try {
+    const novedades = await Novedad.findAll({
+      order: [['snapshot_date', 'DESC']],
+    });
+    res.json(novedades);
+  } catch (error) {
+    console.error('Error obteniendo novedades:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
 
 export default router;
