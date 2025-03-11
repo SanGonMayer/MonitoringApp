@@ -234,4 +234,31 @@ router.get('/test-novedades', async (req, res) => {
   }
 });
 
+// Ruta para forzar el procesamiento de novedades
+router.get('/procesar-novedades', async (req, res) => {
+  try {
+    await processNovedades();
+
+    // Luego de procesar, devolvemos los registros de novedades de hoy (o a partir del umbral)
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const novedades = await Novedad.findAll({
+      where: {
+        snapshot_date: {
+          [Op.gte]: startOfToday,
+        },
+      },
+      order: [['snapshot_date', 'DESC']],
+    });
+    
+    res.json({
+      message: 'Proceso de novedades ejecutado',
+      registros: novedades,
+    });
+  } catch (error) {
+    console.error('Error procesando novedades:', error);
+    res.status(500).json({ error: 'Error interno al procesar novedades' });
+  }
+});
+
 export default router;
