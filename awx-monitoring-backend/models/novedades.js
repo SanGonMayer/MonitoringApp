@@ -54,6 +54,9 @@ const Novedad = sequelize.define('Novedad', {
     allowNull: true,
     defaultValue: null,
   }
+}, {
+    tableName: 'Novedades',
+    freezeTableName: true,
 });
 
 export default Novedad;
