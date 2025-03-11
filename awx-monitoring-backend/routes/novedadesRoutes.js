@@ -6,6 +6,7 @@ import CCTV from '../models/cctv.js';
 import { Op } from 'sequelize';
 import sequelize from '../config/database.js';
 import { processNovedades } from '../services/novedadesProcessor.js';
+import Novedad from '../models/novedades.js';
 
 
 const router = Router();
