@@ -325,4 +325,69 @@ router.get('/resumen/retirados', async (req, res) => {
   }
 });
 
+router.get('/resumen/reemplazos/novedad', async (req, res) => {
+  try {
+    // --- Cálculo Diario ---
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+
+    // Para el resumen diario, se agrupa por (filial_id, inventory_id, día) y se calcula el mínimo entre 
+    // los eventos de "Host agregado" y "Host retirado". Luego se suma para obtener el total del día.
+    const dailyQuery = `
+      SELECT SUM(replacements) AS "dailyCount" FROM (
+        SELECT LEAST(
+          COUNT(CASE WHEN "motivo" = 'Host agregado' THEN 1 END),
+          COUNT(CASE WHEN "motivo" = 'Host retirado' THEN 1 END)
+        ) AS replacements,
+        date_trunc('day', "snapshot_date") AS day
+        FROM "Novedades"
+        WHERE "snapshot_date" BETWEEN :startOfToday AND :endOfToday
+          AND "motivo" IN ('Host agregado', 'Host retirado')
+        GROUP BY "filial_id", "inventory_id", day
+      ) AS sub;
+    `;
+    const [dailyResult] = await sequelize.query(dailyQuery, {
+      replacements: { startOfToday, endOfToday },
+      type: sequelize.QueryTypes.SELECT
+    });
+    const dailyCount = dailyResult.dailyCount ? parseInt(dailyResult.dailyCount) : 0;
+
+    // --- Cálculo Mensual ---
+    // Se consideran registros desde el 1 de marzo de 2025.
+    const threshold = new Date('2025-03-01T00:00:00');
+    const monthlyQuery = `
+      SELECT date_trunc('month', day) AS "month", SUM(replacements) AS "count" FROM (
+        SELECT LEAST(
+          COUNT(CASE WHEN "motivo" = 'Host agregado' THEN 1 END),
+          COUNT(CASE WHEN "motivo" = 'Host retirado' THEN 1 END)
+        ) AS replacements,
+        date_trunc('day', "snapshot_date") AS day
+        FROM "Novedades"
+        WHERE "snapshot_date" >= :threshold
+          AND "motivo" IN ('Host agregado', 'Host retirado')
+        GROUP BY "filial_id", "inventory_id", day
+      ) AS dailyData
+      GROUP BY date_trunc('month', day)
+      ORDER BY date_trunc('month', day) ASC;
+    `;
+    const monthlyResults = await sequelize.query(monthlyQuery, {
+      replacements: { threshold },
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    // Calcular el total anual como la suma de todos los meses.
+    let annualCount = 0;
+    monthlyResults.forEach(item => {
+      annualCount += parseInt(item.count);
+    });
+
+    res.json({ daily: dailyCount, monthly: monthlyResults, annual: annualCount });
+  } catch (error) {
+    console.error('Error en resumen reemplazos (Novedad):', error);
+    res.status(500).json({ error: 'Error al obtener resumen de reemplazos' });
+  }
+});
+
 export default router;

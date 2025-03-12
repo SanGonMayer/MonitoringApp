@@ -93,22 +93,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-    const containerReemplazadas = document.querySelector('.estadistico--3');
-    if (containerReemplazadas) {
-      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/reemplazos')
-        .then(response => response.json())
-        .then(data => {
-          updateCounter(containerReemplazadas, data.length);
-          // Configuración para reemplazadas: mostrar host_id, host_name y filial
-          const configReemplazadas = {
-            headers: ['ID', 'Nombre', 'Filial'],
-            rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
-          };
-          //generateCustomTable(data, containerReemplazadas, configReemplazadas);
-        })
-        .catch(error => console.error('Error al obtener los reemplazados:', error));
-      }
-  });
+  const containerReemplazos = document.getElementById('contador-reemplazos');
+  if (containerReemplazos) {
+    fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/resumen/reemplazos/novedad')
+      .then(response => response.json())
+      .then(data => {
+         // data tendrá la estructura: { daily, monthly, annual }
+         const dailyCount = data.daily;
+
+         // Para el contador mensual, se busca el registro correspondiente al mes actual
+         const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+         let monthlyCount = 0;
+         if (data.monthly && Array.isArray(data.monthly)) {
+           data.monthly.forEach(item => {
+             const itemMonth = new Date(item.month).toISOString().slice(0, 7);
+             if (itemMonth === currentMonth) {
+               monthlyCount = parseInt(item.count);
+             }
+           });
+         }
+         const annualCount = data.annual || 0;
+
+         updateReemplazosCounters(dailyCount, monthlyCount, annualCount);
+      })
+      .catch(error => console.error('Error al actualizar contadores de reemplazos:', error));
+  }
+});
   
 /**
  * Función genérica para generar una tabla a partir de datos y una configuración.
@@ -225,6 +235,39 @@ function updateRetiradosCounters(dailyCount, monthlyCount, annualCount) {
     return;
   }
   // Limpiar contenido previo
+  counterWrapper.innerHTML = '';
+
+  const counterContainer = document.createElement('div');
+  counterContainer.classList.add('contador-container');
+
+  function createCounter(labelText, count) {
+    const item = document.createElement('div');
+    item.classList.add('contador-item');
+    const label = document.createElement('div');
+    label.classList.add('contador-label');
+    label.textContent = labelText;
+    const number = document.createElement('div');
+    number.classList.add('contador-numero');
+    number.textContent = count;
+    item.appendChild(label);
+    item.appendChild(number);
+    return item;
+  }
+
+  const dailyCounter = createCounter("Hoy", dailyCount);
+  const monthlyCounter = createCounter("Mes", monthlyCount);
+  const annualCounter = createCounter("Anual (Marzo+)", annualCount);
+
+  counterContainer.appendChild(dailyCounter);
+  counterContainer.appendChild(monthlyCounter);
+  counterContainer.appendChild(annualCounter);
+
+  counterWrapper.appendChild(counterContainer);
+}
+
+function updateReemplazosCounters(dailyCount, monthlyCount, annualCount) {
+  const counterWrapper = document.getElementById('contador-reemplazos');
+  if (!counterWrapper) return;
   counterWrapper.innerHTML = '';
 
   const counterContainer = document.createElement('div');
