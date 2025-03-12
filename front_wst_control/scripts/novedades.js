@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Actualizar el bloque de contadores usando el contenedor exclusivo "contador-agregados"
       updateAgregadosCounters(dailyCount, monthlyCount, annualCount);
 
-      // Luego, generar la tabla de registros en otro contenedor, por ejemplo, "tabla-agregados"
+      // generar la tabla de registros en "tabla-agregados"
       const tablaContainer = document.getElementById('tabla-agregados');
       if (tablaContainer) {
         // Limpiar el contenedor para evitar duplicados
@@ -38,13 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Configuración para la tabla: mostramos host_id, host_name y el nombre de la filial
         const configAgregadas = {
           headers: ['ID', 'Nombre', 'Filial'],
-          rowMapper: item => [
-            item.host_id, 
-            item.host_name, 
-            (item.filial && item.filial.name) ? item.filial.name : 'N/D'
-          ]
+          rowMapper: item => [item.host_id, item.host_name, (item.filial && item.filial.name) ? item.filial.name : 'N/D']
         };
-        generateCustomTable(dailyData, tablaContainer, configAgregadas);
+        //generateCustomTable(dailyData, tablaContainer, configAgregadas);
       }
     })
     .catch(error => console.error('Error al actualizar contadores agregados:', error));
@@ -62,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: ['ID', 'Nombre', 'Filial'],
             rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
-          generateCustomTable(data, containerDeshabilitadas, configDeshabilitadas);
+          //generateCustomTable(data, containerDeshabilitadas, configDeshabilitadas);
         })
         .catch(error => console.error('Error al obtener los deshabilitados:', error));
     }
@@ -78,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: ['ID', 'Nombre', 'Filial'],
             rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
           };
-          generateCustomTable(data, containerReemplazadas, configReemplazadas);
+          //generateCustomTable(data, containerReemplazadas, configReemplazadas);
         })
         .catch(error => console.error('Error al obtener los reemplazados:', error));
       }
