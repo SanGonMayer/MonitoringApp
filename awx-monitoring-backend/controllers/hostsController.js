@@ -415,7 +415,10 @@ export const getHostsByFilialSNRO = async (req, res) => {
         const latestJob = cronJobs[0];
 
         if (latestJob) {
-          if (!latestJob.failed) {
+          // Convertimos el valor de failed a un booleano según la convención: 'f' o false -> no falló, 't' o true -> falló.
+          const didFail = latestJob.failed === true || latestJob.failed === 't';
+          
+          if (!didFail) {
             console.log(`Host ${host.id} - ${host.name} tiene un "wst_crn_off_v1.4.7" exitoso.`);
             return {
               id: host.id,
