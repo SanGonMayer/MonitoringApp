@@ -219,9 +219,9 @@ function updateAgregadosCounters(dailyCount, monthlyCount, annualCount) {
 
 function updateRetiradosCounters(dailyCount, monthlyCount, annualCount) {
   console.log("Actualizando contadores retirados:", dailyCount, monthlyCount, annualCount);
-  const counterWrapper = document.getElementById('contador-deshabilitados');
+  const counterWrapper = document.getElementById('contador-retirados');
   if (!counterWrapper) {
-    console.error("No se encontró el contenedor con id 'contador-deshabilitados'");
+    console.error("No se encontró el contenedor con id 'contador-retirados'");
     return;
   }
   // Limpiar contenido previo
