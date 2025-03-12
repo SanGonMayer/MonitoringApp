@@ -386,14 +386,12 @@ export const getHostsByFilialSNRO = async (req, res) => {
 
     let hosts;
     
-
     if (tipo === 'wst') {
       hosts = await Workstation.findAll({
         where: { 
-            filial_id: filialIdInt, 
-            enabled: true 
-            //description: { [Op.notILike]: 'HP ProDesk 400%' } 
-          },
+          filial_id: filialIdInt, 
+          enabled: true 
+        },
         include: [
           {
             model: JobHostSummary,
@@ -405,44 +403,41 @@ export const getHostsByFilialSNRO = async (req, res) => {
       });
     
       const hostsWithStatus = hosts.map(host => {
-        const jobSummaries = (host.jobSummaries || [])
-          .filter(summary => new Date(summary.jobCreationDate) >= new Date('2025-02-13')) // Filtrar trabajos a partir del 11/11/2024
-          .sort((a, b) => new Date(b.jobCreationDate) - new Date(a.jobCreationDate));
-    
-        console.log(`Host ${host.id} - ${host.name} tiene ${jobSummaries.length} trabajos ordenados por fecha de creación.`);
-    
-        // Verificar si hay un "wst_crn_off_v1.4.7" exitoso
-        const successfulUpdate = jobSummaries.find(
-          summary => summary.job_name === 'wst_crn_off_v1.4.7' && !summary.failed
+        // Filtramos para obtener solo los trabajos de "wst_crn_off_v1.4.7"
+        const cronJobs = (host.jobSummaries || []).filter(
+          summary => summary.job_name === 'wst_crn_off_v1.4.7'
         );
-    
-        // Si existe un "wst_crn_off_v1.4.7" exitoso, el host está actualizado
-        if (successfulUpdate) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_crn_off_v1.4.7" exitoso. Marcado como actualizado.`);
-          return {
-            id: host.id,
-            name: host.name,
-            description: host.description,
-            status: 'actualizado',
-            enabled: host.enabled,
-          };
+        
+        // Ordenamos de forma descendente por fecha de creación
+        cronJobs.sort((a, b) => new Date(b.jobCreationDate) - new Date(a.jobCreationDate));
+        
+        // Tomamos el trabajo más reciente
+        const latestJob = cronJobs[0];
+
+        if (latestJob) {
+          if (!latestJob.failed) {
+            console.log(`Host ${host.id} - ${host.name} tiene un "wst_crn_off_v1.4.7" exitoso.`);
+            return {
+              id: host.id,
+              name: host.name,
+              description: host.description,
+              status: 'actualizado',
+              enabled: host.enabled,
+            };
+          } else {
+            console.log(`Host ${host.id} - ${host.name} tiene un "wst_crn_off_v1.4.7" fallido.`);
+            return {
+              id: host.id,
+              name: host.name,
+              description: host.description,
+              status: 'fallido',
+              enabled: host.enabled,
+            };
+          }
         }
-    
-        // Si hay un "wst_crn_off_v1.4.7" pero todos fallaron, el host está fallido
-        if (jobSummaries.some(summary => summary.job_name === 'wst_crn_off_v1.4.7' && summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_crn_off_v1.4.7" fallido. Marcado como fallido.`);
-          return {
-            id: host.id,
-            name: host.name,
-            description: host.description,
-            status: 'fallido',
-            enabled: host.enabled,
-          };
-        }
-    
-        // Si no hay un "wst_crn_off_v1.4.7" exitoso ni fallido, está pendiente
-        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_crn_off_v1.4.7".`);
-    
+        
+        // Si no se encontró ningún trabajo, se marca como pendiente
+        console.log(`Host ${host.id} - ${host.name} está pendiente de ejecutar "wst_crn_off_v1.4.7".`);
         return {
           id: host.id,
           name: host.name,
