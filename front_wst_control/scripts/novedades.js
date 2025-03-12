@@ -26,8 +26,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const annualCount = resumenData.annual || 0;
 
-      // Actualizar el bloque de contadores usando nuestro contenedor dedicado
+      // Actualizar el bloque de contadores usando el contenedor exclusivo "contador-agregados"
       updateAgregadosCounters(dailyCount, monthlyCount, annualCount);
+
+      // Luego, generar la tabla de registros en otro contenedor, por ejemplo, "tabla-agregados"
+      const tablaContainer = document.getElementById('tabla-agregados');
+      if (tablaContainer) {
+        // Limpiar el contenedor para evitar duplicados
+        tablaContainer.innerHTML = '';
+
+        // Configuración para la tabla: mostramos host_id, host_name y el nombre de la filial
+        const configAgregadas = {
+          headers: ['ID', 'Nombre', 'Filial'],
+          rowMapper: item => [
+            item.host_id, 
+            item.host_name, 
+            (item.filial && item.filial.name) ? item.filial.name : 'N/D'
+          ]
+        };
+        generateCustomTable(dailyData, tablaContainer, configAgregadas);
+      }
     })
     .catch(error => console.error('Error al actualizar contadores agregados:', error));
   }
