@@ -115,7 +115,7 @@ function generateCustomTable(data, container, config) {
   }
   
 
-  function updateCounter(container, count) {
+/*  function updateCounter(container, count) {
     const counterElement = document.createElement('div');
     counterElement.classList.add('contador-hoy');
     
@@ -136,7 +136,7 @@ function generateCustomTable(data, container, config) {
     } else {
       container.insertAdjacentElement('afterbegin', counterElement);
     }
-}
+}*/
 
 function updateAgregadosCounters(dailyCount, monthlyCount, annualCount) {
   const counterWrapper = document.getElementById('contador-agregados');
