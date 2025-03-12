@@ -261,4 +261,68 @@ router.get('/procesar-novedades', async (req, res) => {
   }
 });
 
+// Resumen de host agregados: acumulado mensual y anual (desde 1/3/2025)
+router.get('/resumen/agregados', async (req, res) => {
+  try {
+    const threshold = new Date('2025-03-01T00:00:00');
+    // Agrupar por mes usando date_trunc de Postgres
+    const monthly = await Novedad.findAll({
+      attributes: [
+        [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'month'],
+        [Novedad.sequelize.fn('COUNT', Novedad.sequelize.col('id')), 'count']
+      ],
+      where: {
+        motivo: 'Host agregado',
+        snapshot_date: { [Op.gte]: threshold }
+      },
+      group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
+      order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
+      raw: true
+    });
+    // Conteo anual: total desde el 1 de marzo
+    const annual = await Novedad.count({
+      where: {
+        motivo: 'Host agregado',
+        snapshot_date: { [Op.gte]: threshold }
+      }
+    });
+
+    res.json({ monthly, annual });
+  } catch (error) {
+    console.error('Error en resumen agregados:', error);
+    res.status(500).json({ error: 'Error al obtener resumen de host agregados' });
+  }
+});
+
+// Resumen de host retirados: acumulado mensual y anual (desde 1/3/2025)
+router.get('/resumen/retirados', async (req, res) => {
+  try {
+    const threshold = new Date('2025-03-01T00:00:00');
+    const monthly = await Novedad.findAll({
+      attributes: [
+        [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'month'],
+        [Novedad.sequelize.fn('COUNT', Novedad.sequelize.col('id')), 'count']
+      ],
+      where: {
+        motivo: 'Host retirado',
+        snapshot_date: { [Op.gte]: threshold }
+      },
+      group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
+      order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
+      raw: true
+    });
+    const annual = await Novedad.count({
+      where: {
+        motivo: 'Host retirado',
+        snapshot_date: { [Op.gte]: threshold }
+      }
+    });
+
+    res.json({ monthly, annual });
+  } catch (error) {
+    console.error('Error en resumen retirados:', error);
+    res.status(500).json({ error: 'Error al obtener resumen de host retirados' });
+  }
+});
+
 export default router;

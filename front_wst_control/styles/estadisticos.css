@@ -102,3 +102,28 @@
   font-weight: bold;
   color: rgb(255, 255, 255);
 }
+
+.contador-container {
+  display: flex;
+  justify-content: space-between; /* Separa los items: primero a la izquierda, segundo centrado, tercero a la derecha */
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.contador-item {
+  flex: 1;
+  text-align: center;
+}
+
+.contador-label {
+  font-size: 0.9em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.contador-numero {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #000;
+}
