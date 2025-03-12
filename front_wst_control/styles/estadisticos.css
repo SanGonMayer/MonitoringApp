@@ -90,18 +90,18 @@
   overflow-y: auto;
 }
 
-.contador-hoy {
+/*.contador-hoy {
   font-size: 1em;           /* Tamaño normal para la palabra "Hoy:" */
-  color: rgb(0, 0, 0);             /* Color blanco para todo el contenido */
-  margin-top: 5px;
+/*  color: rgb(0, 0, 0);             /* Color blanco para todo el contenido */
+/*  margin-top: 5px;
   text-align: center;
 }
 
-.contador-numero {
+/*.contador-numero {
   font-size: 4em;           /* Número en grande */
-  font-weight: bold;
+/*  font-weight: bold;
   color: rgb(255, 255, 255);
-}
+}*/
 
 .contador-container {
   display: flex;
@@ -117,13 +117,13 @@
 }
 
 .contador-label {
-  font-size: 0.9em;
+  font-size: 1em;
   color: #333;
   margin-bottom: 5px;
 }
 
 .contador-numero {
-  font-size: 1.5em;
+  font-size: 4em;
   font-weight: bold;
   color: #000;
 }
