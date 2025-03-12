@@ -47,21 +47,51 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
 
-    const containerDeshabilitadas = document.querySelector('.estadistico--2');
-    if (containerDeshabilitadas) {
+  const containerRetirados = document.getElementById('contador-retirados');
+  if (containerRetirados) {
+    Promise.all([
+      // Obtener datos diarios de retirados: usamos el endpoint de deshabilitados
       fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/deshabilitados')
+        .then(response => response.json()),
+      // Obtener el resumen mensual y anual de retirados
+      fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/hosts/resumen/retirados')
         .then(response => response.json())
-        .then(data => {
-          updateCounter(containerDeshabilitadas, data.length);
-          // Configuración para deshabilitadas: mostrar host_id, host_name y filial
-          const configDeshabilitadas = {
-            headers: ['ID', 'Nombre', 'Filial'],
-            rowMapper: item => [item.host_id, item.host_name, item.filial && item.filial.name ? item.filial.name : 'N/D']
-          };
-          //generateCustomTable(data, containerDeshabilitadas, configDeshabilitadas);
-        })
-        .catch(error => console.error('Error al obtener los deshabilitados:', error));
-    }
+    ])
+    .then(([dailyData, resumenData]) => {
+      const dailyCount = dailyData.length;
+
+      // Suponemos que resumenData tiene: { monthly: [ { month, count } ], annual: <number> }
+      const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+      let monthlyCount = 0;
+      if (resumenData.monthly && Array.isArray(resumenData.monthly)) {
+        resumenData.monthly.forEach(item => {
+          const itemMonth = new Date(item.month).toISOString().slice(0, 7);
+          if (itemMonth === currentMonth) {
+            monthlyCount = parseInt(item.count);
+          }
+        });
+      }
+      const annualCount = resumenData.annual || 0;
+
+      // Actualizar el bloque de contadores usando la función para retirados
+      updateRetiradosCounters(dailyCount, monthlyCount, annualCount);
+
+      const tablaContainer = document.getElementById('tabla-retirados');
+      if (tablaContainer) {
+        // Limpiar el contenedor para evitar duplicados
+        tablaContainer.innerHTML = '';
+
+        // Configuración para la tabla: mostramos host_id, host_name y el nombre de la filial
+        const configAgregadas = {
+          headers: ['ID', 'Nombre', 'Filial'],
+          rowMapper: item => [item.host_id, item.host_name, (item.filial && item.filial.name) ? item.filial.name : 'N/D']
+        };
+        //generateCustomTable(dailyData, tablaContainer, configAgregadas);
+      }
+    })
+    .catch(error => console.error('Error al actualizar contadores retirados:', error));
+  }
+
 
     const containerReemplazadas = document.querySelector('.estadistico--3');
     if (containerReemplazadas) {
@@ -156,6 +186,44 @@ function updateAgregadosCounters(dailyCount, monthlyCount, annualCount) {
   const counterWrapper = document.getElementById('contador-agregados');
   if (!counterWrapper) return; // Si no existe, no hacer nada
 
+  // Limpiar contenido previo
+  counterWrapper.innerHTML = '';
+
+  const counterContainer = document.createElement('div');
+  counterContainer.classList.add('contador-container');
+
+  function createCounter(labelText, count) {
+    const item = document.createElement('div');
+    item.classList.add('contador-item');
+    const label = document.createElement('div');
+    label.classList.add('contador-label');
+    label.textContent = labelText;
+    const number = document.createElement('div');
+    number.classList.add('contador-numero');
+    number.textContent = count;
+    item.appendChild(label);
+    item.appendChild(number);
+    return item;
+  }
+
+  const dailyCounter = createCounter("Hoy", dailyCount);
+  const monthlyCounter = createCounter("Mes", monthlyCount);
+  const annualCounter = createCounter("Anual (Marzo+)", annualCount);
+
+  counterContainer.appendChild(dailyCounter);
+  counterContainer.appendChild(monthlyCounter);
+  counterContainer.appendChild(annualCounter);
+
+  counterWrapper.appendChild(counterContainer);
+}
+
+function updateRetiradosCounters(dailyCount, monthlyCount, annualCount) {
+  console.log("Actualizando contadores retirados:", dailyCount, monthlyCount, annualCount);
+  const counterWrapper = document.getElementById('contador-deshabilitados');
+  if (!counterWrapper) {
+    console.error("No se encontró el contenedor con id 'contador-deshabilitados'");
+    return;
+  }
   // Limpiar contenido previo
   counterWrapper.innerHTML = '';
 

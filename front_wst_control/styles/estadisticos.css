@@ -26,6 +26,7 @@
 
 .titulo-1{
   color: rgba(149, 149, 255, 1);
+  font-size: 4em;
 }
 
 .estadistico--2 {
@@ -34,6 +35,7 @@
 
 .titulo-2{
   color: rgba(252, 161, 71, 1);
+  font-size: 4em;
 }
 
 .estadistico--3 {
@@ -42,6 +44,7 @@
 
 .titulo-3 {
   color: rgba(220, 91, 183, 1);
+  font-size: 4em;
 }
 
 @media (max-width: 768px) {
@@ -117,7 +120,7 @@
 }
 
 .contador-label {
-  font-size: 1em;
+  font-size: 2em;
   color: #333;
   margin-bottom: 5px;
 }
