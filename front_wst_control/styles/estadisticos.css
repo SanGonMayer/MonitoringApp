@@ -17,8 +17,7 @@
 }
 
 .estadistico-header {
-  display: grid;
-  grid-template-columns: auto 1fr; 
+  display: flex;
   align-items: center;       /* Alinea verticalmente el h2 y los contadores */
   /*justify-content: space-between; */
   margin-bottom: 1em;        /* Separación debajo de la cabecera */
