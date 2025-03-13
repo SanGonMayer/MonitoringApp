@@ -29,14 +29,6 @@
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
 }
 
-.contador-section {
-  display: grid;
-  grid-template-columns: 80px 80px 100px; 
-    /* “Hoy” 80px, “Mes” 80px, “Anual” 100px, ajusta a gusto */
-  justify-content: end; 
-  gap: 1rem;
-}
-
 .estadistico--1 {
   background: #c7c7ff;
 }
@@ -139,14 +131,21 @@
   color: rgb(255, 255, 255);
 }*/
 
-.contador-container {
+/*.contador-container {
   display: flex;
   justify-content: space-between; /* Separa los items: primero a la izquierda, segundo centrado, tercero a la derecha */
-  align-items: center;
+/*  align-items: center;
   margin-top: 10px;
   padding: 0 10px;
   gap: 1em;
   width: 100%;
+}*/
+
+.contador-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center; 
+  gap: 1rem;
 }
 
 .contador-item {

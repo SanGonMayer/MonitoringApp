@@ -271,9 +271,6 @@ function updateReemplazosCounters(dailyCount, monthlyCount, annualCount) {
   if (!container) return;
   container.innerHTML = '';
 
-  const counterContainer = document.createElement('div');
-  counterContainer.classList.add('contador-container');
-
   function createCounter(labelText, count) {
     const item = document.createElement('div');
     item.classList.add('contador-item'); 
