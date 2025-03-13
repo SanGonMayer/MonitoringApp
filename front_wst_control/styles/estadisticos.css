@@ -19,7 +19,7 @@
 .estadistico-header {
   display: flex;
   align-items: center;       /* Alinea verticalmente el h2 y los contadores */
-  justify-content: space-between; 
+  /*justify-content: space-between; */
   margin-bottom: 1em;        /* Separación debajo de la cabecera */
 }
 
@@ -34,6 +34,11 @@
 .titulo-1{
   color: rgba(149, 149, 255, 1);
   font-size: 4em;
+}
+
+#contador-agregados {
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
+  display: flex;
 }
 
 .estadistico--2 {
