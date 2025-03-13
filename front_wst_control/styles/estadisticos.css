@@ -13,7 +13,14 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-  text-align: center;
+  text-align: left;
+}
+
+.estadistico-header {
+  display: flex;
+  align-items: center;       /* Alinea verticalmente el h2 y los contadores */
+  justify-content: space-between; 
+  margin-bottom: 1em;        /* Separación debajo de la cabecera */
 }
 
 .estadistico:hover {
@@ -112,6 +119,7 @@
   align-items: center;
   margin-top: 10px;
   padding: 0 10px;
+  gap: 1em;
 }
 
 .contador-item {
@@ -129,4 +137,9 @@
   font-size: 4em;
   font-weight: bold;
   color: #000;
+}
+
+.contador-item:not(:last-child) {
+  border-right: 1px solid #333;
+  padding-right: 1em;       /* Asegura que el texto no quede pegado a la línea */
 }
