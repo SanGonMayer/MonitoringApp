@@ -16,25 +16,25 @@
   border-radius: 8px;
 }
 
-.estadistico {
+/*.estadistico {
   width: 100%; /* Hace que cada card ocupe todo el ancho del contenedor */
-  background-color: #fff;
+/*  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   text-align: left;
-}
+}*/
 
-.estadistico-header {
+/*.estadistico-header {
   display: grid;
   grid-template-columns: auto 1fr; 
   align-items: center;       /* Alinea verticalmente el h2 y los contadores */
   /*justify-content: space-between; */
   /*margin-bottom: 1em;        /* Separación debajo de la cabecera */
-  gap: 1rem;
-}
+  /*gap: 1rem;
+}*/
 
 .estadistico:hover {
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
@@ -50,9 +50,9 @@
   font-size: 3em; /* ajusta a tu gusto */
 }
 
-.estadistico--1 {
+/*.estadistico--1 {
   background: #c7c7ff;
-}
+}*/
 
 .titulo-1{
  /* color: rgba(149, 149, 255, 1);*/
@@ -65,9 +65,9 @@
 /*  display: flex;
 }*/
 
-.estadistico--2 {
+/*.estadistico--2 {
   background: #ffd8be;
-}
+}*/
 
 .titulo-2{
   color: rgba(252, 161, 71, 1);
@@ -79,9 +79,9 @@
 /*  display: flex;
 }*/
 
-.estadistico--3 {
+/*.estadistico--3 {
   background: #f3bbe1;
-}
+}*/
 
 .titulo-3 {
   color: rgba(220, 91, 183, 1);
