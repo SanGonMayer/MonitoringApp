@@ -1,73 +1,42 @@
+/* Contenedor que apila varias filas (cada .row) en columna. */
 .estadisticos-container {
   display: flex;
-  flex-direction: column; /* Dispone las "filas" en columna */
-  gap: 20px;             /* Espacio vertical entre filas */
-  /* padding: 20px; */
+  flex-direction: column;  /* Una fila debajo de otra */
+  gap: 20px;               /* Espacio vertical entre las filas */
+  /* padding: 20px;  <-- Usar si quieres un margen interno general */
 }
 
-/* Cada fila (row) es un grid de 2 columnas:
-   - 1ª col fija (300px) para el título
-   - 2ª col (1fr) para contadores y tablas */
+/* Cada fila (ej. row--agregadas) es un grid de 2 columnas:
+   - Col 1: 300px (fijo) p/ título
+   - Col 2: 1fr (resto) p/ contadores + tabla. */
 .row {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 20px;
-  padding: 20px;
-  border-radius: 8px; /* Opcional */
-}
-
-/* Comentar/eliminar lo siguiente si no usas .estadistico:
-.estadistico {
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  padding: 20px;    /* Espacio interior de la fila */
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  text-align: left;
+  /* Si quieres un borde o shadow, ponlo aquí 
+     border: 1px solid #ddd;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
 }
 
-.estadistico-header {
-  display: grid;
-  grid-template-columns: auto 1fr; 
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1em;
-  gap: 1rem;
-}
-
-.estadistico--1 {
-  background: #c7c7ff;
-}
-.estadistico--2 {
-  background: #ffd8be;
-}
-.estadistico--3 {
-  background: #f3bbe1;
-}
-*/
-
-/* Este hover sólo aplica a .estadistico; si ya no la usas, también puedes comentarlo: */
-.estadistico:hover {
-  transform: translateY(-5px);
-}
-
-/* FONDOS para cada row */
+/* Colores de fondo para cada fila */
 .row--agregadas    { background: #c7c7ff; }
 .row--retiradas    { background: #ffd8be; }
 .row--reemplazadas { background: #f3bbe1; }
 
-/* TITULOS */
+/* ==================================
+   TÍTULOS 
+   ================================== */
 .titulo-1, .titulo-2, .titulo-3 {
-  margin: 0;
-  font-size: 3em; /* Ajustar a gusto */
+  margin: 0;           /* Quitar margen por defecto */
+  font-size: 3em;      /* Ajusta a gusto */
 }
 
-/* Si quieres distintos colores o tamaños para cada uno: */
+/* Si quieres darle distinto color/tamaño a cada uno: */
 .titulo-1 {
   color: rgb(81, 81, 250);
-  font-size: 4em;
+  font-size: 4em;      /* Por si quieres más grande que el resto */
 }
 .titulo-2 {
   color: rgba(252, 161, 71, 1);
@@ -78,41 +47,56 @@
   font-size: 4em;
 }
 
-/* Comentar/eliminar si no usas #contador-agregados, #contador-retirados, etc.
-#contador-agregados {
-  flex: 1;
-  display: flex;
+/* ==================================
+   CONTADORES
+   ================================== */
+/* Este contenedor aloja los 3 contadores:
+   - "Hoy"
+   - "Mes"
+   - "Anual"
+   Se define en 3 columnas (iguales). */
+.contador-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: center;   /* Centra verticalmente cada contador */
+  justify-items: center; /* Centra horizontalmente cada contador */
 }
-#contador-retirados {
-  flex: 1;
-  display: flex;
-}
-#contador-reemplazos {
-  flex: 1;
-  display: flex;
-}
-*/
 
-/* Media queries antiguas para .estadistico. 
-   Si no usas .estadistico, puedes comentar:
-@media (max-width: 768px) {
-  .estadistico {
-    flex: 1 1 calc(50% - 20px); 
-  }
+/* Cada contador individual (Hoy, Mes, Anual) */
+.contador-item {
+  text-align: center;
+  /* Si quisieras una anchura fija para cada cont.:
+     width: 80px; 
+     o similar. */
 }
-@media (max-width: 480px) {
-  .estadistico {
-    flex: 1 1 100%;
-  }
-}
-*/
 
-/* TABLAS generadas */
+/* Poner línea vertical en los contadores (menos en el último) */
+.contador-item:not(:last-child) {
+  border-right: 1px solid #333;
+  padding-right: 1rem;
+}
+
+/* Texto de la etiqueta y número del contador */
+.contador-label {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 5px;
+}
+.contador-numero {
+  font-size: 4em;
+  font-weight: bold;
+  color: #000;
+}
+
+/* ==================================
+   TABLA (si generas una con data-table)
+   ================================== */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  max-height: 300px; /* Aproximadamente para 7 filas */
+  max-height: 300px; /* Ajusta si quieres tope en la altura */
   overflow-y: auto;
 }
 .data-table th,
@@ -132,42 +116,73 @@
   background-color: #ddd;
 }
 .table-container-estadisticos {
-  max-height: 400px; 
+  max-height: 400px;
   overflow-y: auto;
 }
 
-/* CONTADORES */
-.contador-section {
+/* ==================================
+   CÓDIGO ANTIGUO (COMENTADO)
+   ================================== */
+
+/* 
+.estadistico {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  text-align: left;
+}
+
+.estadistico-header {
   display: grid;
-  /* Tres columnas iguales para Hoy / Mes / Anual */
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  justify-content: center; /* Centra cada contador */
+  justify-content: space-between;
+  margin-bottom: 1em;
+  gap: 1rem;
 }
 
-.contador-item {
-  text-align: center;
-  /* flex: 1; <- comentado si no usas flex */
+.estadistico--1 {
+  background: #c7c7ff;
 }
-.contador-item:not(:last-child) {
-  border-right: 1px solid #333;
-  padding-right: 1rem;
+.estadistico--2 {
+  background: #ffd8be;
 }
-
-/* Etiquetas y números de contadores */
-.contador-label {
-  font-size: 2em;
-  color: #333;
-  margin-bottom: 5px;
-}
-.contador-numero {
-  font-size: 4em;
-  font-weight: bold;
-  color: #000;
+.estadistico--3 {
+  background: #f3bbe1;
 }
 
-/* .contador-hoy y .contador-numero (viejos) -> comentados
+.estadistico:hover {
+  transform: translateY(-5px);
+}
+
+#contador-agregados {
+  flex: 1;
+  display: flex;
+}
+#contador-retirados {
+  flex: 1;
+  display: flex;
+}
+#contador-reemplazos {
+  flex: 1;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .estadistico {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+@media (max-width: 480px) {
+  .estadistico {
+    flex: 1 1 100%;
+  }
+}
+
 .contador-hoy {
   font-size: 1em;
   color: rgb(0, 0, 0);
