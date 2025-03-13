@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novedades</title>
-  <!-- Tus hojas de estilo -->
   <link rel="stylesheet" href="styles/styles.css">
   <link rel="stylesheet" href="styles/searchbar.css">
   <link rel="stylesheet" href="styles/botonFilial.css">
@@ -54,68 +53,55 @@
         <div class="breadcrumb">
           <a href="/MonitoringAppFront/">Home</a> / 
           <a href="novedades.html">Novedades</a>
-        </div>
+          </div>
         <h1>Novedades</h1>
         <div class="button-container-upd">
           <button id="action-upd-filial"> - </button>
         </div>
       </header>
       <hr class="linefilial">
-
-      <!-- Contenedor general para las filas (tarjetas) -->
       <div class="estadisticos-container">
-        
-        <!-- Fila 1: Máquinas Agregadas -->
-        <div class="row row--agregadas">
-          <!-- Columna de título -->
-          <div class="title-block">
-            <h2 class="titulo-1">
-              Máquinas<br>Agregadas
-            </h2>
-          </div>
-          <!-- Columna de contadores + tabla -->
-          <div class="counters-block">
+        <div class="estadistico estadistico--1">
+          <div class="estadistico-header">
+            <h2 class="titulo-1">  
+              <span>Máquinas</span>
+              <br>
+              <span>Agregadas</span></h2>
             <div id="contador-agregados" class="contador-section"></div>
             <div id="tabla-agregados"></div>
           </div>
+          <p></p>
         </div>
-
-        <!-- Fila 2: Máquinas Retiradas -->
-        <div class="row row--retiradas">
-          <div class="title-block">
-            <h2 class="titulo-2">
-              Máquinas<br>Retiradas
-            </h2>
-          </div>
-          <div class="counters-block">
+        <div class="estadistico estadistico--2">
+          <div class="estadistico-header">
+            <h2 class="titulo-2">              
+              <span>Máquinas</span>
+              <br>
+              <span>Retiradas</span></h2>
             <div id="contador-retirados" class="contador-section"></div>
             <div id="tabla-retirados"></div>
+            <p></p>
           </div>
         </div>
-
-        <!-- Fila 3: Máquinas Reemplazadas -->
-        <div class="row row--reemplazadas">
-          <div class="title-block">
-            <h2 class="titulo-3">
-              Máquinas<br>Reemplazadas
-            </h2>
-          </div>
-          <div class="counters-block">
+        <div class="estadistico estadistico--3">
+          <div class="estadistico-header">
+            <h2 class="titulo-3">            
+              <span>Máquinas</span>
+              <br>
+              <span>Reemplazadas</span></h2>
             <div id="contador-reemplazos" class="contador-section"></div>
             <div id="tabla-reemplazos"></div>
+            <p></p>
           </div>
         </div>
-
-      </div> <!-- fin estadisticos-container -->
-
-    </div> <!-- fin main-content -->
-  </div> <!-- fin container -->
-
-  <!-- Scripts -->
+      </div>
+    </div>
+  </div>
   <script type="module" src="scripts/appNEW.js"></script>
   <script type="module" src="scripts/filialesFromDB.js"></script>
   <script type="module" src="scripts/hostsFromDB.js"></script>
   <script type="module" src="scripts/novedades.js"></script>
   <script type="module" src="scripts/filter.js"></script>
+
 </body>
 </html>

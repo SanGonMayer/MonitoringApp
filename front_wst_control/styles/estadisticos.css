@@ -1,132 +1,12 @@
-/* Contenedor que apila varias filas (cada .row) en columna. */
 .estadisticos-container {
   display: flex;
-  flex-direction: column;  /* Una fila debajo de otra */
-  gap: 20px;               /* Espacio vertical entre las filas */
-  /* padding: 20px;  <-- Usar si quieres un margen interno general */
+  flex-direction: column; /* Dispone las cards en columna */
+  gap: 20px; /* Espacio entre las cards */
+  padding: 20px;
 }
 
-/* Cada fila (ej. row--agregadas) es un grid de 2 columnas:
-   - Col 1: 300px (fijo) p/ título
-   - Col 2: 1fr (resto) p/ contadores + tabla. */
-.row {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 20px;
-  padding: 20px;    /* Espacio interior de la fila */
-  border-radius: 8px;
-  /* Si quieres un borde o shadow, ponlo aquí 
-     border: 1px solid #ddd;
-     box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
-}
-
-/* Colores de fondo para cada fila */
-.row--agregadas    { background: #c7c7ff; }
-.row--retiradas    { background: #ffd8be; }
-.row--reemplazadas { background: #f3bbe1; }
-
-/* ==================================
-   TÍTULOS 
-   ================================== */
-.titulo-1, .titulo-2, .titulo-3 {
-  margin: 0;           /* Quitar margen por defecto */
-  font-size: 3em;      /* Ajusta a gusto */
-}
-
-/* Si quieres darle distinto color/tamaño a cada uno: */
-.titulo-1 {
-  color: rgb(81, 81, 250);
-  font-size: 4em;      /* Por si quieres más grande que el resto */
-}
-.titulo-2 {
-  color: rgba(252, 161, 71, 1);
-  font-size: 4em;
-}
-.titulo-3 {
-  color: rgba(220, 91, 183, 1);
-  font-size: 4em;
-}
-
-/* ==================================
-   CONTADORES
-   ================================== */
-/* Este contenedor aloja los 3 contadores:
-   - "Hoy"
-   - "Mes"
-   - "Anual"
-   Se define en 3 columnas (iguales). */
-.contador-section {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  align-items: center;   /* Centra verticalmente cada contador */
-  justify-items: center; /* Centra horizontalmente cada contador */
-}
-
-/* Cada contador individual (Hoy, Mes, Anual) */
-.contador-item {
-  text-align: center;
-  /* Si quisieras una anchura fija para cada cont.:
-     width: 80px; 
-     o similar. */
-}
-
-/* Poner línea vertical en los contadores (menos en el último) */
-.contador-item:not(:last-child) {
-  border-right: 1px solid #333;
-  padding-right: 1rem;
-}
-
-/* Texto de la etiqueta y número del contador */
-.contador-label {
-  font-size: 2em;
-  color: #333;
-  margin-bottom: 5px;
-}
-.contador-numero {
-  font-size: 4em;
-  font-weight: bold;
-  color: #000;
-}
-
-/* ==================================
-   TABLA (si generas una con data-table)
-   ================================== */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-  max-height: 300px; /* Ajusta si quieres tope en la altura */
-  overflow-y: auto;
-}
-.data-table th,
-.data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-.data-table th {
-  background-color: #f2f2f2;
-  color: #333;
-}
-.data-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-.data-table tr:hover {
-  background-color: #ddd;
-}
-.table-container-estadisticos {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-/* ==================================
-   CÓDIGO ANTIGUO (COMENTADO)
-   ================================== */
-
-/* 
 .estadistico {
-  width: 100%;
+  width: 100%; /* Hace que cada card ocupe todo el ancho del contenedor */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -138,60 +18,146 @@
 
 .estadistico-header {
   display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1em;
-  gap: 1rem;
+  grid-template-columns: auto 1fr; 
+  align-items: center;       /* Alinea verticalmente el h2 y los contadores */
+  /*justify-content: space-between; */
+  margin-bottom: 1em;        /* Separación debajo de la cabecera */
+}
+
+.estadistico:hover {
+  transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
 }
 
 .estadistico--1 {
   background: #c7c7ff;
 }
+
+.titulo-1{
+ /* color: rgba(149, 149, 255, 1);*/
+  color: rgb(81, 81, 250);
+  font-size: 4em;
+}
+
+#contador-agregados {
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
+  display: flex;
+}
+
 .estadistico--2 {
   background: #ffd8be;
 }
+
+.titulo-2{
+  color: rgba(252, 161, 71, 1);
+  font-size: 4em;
+}
+
+#contador-retirados {
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
+  display: flex;
+}
+
 .estadistico--3 {
   background: #f3bbe1;
 }
 
-.estadistico:hover {
-  transform: translateY(-5px);
+.titulo-3 {
+  color: rgba(220, 91, 183, 1);
+  font-size: 4em;
 }
 
-#contador-agregados {
-  flex: 1;
-  display: flex;
-}
-#contador-retirados {
-  flex: 1;
-  display: flex;
-}
 #contador-reemplazos {
-  flex: 1;
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
   display: flex;
 }
 
 @media (max-width: 768px) {
   .estadistico {
-    flex: 1 1 calc(50% - 20px);
-  }
-}
-@media (max-width: 480px) {
-  .estadistico {
-    flex: 1 1 100%;
+    flex: 1 1 calc(50% - 20px); /* Dos estadisticos por fila en pantallas medianas */
   }
 }
 
-.contador-hoy {
-  font-size: 1em;
-  color: rgb(0, 0, 0);
-  margin-top: 5px;
+@media (max-width: 480px) {
+    .estadistico {
+      flex: 1 1 100%; /* Una estadistico por fila en pantallas pequeñas */
+    }
+  }
+
+/* Estilos para la tabla generada */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  max-height: 300px; /* Aproximadamente para 7 filas, ajustar según tus estilos */
+  overflow-y: auto;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: center;
 }
+
+.data-table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.data-table tr:hover {
+  background-color: #ddd;
+}
+
+.table-container-estadisticos {
+  max-height: 400px; /* Ajustá según la altura deseada para 10 filas */
+  overflow-y: auto;
+}
+
+/*.contador-hoy {
+  font-size: 1em;           /* Tamaño normal para la palabra "Hoy:" */
+/*  color: rgb(0, 0, 0);             /* Color blanco para todo el contenido */
+/*  margin-top: 5px;
+  text-align: center;
+}
+
+/*.contador-numero {
+  font-size: 4em;           /* Número en grande */
+/*  font-weight: bold;
+  color: rgb(255, 255, 255);
+}*/
+
+.contador-container {
+  display: flex;
+  justify-content: space-between; /* Separa los items: primero a la izquierda, segundo centrado, tercero a la derecha */
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+  gap: 1em;
+  width: 100%;
+}
+
+.contador-item {
+  flex: 1;
+  text-align: center;
+}
+
+.contador-label {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 5px;
+}
+
 .contador-numero {
   font-size: 4em;
   font-weight: bold;
-  color: rgb(255, 255, 255);
+  color: #000;
 }
-*/
+
+.contador-item:not(:last-child) {
+  border-right: 1px solid #333;
+  padding-right: 1em;       /* Asegura que el texto no quede pegado a la línea */
+}
