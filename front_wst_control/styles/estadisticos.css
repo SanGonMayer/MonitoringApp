@@ -51,6 +51,11 @@
   font-size: 4em;
 }
 
+#contador-retirados {
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
+  display: flex;
+}
+
 .estadistico--3 {
   background: #f3bbe1;
 }
@@ -58,6 +63,11 @@
 .titulo-3 {
   color: rgba(220, 91, 183, 1);
   font-size: 4em;
+}
+
+#contador-reemplazos {
+  flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
+  display: flex;
 }
 
 @media (max-width: 768px) {
