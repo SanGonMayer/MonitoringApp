@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  const containerAgregadas = document.querySelector('contador-agregados');
+  const containerAgregadas = document.getElementById('contador-agregados');
   if (containerAgregadas) {
     Promise.all([
       // Obtener datos diarios de agregados
