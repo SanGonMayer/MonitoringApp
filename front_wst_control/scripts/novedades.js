@@ -193,95 +193,102 @@ function generateCustomTable(data, container, config) {
 }
 
 function updateAgregadosCounters(dailyCount, monthlyCount, annualCount) {
-  const counterWrapper = document.getElementById('contador-agregados');
-  if (!counterWrapper) return; // Si no existe, no hacer nada
+  // Apuntamos al <div id="contador-agregados" class="contador-section">
+  const container = document.getElementById('contador-agregados');
+  if (!container) return; // Si no existe, salimos
 
-  // Limpiar contenido previo
-  counterWrapper.innerHTML = '';
+  // Limpiar el contenido previo para evitar duplicados
+  container.innerHTML = '';
 
-  const counterContainer = document.createElement('div');
-  counterContainer.classList.add('contador-container');
-
+  // Función para crear cada contador (Hoy, Mes, Anual, etc.)
   function createCounter(labelText, count) {
     const item = document.createElement('div');
-    item.classList.add('contador-item');
+    item.classList.add('contador-item'); 
+
+    // Etiqueta (Hoy/Mes/Anual) 
     const label = document.createElement('div');
     label.classList.add('contador-label');
     label.textContent = labelText;
+
+    // Número
     const number = document.createElement('div');
     number.classList.add('contador-numero');
     number.textContent = count;
+
+    // Ensamblamos
     item.appendChild(label);
     item.appendChild(number);
     return item;
   }
 
+  // Creamos los tres contadores
   const dailyCounter = createCounter("Hoy", dailyCount);
   const monthlyCounter = createCounter("Mes", monthlyCount);
   const annualCounter = createCounter("Anual (Marzo+)", annualCount);
 
-  counterContainer.appendChild(dailyCounter);
-  counterContainer.appendChild(monthlyCounter);
-  counterContainer.appendChild(annualCounter);
-
-  counterWrapper.appendChild(counterContainer);
+  // Insertamos cada contador en el contenedor del HTML
+  container.appendChild(dailyCounter);
+  container.appendChild(monthlyCounter);
+  container.appendChild(annualCounter);
 }
 
 function updateRetiradosCounters(dailyCount, monthlyCount, annualCount) {
-  console.log("Actualizando contadores retirados:", dailyCount, monthlyCount, annualCount);
-  const counterWrapper = document.getElementById('contador-retirados');
-  if (!counterWrapper) {
-    console.error("No se encontró el contenedor con id 'contador-retirados'");
-    return;
-  }
-  // Limpiar contenido previo
-  counterWrapper.innerHTML = '';
-
-  const counterContainer = document.createElement('div');
-  counterContainer.classList.add('contador-container');
+  const container = document.getElementById('contador-retirados');
+  if (!container) return;
+  container.innerHTML = '';
 
   function createCounter(labelText, count) {
     const item = document.createElement('div');
-    item.classList.add('contador-item');
+    item.classList.add('contador-item'); 
+
+    // Etiqueta (Hoy/Mes/Anual) 
     const label = document.createElement('div');
     label.classList.add('contador-label');
     label.textContent = labelText;
+
+    // Número
     const number = document.createElement('div');
     number.classList.add('contador-numero');
     number.textContent = count;
+
+    // Ensamblamos
     item.appendChild(label);
     item.appendChild(number);
     return item;
   }
 
-  const dailyCounter = createCounter("Hoy", dailyCount);
+  const dailyCounter   = createCounter("Hoy", dailyCount);
   const monthlyCounter = createCounter("Mes", monthlyCount);
-  const annualCounter = createCounter("Anual (Marzo+)", annualCount);
+  const annualCounter  = createCounter("Anual (Marzo+)", annualCount);
 
-  counterContainer.appendChild(dailyCounter);
-  counterContainer.appendChild(monthlyCounter);
-  counterContainer.appendChild(annualCounter);
-
-  counterWrapper.appendChild(counterContainer);
+  container.appendChild(dailyCounter);
+  container.appendChild(monthlyCounter);
+  container.appendChild(annualCounter);
 }
 
 function updateReemplazosCounters(dailyCount, monthlyCount, annualCount) {
-  const counterWrapper = document.getElementById('contador-reemplazos');
-  if (!counterWrapper) return;
-  counterWrapper.innerHTML = '';
+  const container = document.getElementById('contador-reemplazos');
+  if (!container) return;
+  container.innerHTML = '';
 
   const counterContainer = document.createElement('div');
   counterContainer.classList.add('contador-container');
 
   function createCounter(labelText, count) {
     const item = document.createElement('div');
-    item.classList.add('contador-item');
+    item.classList.add('contador-item'); 
+
+    // Etiqueta (Hoy/Mes/Anual) 
     const label = document.createElement('div');
     label.classList.add('contador-label');
     label.textContent = labelText;
+
+    // Número
     const number = document.createElement('div');
     number.classList.add('contador-numero');
     number.textContent = count;
+
+    // Ensamblamos
     item.appendChild(label);
     item.appendChild(number);
     return item;
@@ -294,6 +301,4 @@ function updateReemplazosCounters(dailyCount, monthlyCount, annualCount) {
   counterContainer.appendChild(dailyCounter);
   counterContainer.appendChild(monthlyCounter);
   counterContainer.appendChild(annualCounter);
-
-  counterWrapper.appendChild(counterContainer);
 }

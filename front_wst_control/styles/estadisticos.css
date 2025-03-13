@@ -17,14 +17,24 @@
 }
 
 .estadistico-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr; 
   align-items: center;       /* Alinea verticalmente el h2 y los contadores */
   /*justify-content: space-between; */
-  margin-bottom: 1em;        /* Separación debajo de la cabecera */
+  /*margin-bottom: 1em;        /* Separación debajo de la cabecera */
+  gap: 1rem;
 }
 
 .estadistico:hover {
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
+}
+
+.contador-section {
+  display: grid;
+  grid-template-columns: 80px 80px 100px; 
+    /* “Hoy” 80px, “Mes” 80px, “Anual” 100px, ajusta a gusto */
+  justify-content: end; 
+  gap: 1rem;
 }
 
 .estadistico--1 {
@@ -140,7 +150,7 @@
 }
 
 .contador-item {
-  flex: 1;
+  /*flex: 1;*/
   text-align: center;
 }
 
@@ -158,5 +168,5 @@
 
 .contador-item:not(:last-child) {
   border-right: 1px solid #333;
-  padding-right: 1em;       /* Asegura que el texto no quede pegado a la línea */
+  padding-right: 1rem;       /* Asegura que el texto no quede pegado a la línea */
 }
