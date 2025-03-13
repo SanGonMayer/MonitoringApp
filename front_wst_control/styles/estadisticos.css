@@ -39,10 +39,10 @@
   font-size: 4em;
 }
 
-#contador-agregados {
+/*#contador-agregados {
   flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
-  display: flex;
-}
+/*  display: flex;
+}*/
 
 .estadistico--2 {
   background: #ffd8be;
@@ -53,10 +53,10 @@
   font-size: 4em;
 }
 
-#contador-retirados {
+/*#contador-retirados {
   flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
-  display: flex;
-}
+/*  display: flex;
+}*/
 
 .estadistico--3 {
   background: #f3bbe1;
@@ -67,10 +67,10 @@
   font-size: 4em;
 }
 
-#contador-reemplazos {
+/*#contador-reemplazos {
   flex: 1;   /* Ocupar todo el espacio restante a la derecha del h2 */
-  display: flex;
-}
+/*  display: flex;
+}*/
 
 @media (max-width: 768px) {
   .estadistico {

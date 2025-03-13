@@ -295,7 +295,7 @@ function updateReemplazosCounters(dailyCount, monthlyCount, annualCount) {
   const monthlyCounter = createCounter("Mes", monthlyCount);
   const annualCounter = createCounter("Anual (Marzo+)", annualCount);
 
-  counterContainer.appendChild(dailyCounter);
-  counterContainer.appendChild(monthlyCounter);
-  counterContainer.appendChild(annualCounter);
+  container.appendChild(dailyCounter);
+  container.appendChild(monthlyCounter);
+  container.appendChild(annualCounter);
 }
