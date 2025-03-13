@@ -2,7 +2,18 @@
   display: flex;
   flex-direction: column; /* Dispone las cards en columna */
   gap: 20px; /* Espacio entre las cards */
+  /*padding: 20px;*/
+}
+
+.row {
+  /* Cada fila es un grid de 2 columnas: 
+     - la 1ª (título) con ancho fijo (ej. 300px), 
+     - la 2ª que se expande (1fr). */
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
   padding: 20px;
+  border-radius: 8px;
 }
 
 .estadistico {
@@ -27,6 +38,16 @@
 
 .estadistico:hover {
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
+}
+
+/* Colores de fondo por cada tipo de row */
+.row--agregadas { background: #c7c7ff; }
+.row--retiradas { background: #ffd8be; }
+.row--reemplazadas { background: #f3bbe1; }
+
+.titulo-1, .titulo-2, .titulo-3 {
+  margin: 0;
+  font-size: 3em; /* ajusta a tu gusto */
 }
 
 .estadistico--1 {
@@ -146,6 +167,7 @@
   grid-template-columns: repeat(3, 1fr);
   justify-content: center; 
   gap: 1rem;
+  align-items: center;
 }
 
 .contador-item {
