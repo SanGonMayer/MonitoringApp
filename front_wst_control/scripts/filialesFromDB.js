@@ -122,61 +122,70 @@ function clearFilialContainer() {
     inicializarEstadosFiliales(); 
     inicializarEstadosHostsListas();
   
-    const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
+    const tableElement = document.querySelector('#workstationsTable');
     tableElement.style.display = 'none';
-
-    const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-movimientos')
-    console.log('🔍 Respuesta de la API:', response);
+  
+    const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-movimientos');
     const { filialesConMovimientos } = await response.json();
-    console.log('Filiales con movimientos:', filialesConMovimientos);
+  
+    // Verificamos si estamos en srno.html
+    const pageName = window.location.pathname.split('/').pop();
+    const isSrnoPage = pageName === 'srno.html';  
   
     for (const filial of filiales) {
-        // Creamos el botón directamente sin contenedor extra
-        const button = document.createElement('button');
-        button.classList.add('custom-button');
-    
-        const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
-    
-        // Evaluar el estado de los hosts
-        const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
-        button.style.backgroundColor = color;
-    
-        // Crear los spans para el nombre y la cantidad de hosts
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = filial.name;
-        nameSpan.classList.add('button-name');
-    
-        const hostsSpan = document.createElement('span');
-        hostsSpan.textContent = `${hosts.length}`;
-        hostsSpan.classList.add('button-hosts');
-    
-        // Agregar los spans al botón
-        button.appendChild(nameSpan);
-        button.appendChild(hostsSpan);
-
-        console.log('ID de la filial actual:', filial.id);
-
-        // Si la filial tuvo movimientos, agregar la clase que resalta el botón con un borde
-        if (filialesConMovimientos.includes(Number(filial.id))) {
-            button.classList.add('with-movement');
-        }
+      const button = document.createElement('button');
+      button.classList.add('custom-button');
+      
+      // Ajustamos el tipo según el HTML que se use
+      const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
+      
+      // Evaluar el estado de los hosts
+      const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
+      button.style.backgroundColor = color;
   
-        // Asigna los hosts directamente al evento click sin volver a hacer fetch
-        button.onclick = () => {
-            const filialName = filial.name; 
-            sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
-            console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-            window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
-        };
-        
-        // Agregar el botón directamente al contenedor principal
-        filialContainer.appendChild(button);
-        window.allButtons.push(button);
+      // Crear los spans
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = filial.name;
+      nameSpan.classList.add('button-name');
+      
+      const hostsSpan = document.createElement('span');
+      
+      // Aquí la diferencia:
+      // Si estamos en srno.html, mostramos solo hosts fallidos o pendientes;
+      // en caso contrario, se muestran todos los hosts
+      if (isSrnoPage) {
+        // Filtra solo los que estén fallidos o pendientes
+        const pendientesOFallidos = hosts.filter(h => h.status === 'fallido' || h.status === 'pendiente');
+        hostsSpan.textContent = pendientesOFallidos.length;
+      } else {
+        hostsSpan.textContent = hosts.length; 
+      }
+  
+      hostsSpan.classList.add('button-hosts');
+  
+      // Agregar los spans al botón
+      button.appendChild(nameSpan);
+      button.appendChild(hostsSpan);
+  
+      // Si la filial tuvo movimientos, agregamos la clase con borde
+      if (filialesConMovimientos.includes(Number(filial.id))) {
+        button.classList.add('with-movement');
+      }
+      
+      button.onclick = () => {
+        const filialName = filial.name; 
+        sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+        window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
+      };
+  
+      filialContainer.appendChild(button);
+      window.allButtons.push(button);
     }
-    console.log('Mostrando botones de filiales', window.allButtons);
+  
     updateCantidadDeHosts();
     updateCantidadDeFiliales();
-}
+  }
+  
 
 
 
