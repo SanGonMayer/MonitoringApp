@@ -129,8 +129,8 @@ function clearFilialContainer() {
     const { filialesConMovimientos } = await response.json();
   
     // Verificamos si estamos en srno.html
-    const pageName = window.location.pathname.split('/').pop();
-    const isSrnoPage = pageName === 'srno.html';  
+    const currentURL = window.location.href;
+    const isSrnoPage = currentURL.includes('srno.html'); 
   
     for (const filial of filiales) {
       const button = document.createElement('button');
