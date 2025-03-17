@@ -3,6 +3,7 @@
   flex-direction: column; /* Dispone las cards en columna */
   gap: 20px; /* Espacio entre las cards */
   padding: 20px;
+  flex-grow: 1;
 }
 
 .estadistico {
