@@ -172,3 +172,12 @@
   border-right: 1px solid #333;
   padding-right: 1em;       /* Asegura que el texto no quede pegado a la línea */
 }
+
+
+
+/* Estilos para el gráfico */
+.chart-container {
+  width: 100%;
+  max-width: 1200px; /* Ajusta según necesites */
+  margin: 20px auto;
+}
