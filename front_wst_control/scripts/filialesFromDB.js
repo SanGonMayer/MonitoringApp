@@ -438,11 +438,6 @@ async function createFilialButtonsSro(filiales, tipoTerminal) {
         button.appendChild(hostsSpan);
 
         console.log('ID de la filial actual:', filial.id);
-
-        // Si la filial tuvo movimientos, agregar la clase que resalta el botón con un borde
-        if (filialesConMovimientos.includes(Number(filial.id))) {
-            button.classList.add('with-movement');
-        }
   
         // Asigna los hosts directamente al evento click sin volver a hacer fetch
         button.onclick = () => {
