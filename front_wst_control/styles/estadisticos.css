@@ -24,6 +24,16 @@
   margin-bottom: 1em;        /* Separación debajo de la cabecera */
 }
 
+.header-title{
+  width: 300px;
+}
+
+.header-counters {
+  flex: 1; /* Ocupa el espacio restante */
+  display: flex;
+  justify-content: space-between; /* Distribuye los contadores a lo largo de todo el espacio disponible */
+}
+
 .estadistico:hover {
   transform: translateY(-5px); /* Efecto de levantar la estadistico al pasar el mouse */
 }
