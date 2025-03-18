@@ -286,7 +286,8 @@ router.get('/resumen/agregados', async (req, res) => {
     const annual = await Novedad.count({
       where: {
         motivo: 'Host agregado',
-        snapshot_date: { [Op.gte]: threshold }
+        snapshot_date: { [Op.gte]: threshold },
+        host_name: { [Op.notLike]: 'cctv-%' },
       }
     });
 
@@ -318,7 +319,8 @@ router.get('/resumen/retirados', async (req, res) => {
     const annual = await Novedad.count({
       where: {
         motivo: 'Host retirado',
-        snapshot_date: { [Op.gte]: threshold }
+        snapshot_date: { [Op.gte]: threshold },
+        host_name: { [Op.notLike]: 'cctv-%' },
       }
     });
 
