@@ -72,7 +72,7 @@ async function fetchMonthlySummaries() {
         ]
       },
       options: {
-        maintainAspectRatio: false,
+        /*maintainAspectRatio: false,*/
         responsive: true,
         scales: {
           x: {
