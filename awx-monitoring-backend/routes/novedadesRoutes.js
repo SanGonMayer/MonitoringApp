@@ -29,7 +29,8 @@ router.get('/agregados', async (req, res) => {
         snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
-        }
+        },
+        host_name: { [Op.notLike]: 'cctv-%' },
       },
       attributes: ['host_id', 'host_name', 'snapshot_date'],
       include: [
@@ -71,7 +72,8 @@ router.get('/deshabilitados', async (req, res) => {
         snapshot_date: {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
-        },        
+        }, 
+        host_name: { [Op.notLike]: 'cctv-%' },       
         [Op.or]: [
           { motivo: 'Modificacion de habilitado a deshabilitado' },
 
@@ -273,7 +275,8 @@ router.get('/resumen/agregados', async (req, res) => {
       ],
       where: {
         motivo: 'Host agregado',
-        snapshot_date: { [Op.gte]: threshold }
+        snapshot_date: { [Op.gte]: threshold },
+        host_name: { [Op.notLike]: 'cctv-%' },
       },
       group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
       order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
@@ -305,7 +308,8 @@ router.get('/resumen/retirados', async (req, res) => {
       ],
       where: {
         motivo: 'Host retirado',
-        snapshot_date: { [Op.gte]: threshold }
+        snapshot_date: { [Op.gte]: threshold },
+        host_name: { [Op.notLike]: 'cctv-%' },
       },
       group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
       order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
