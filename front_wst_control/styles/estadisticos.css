@@ -184,7 +184,7 @@
 
 
 #chartSummary {
-  max-width: 1000px; /* Ajusta el ancho deseado */
-  height: 600px;    /* Ajusta la altura deseada */
+  max-width: 900px; /* Ajusta el ancho deseado */
+  height: 500px;    /* Ajusta la altura deseada */
   margin: 0 auto;   /* Centrar el gráfico */
 }
