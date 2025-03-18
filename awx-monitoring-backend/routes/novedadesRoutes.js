@@ -31,6 +31,7 @@ router.get('/agregados', async (req, res) => {
           [Op.lte]: endOfToday,
         },
         host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},
       },
       attributes: ['host_id', 'host_name', 'snapshot_date'],
       include: [
@@ -73,7 +74,8 @@ router.get('/deshabilitados', async (req, res) => {
           [Op.gte]: startOfToday,
           [Op.lte]: endOfToday,
         }, 
-        host_name: { [Op.notLike]: 'cctv-%' },       
+        host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},       
         [Op.or]: [
           { motivo: 'Modificacion de habilitado a deshabilitado' },
 
@@ -277,6 +279,7 @@ router.get('/resumen/agregados', async (req, res) => {
         motivo: 'Host agregado',
         snapshot_date: { [Op.gte]: threshold },
         host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},
       },
       group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
       order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
@@ -288,6 +291,7 @@ router.get('/resumen/agregados', async (req, res) => {
         motivo: 'Host agregado',
         snapshot_date: { [Op.gte]: threshold },
         host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},
       }
     });
 
@@ -311,6 +315,7 @@ router.get('/resumen/retirados', async (req, res) => {
         motivo: 'Host retirado',
         snapshot_date: { [Op.gte]: threshold },
         host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},
       },
       group: [Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date'))],
       order: [[Novedad.sequelize.fn('date_trunc', 'month', Novedad.sequelize.col('snapshot_date')), 'ASC']],
@@ -321,6 +326,7 @@ router.get('/resumen/retirados', async (req, res) => {
         motivo: 'Host retirado',
         snapshot_date: { [Op.gte]: threshold },
         host_name: { [Op.notLike]: 'cctv-%' },
+        filial_id: { [Op.not]: [62, 304, 305, 299, ]},
       }
     });
 
