@@ -181,3 +181,10 @@
   max-width: 1200px; /* Ajusta según necesites */
   margin: 20px auto;
 }
+
+
+#chartSummary {
+  max-width: 600px; /* Ajusta el ancho deseado */
+  height: 300px;    /* Ajusta la altura deseada */
+  margin: 0 auto;   /* Centrar el gráfico */
+}
