@@ -64,11 +64,11 @@ async function fetchMonthlySummaries() {
             data: retiradas,
             backgroundColor: 'rgba(252, 161, 71, 0.7)'
           },
-          {
+          /*{
             label: 'Reemplazadas',
             data: reemplazos,
             backgroundColor: 'rgba(220, 91, 183, 0.7)'
-          }
+          }*/
         ]
       },
       options: {
