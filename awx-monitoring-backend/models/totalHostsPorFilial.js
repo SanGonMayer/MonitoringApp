@@ -7,6 +7,7 @@ const totalHostsPorFilial = sequelize.define('totalHostsPorFilial', {
       primaryKey: true,
       allowNull: false,
       unique: true, 
+      autoIncrement: true,
     },
     filial_id: {
       type: DataTypes.INTEGER,
