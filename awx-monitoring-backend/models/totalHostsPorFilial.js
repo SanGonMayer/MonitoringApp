@@ -20,6 +20,8 @@ const totalHostsPorFilial = sequelize.define('totalHostsPorFilial', {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+}, {
+    freezeTableName: true,
 });
 
 export default totalHostsPorFilial;
