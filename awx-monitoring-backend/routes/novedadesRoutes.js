@@ -7,6 +7,7 @@ import { Op } from 'sequelize';
 import sequelize from '../config/database.js';
 import { processNovedades } from '../services/novedadesProcessor.js';
 import Novedad from '../models/novedades.js';
+import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
 
 
 const router = Router();
@@ -399,6 +400,76 @@ router.get('/resumen/reemplazos/novedad', async (req, res) => {
   } catch (error) {
     console.error('Error en resumen reemplazos (Novedad):', error);
     res.status(500).json({ error: 'Error al obtener resumen de reemplazos' });
+  }
+});
+
+router.get('/update-host-counts', async (req, res) => {
+  try {
+
+    const wstCounts = await Workstation.findAll({
+      attributes: [
+        'filial_id',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      ],
+      group: ['filial_id']
+    });
+
+
+    const cctvCounts = await CCTV.findAll({
+      attributes: [
+        'filial_id',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      ],
+      group: ['filial_id']
+    });
+
+
+    const hostCountsMap = new Map();
+
+    wstCounts.forEach(record => {
+      const filialId = record.filial_id;
+      hostCountsMap.set(filialId, { 
+        wst_hosts_qty: parseInt(record.dataValues.count), 
+        cctv_hosts_qty: 0 
+      });
+    });
+
+    cctvCounts.forEach(record => {
+      const filialId = record.filial_id;
+      if (hostCountsMap.has(filialId)) {
+        const existing = hostCountsMap.get(filialId);
+        existing.cctv_hosts_qty = parseInt(record.dataValues.count);
+      } else {
+        hostCountsMap.set(filialId, { 
+          wst_hosts_qty: 0, 
+          cctv_hosts_qty: parseInt(record.dataValues.count) 
+        });
+      }
+    });
+
+
+    await TotalHostsPorFilial.destroy({ truncate: true });
+
+
+    const recordsToInsert = [];
+    for (const [filial_id, counts] of hostCountsMap) {
+      recordsToInsert.push({
+        filial_id,
+        wst_hosts_qty: counts.wst_hosts_qty,
+        cctv_hosts_qty: counts.cctv_hosts_qty
+      });
+    }
+
+
+    await TotalHostsPorFilial.bulkCreate(recordsToInsert);
+
+    res.status(200).json({
+      message: 'Tabla totalHostsPorFilial actualizada correctamente',
+      data: recordsToInsert
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al actualizar la tabla de conteo de hosts' });
   }
 });
 
