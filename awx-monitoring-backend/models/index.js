@@ -9,6 +9,7 @@ import CCTV from './cctv.js';
 import JobHostSummary from './jobHostSummary.js';
 import HostSnapshot from './hostsSnapshot.js';
 import Novedad from './novedades.js';
+import totalHostsPorFilial from './totalHostsPorFilial.js';
 
 Filial.hasMany(Workstation, { foreignKey: 'filial_id' });
 Workstation.belongsTo(Filial, { foreignKey: 'filial_id' });
@@ -43,6 +44,8 @@ HostSnapshot.belongsTo(Filial, { foreignKey: 'old_filial_id', as: 'oldFilial' })
 // Relación de Novedad con Filial
 Filial.hasMany(Novedad, { foreignKey: 'filial_id', as: 'novedades' });
 Novedad.belongsTo(Filial, { foreignKey: 'filial_id', as: 'filial' });
+
+totalHostsPorFilial.belongsTo(Filial, { foreignKey: 'filial_id' });
   
 
 
