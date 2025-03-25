@@ -8,7 +8,7 @@ import sequelize from '../config/database.js';
 import { processNovedades } from '../services/novedadesProcessor.js';
 import Novedad from '../models/novedades.js';
 import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
-import { notifyTotalHostsComparison } from '../services/notifyTotalHostsComparison.js';
+import { notifyTotalHostsComparison } from '../services/compareHostCounts.js';
 
 
 const router = Router();
