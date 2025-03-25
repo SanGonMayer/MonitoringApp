@@ -8,6 +8,7 @@ import sequelize from '../config/database.js';
 import { processNovedades } from '../services/novedadesProcessor.js';
 import Novedad from '../models/novedades.js';
 import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
+import { notifyTotalHostsComparison } from '../services/notifyTotalHostsComparison.js';
 
 
 const router = Router();
@@ -470,6 +471,16 @@ router.get('/update-host-counts', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al actualizar la tabla de conteo de hosts' });
+  }
+});
+
+router.get('/notify-host-count-comparison', async (req, res) => {
+  try {
+    await notifyTotalHostsComparison();
+    res.json({ message: 'Notificación enviada correctamente.' });
+  } catch (error) {
+    console.error('Error en la ruta de comparación:', error.message);
+    res.status(500).json({ error: 'Error al enviar la notificación', details: error.message });
   }
 });
 

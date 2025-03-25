@@ -140,9 +140,15 @@ export const sendReportViaTelegram = async (report) => {
         throw new Error('TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no están definidos en el archivo .env');
       }
   
-      const httpsProxyAgent = new HttpsProxyAgent('http://10.1.1.89:3128');
-      const httpProxyAgent = new HttpProxyAgent('http://10.1.1.89:3128');
-  
+      //const httpsProxyAgent = new HttpsProxyAgent('http://10.1.1.89:3128');
+      //const httpProxyAgent = new HttpProxyAgent('http://10.1.1.89:3128');
+      
+      const httpProxyUrl = process.env.HTTP_PROXY_URL; 
+      const httpsProxyUrl = process.env.HTTPS_PROXY_URL; 
+          
+      const httpProxyAgent = new HttpProxyAgent(httpProxyUrl);
+      const httpsProxyAgent = new HttpsProxyAgent(httpsProxyUrl);
+
       const getProxyAgent = (url) => {
         return url.startsWith('https') ? httpsProxyAgent : httpProxyAgent;
       };
