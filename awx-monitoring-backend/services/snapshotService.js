@@ -130,7 +130,7 @@ export const createAndManageSnapshots = async (snapshotData) => {
 /**
  * Maneja el snapshot para un host específico.
  */
-export const handleHostSnapshot = async (host, tipo) => {
+export const handleHostSnapshot = async (host, tipo, force = false) => {
     try {
       const { id, name, status, enabled, inventory_id, filial_id } = host;
       console.log(`📝 Procesando snapshot para ${tipo} - ID: ${id}, Nombre: ${name}`);
@@ -143,7 +143,7 @@ export const handleHostSnapshot = async (host, tipo) => {
         filial_id,
       });
   
-      if (!lastSnapshot || hasChanges) {
+      if (force || !lastSnapshot || hasChanges) {
 
         const motivo = determineChangeReason(lastSnapshot, {
           status,
