@@ -19,6 +19,7 @@ import { Op } from 'sequelize';
 import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
 import Workstation from '../models/workstations.js';
 import CCTV from '../models/cctv.js';
+import sequelize from '../config/database.js';
 
 
 export const awxRoutes = Router();
