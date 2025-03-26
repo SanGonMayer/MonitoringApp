@@ -125,9 +125,9 @@ function clearFilialContainer() {
     const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
     tableElement.style.display = 'none';
 
-    const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-movimientos')
+    const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
     console.log('🔍 Respuesta de la API:', response);
-    const { filialesConMovimientos } = await response.json();
+    const { filialesConDiferencia } = await response.json();
     console.log('Filiales con movimientos:', filialesConMovimientos);
   
     for (const filial of filiales) {
@@ -156,9 +156,9 @@ function clearFilialContainer() {
 
         console.log('ID de la filial actual:', filial.id);
 
-        // Si la filial tuvo movimientos, agregar la clase que resalta el botón con un borde
-        if (filialesConMovimientos.includes(Number(filial.id))) {
-            button.classList.add('with-movement');
+        // Si la filial tuvo diferencias, agregar la clase que resalta el botón con un borde
+        if (filialesConDiferencia.includes(Number(filial.id))) {
+          button.classList.add('with-movement');
         }
   
         // Asigna los hosts directamente al evento click sin volver a hacer fetch

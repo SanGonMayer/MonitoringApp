@@ -16,6 +16,7 @@ import { sendReportByEmail } from '../services/notificadorService.js';
 import { generateEmailBodyHtml } from '../services/notificadorService.js';
 import HostSnapshot from '../models/hostsSnapshot.js'
 import { Op } from 'sequelize';
+import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
 
 
 export const awxRoutes = Router();
@@ -272,6 +273,51 @@ awxRoutes.get('/api/filiales-con-movimientos', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener filiales con movimientos.' });
   }
 });
+
+awxRoutes.get('/api/filiales-con-diferencias-hosts', async (req, res) => {
+  try {
+    const wstCounts = await Workstation.findAll({
+      attributes: ['filial_id', [sequelize.fn('COUNT', sequelize.col('id')), 'wstCount']],
+      group: ['filial_id'],
+      raw: true,
+    });
+
+    const cctvCounts = await CCTV.findAll({
+      attributes: ['filial_id', [sequelize.fn('COUNT', sequelize.col('id')), 'cctvCount']],
+      group: ['filial_id'],
+      raw: true,
+    });
+
+    const currentCounts = {};
+    wstCounts.forEach(record => {
+      const id = record.filial_id;
+      currentCounts[id] = { wst: parseInt(record.wstCount, 10), cctv: 0 };
+    });
+    cctvCounts.forEach(record => {
+      const id = record.filial_id;
+      if (!currentCounts[id]) currentCounts[id] = { wst: 0, cctv: 0 };
+      currentCounts[id].cctv = parseInt(record.cctvCount, 10);
+    });
+
+    const storedRecords = await TotalHostsPorFilial.findAll({ raw: true });
+
+    const filialesConDiferencia = [];
+
+    storedRecords.forEach(record => {
+      if (record.filial_id === 1) return; // Excluir f0000
+      const current = currentCounts[record.filial_id] || { wst: 0, cctv: 0 };
+      if (record.wst_hosts_qty !== current.wst || record.cctv_hosts_qty !== current.cctv) {
+        filialesConDiferencia.push(record.filial_id);
+      }
+    });
+
+    res.status(200).json({ filialesConDiferencia });
+  } catch (error) {
+    console.error('Error al obtener diferencias de hosts:', error.message);
+    res.status(500).json({ error: 'Error al obtener diferencias de hosts.' });
+  }
+});
+
 
 
 
