@@ -17,6 +17,8 @@ import { generateEmailBodyHtml } from '../services/notificadorService.js';
 import HostSnapshot from '../models/hostsSnapshot.js'
 import { Op } from 'sequelize';
 import TotalHostsPorFilial from '../models/totalHostsPorFilial.js';
+import Workstation from '../models/workstations.js';
+import CCTV from '../models/cctv.js';
 
 
 export const awxRoutes = Router();
