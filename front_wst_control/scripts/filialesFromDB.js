@@ -128,7 +128,7 @@ function clearFilialContainer() {
     const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
     console.log('🔍 Respuesta de la API:', response);
     const { filialesConDiferencia } = await response.json();
-    console.log('Filiales con movimientos:', filialesConMovimientos);
+    console.log('Filiales con diferencias:', filialesConDiferencia);
   
     for (const filial of filiales) {
         // Creamos el botón directamente sin contenedor extra
