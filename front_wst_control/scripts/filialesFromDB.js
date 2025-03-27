@@ -399,7 +399,7 @@ async function fetchFilialesGraficoDB(tipoTerminal) {
       filialesFiltradas = filiales.filter(filial => filial.hasWST && !gruposExcluidos.includes(filial.name.toLowerCase()));
     } else if (tipoTerminal === 'cctv.html') {
         console.log('Estoy evaluando las filiales para cctv')
-        filialesFiltradas = filiales.filter(filial => filial.hasCCTV && !gruposExcluidosCCTV.includes(filial.name.toLowerCase()));
+        filialesFiltradas = filiales.filter(filial => filial.hasCCTV && !gruposExcluidos.includes(filial.name.toLowerCase()));
     }
 
     console.log('Filiales filtradas:', filialesFiltradas);
