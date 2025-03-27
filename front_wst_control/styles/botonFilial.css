@@ -13,7 +13,7 @@
     color: white;
 }
 
-#filialContainer {
+#filialContainer, #filialContainerTesting, #filialContainerComercial {
     display: grid; 
     grid-template-columns: repeat(20, 1fr); 
     gap: 2px; 
