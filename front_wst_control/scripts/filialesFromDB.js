@@ -146,44 +146,55 @@ function filtrarFiliales(filiales, tipoTerminal) {
 
 async function createFilialButtons(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainer');
-
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
 
+  const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
+  console.log('🔍 Respuesta de la API:', response);
+  const { filialesConDiferencia } = await response.json();
+  console.log('Filiales con movimientos:', filialesConMovimientos);
+
   for (const filial of filiales) {
+
       const button = document.createElement('button');
       button.classList.add('custom-button');
-  
+
       const tipo = tipoTerminal === 'wst.html' ? 'wst' : 'cctv';
-  
+
       // Evaluar el estado de los hosts
       const { color, hosts } = await evaluarEstadoHosts(filial.id, tipo);
       button.style.backgroundColor = color;
-  
+
       // Crear los spans para el nombre y la cantidad de hosts
       const nameSpan = document.createElement('span');
       nameSpan.textContent = filial.name;
       nameSpan.classList.add('button-name');
-  
+
       const hostsSpan = document.createElement('span');
       hostsSpan.textContent = `${hosts.length}`;
       hostsSpan.classList.add('button-hosts');
-  
+
       // Agregar los spans al botón
       button.appendChild(nameSpan);
       button.appendChild(hostsSpan);
 
+      console.log('ID de la filial actual:', filial.id);
+
+      // Si la filial tuvo diferencias, agregar la clase que resalta el botón con un borde
+      if (filialesConDiferencia.includes(Number(filial.id))) {
+        button.classList.add('with-movement');
+      }
+
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
-
-        const filialName = filial.name; 
-        
-        sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
-        console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
-        window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
+          const filialName = filial.name; 
+          sessionStorage.setItem('filialHosts', JSON.stringify(hosts));
+          console.log("Hosts guardados en sessionStorage:", JSON.parse(sessionStorage.getItem('filialHosts')));
+          window.open(`filial.html?name=${filialName}&from=${tipo}&action=filialHost`, '_blank');
       };
 
-      filialContainer.appendChild(button); // Asegúrate de agregar el botón al contenedor
+      // Agregar el botón directamente al contenedor principal
+      filialContainer.appendChild(button);
       window.allButtons.push(button);
   }
   console.log('Mostrando botones de filiales', window.allButtons);
@@ -199,6 +210,11 @@ async function createFilialButtonsComercial(filiales, tipoTerminal) {
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
 
+  const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
+  console.log('🔍 Respuesta de la API:', response);
+  const { filialesConDiferencia } = await response.json();
+  console.log('Filiales con movimientos:', filialesConMovimientos);
+
   for (const filial of filiales) {
       const button = document.createElement('button');
       button.classList.add('custom-button');
@@ -221,6 +237,14 @@ async function createFilialButtonsComercial(filiales, tipoTerminal) {
       // Agregar los spans al botón
       button.appendChild(nameSpan);
       button.appendChild(hostsSpan);
+
+      console.log('ID de la filial actual:', filial.id);
+
+      // Si la filial tuvo diferencias, agregar la clase que resalta el botón con un borde
+      if (filialesConDiferencia.includes(Number(filial.id))) {
+        button.classList.add('with-movement');
+      }
+
 
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
@@ -244,11 +268,13 @@ async function createFilialButtonsComercial(filiales, tipoTerminal) {
 
 async function createFilialButtonsTesting(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainerTesting');
-  //inicializarEstadosFiliales(); 
-  //inicializarEstadosHostsListas();
-
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
+
+  const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
+  console.log('🔍 Respuesta de la API:', response);
+  const { filialesConDiferencia } = await response.json();
+  console.log('Filiales con movimientos:', filialesConMovimientos);
 
   for (const filial of filiales) {
       const button = document.createElement('button');
@@ -272,6 +298,15 @@ async function createFilialButtonsTesting(filiales, tipoTerminal) {
       // Agregar los spans al botón
       button.appendChild(nameSpan);
       button.appendChild(hostsSpan);
+
+      console.log('ID de la filial actual:', filial.id);
+
+      // Si la filial tuvo diferencias, agregar la clase que resalta el botón con un borde
+      if (filialesConDiferencia.includes(Number(filial.id))) {
+        button.classList.add('with-movement');
+      }
+
+
 
       // Asigna los hosts directamente al evento click sin volver a hacer fetch
       button.onclick = () => {
