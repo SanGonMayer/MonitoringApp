@@ -152,7 +152,7 @@ async function createFilialButtons(filiales, tipoTerminal) {
   const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
   console.log('🔍 Respuesta de la API:', response);
   const { filialesConDiferencia } = await response.json();
-  console.log('Filiales con movimientos:', filialesConMovimientos);
+  console.log('Filiales con movimientos:', filialesConDiferencia);
 
   for (const filial of filiales) {
 
@@ -213,7 +213,7 @@ async function createFilialButtonsComercial(filiales, tipoTerminal) {
   const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
   console.log('🔍 Respuesta de la API:', response);
   const { filialesConDiferencia } = await response.json();
-  console.log('Filiales con movimientos:', filialesConMovimientos);
+  console.log('Filiales con movimientos:', filialesConDiferencia);
 
   for (const filial of filiales) {
       const button = document.createElement('button');
@@ -274,7 +274,7 @@ async function createFilialButtonsTesting(filiales, tipoTerminal) {
   const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/filiales-con-diferencias-hosts');
   console.log('🔍 Respuesta de la API:', response);
   const { filialesConDiferencia } = await response.json();
-  console.log('Filiales con movimientos:', filialesConMovimientos);
+  console.log('Filiales con movimientos:', filialesConDiferencia);
 
   for (const filial of filiales) {
       const button = document.createElement('button');
