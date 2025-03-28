@@ -221,7 +221,8 @@ function mostrarHostsDefilialHtml(){
             statsContainer.appendChild(statDiv);
           });
 
-          displayHosts(hosts, fromPage);
+          //displayHosts(hosts, fromPage);
+          displayHostsPorEstados(hosts,0,fromPage);
 
           //-----
 
