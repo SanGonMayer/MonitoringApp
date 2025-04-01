@@ -503,6 +503,10 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 
     const filiales = await response.json();
 
+    filiales.forEach(filial => {
+      console.log("Filiales",filial.name.toLowerCase())
+    });
+
     const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFilialesSrno(filiales, tipoTerminal);
 
     console.log('Filiales filtradas:', filialesFiltradas);
