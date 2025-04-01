@@ -680,6 +680,10 @@ async function createFilialButtonsComercialSrno(filiales, tipoTerminal) {
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
 
+  const pageName = window.location.pathname.split('/').pop();
+  console.log('pageName (SRO):', pageName);
+  const isSrnoPage = pageName === 'srno.html';
+
   for (const filial of filiales) {
       const button = document.createElement('button');
       button.classList.add('custom-button');
@@ -696,7 +700,15 @@ async function createFilialButtonsComercialSrno(filiales, tipoTerminal) {
       nameSpan.classList.add('button-name');
   
       const hostsSpan = document.createElement('span');
-      hostsSpan.textContent = `${hosts.length}`;
+
+      if (isSrnoPage) {
+        const pendientesOFallidos = hosts.filter(
+          h => h.status === 'fallido' || h.status === 'pendiente'
+        );
+        hostsSpan.textContent = pendientesOFallidos.length;
+      } else {
+        hostsSpan.textContent = hosts.length;
+      }
       hostsSpan.classList.add('button-hosts');
   
       // Agregar los spans al botón
@@ -730,6 +742,10 @@ async function createFilialButtonsObrasSrno(filiales, tipoTerminal) {
   const tableElement = document.querySelector('#workstationsTable'); // Seleccionamos la tabla para scroll
   tableElement.style.display = 'none';
 
+  const pageName = window.location.pathname.split('/').pop();
+  console.log('pageName (SRO):', pageName);
+  const isSrnoPage = pageName === 'srno.html';
+
   for (const filial of filiales) {
       const button = document.createElement('button');
       button.classList.add('custom-button');
@@ -746,7 +762,16 @@ async function createFilialButtonsObrasSrno(filiales, tipoTerminal) {
       nameSpan.classList.add('button-name');
   
       const hostsSpan = document.createElement('span');
-      hostsSpan.textContent = `${hosts.length}`;
+      
+      if (isSrnoPage) {
+        const pendientesOFallidos = hosts.filter(
+          h => h.status === 'fallido' || h.status === 'pendiente'
+        );
+        hostsSpan.textContent = pendientesOFallidos.length;
+      } else {
+        hostsSpan.textContent = hosts.length;
+      }
+
       hostsSpan.classList.add('button-hosts');
   
       // Agregar los spans al botón
