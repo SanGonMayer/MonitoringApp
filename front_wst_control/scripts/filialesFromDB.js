@@ -40,9 +40,14 @@ const gruposCajas = [
 
 const gruposExcluidosSrno = [
   'f0000',
-  'f0071', 'f0603', 'f0661', 'f0663', 'f0664', 'f0662','f0665', 'f0668', 'f0299', 'f0676',
-  'wst', 'pve','f0999',
+  'f0071', 'f0661', 'f0663', 'f0664', 'f0662','f0665', 'f0668', 'f0299','wst', 'pve','f0999',
   'f0036','f0174','f0344','f0346',
+];
+
+
+const gruposCajasSrno = [
+  'f0504', 'f0509', 'f0513', 'f0514', 'f0559', 'f0579', 'f0580', 'f0583', 'f0584', 'f0593',
+  'f0594', 'f0595', 'f0597', 'f0652', 'f0688', 'f0703',
 ];
 
 
@@ -732,7 +737,7 @@ function filtrarFilialesSrno(filiales, tipoTerminal) {
   filiales.forEach(filial => {
     const isExcluded = gruposExcluidosSrno.includes(filial.name.toLowerCase());
     const isObra = gruposObras.includes(filial.name.toLowerCase());
-    const isCaja = gruposCajas.includes(filial.name.toLowerCase());
+    const isCaja = gruposCajasSrno.includes(filial.name.toLowerCase());
 
     if (tipoTerminal === 'srno.html' && filial.hasWST) {
       if (!isExcluded && !isCaja) filialesFiltradas.push(filial); // NO debe ser caja
