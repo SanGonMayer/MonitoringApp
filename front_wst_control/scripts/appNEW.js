@@ -406,6 +406,7 @@ function displayHostsPorEstados(hosts, startIndex,fromPage) {
         const rutaJobsAwx = `http://sawx0001lx.bancocredicoop.coop/#/inventories/inventory/22/hosts/edit/${host.id}/completed_jobs?`;
         const jobWolButton = `<button onclick="launchJobWol('${host.name}', '${fromPage}')">Ejecutar</button>`;
         const jobUpdButton = `<button onclick="launchJobUpd('${host.name}', '${fromPage}')">Ejecutar</button>`;
+        const jobCrnOff = `<button onclick="launchJobCrnOff('${host.name}', '${fromPage}')">Ejecutar</button>`;
         
         let descriptionStatus = '';
         if (host.status === 'actualizado') {
@@ -432,6 +433,7 @@ function displayHostsPorEstados(hosts, startIndex,fromPage) {
               </td>
               <td>${jobWolButton}</td>
               <td>${jobUpdButton}</td>
+              <td>${jobCrnOff}</td>
             </tr>
         `;
         tableBody.innerHTML += row;

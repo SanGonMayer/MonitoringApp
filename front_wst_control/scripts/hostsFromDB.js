@@ -141,6 +141,72 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
     }
   }
 
+  async function launchJobCrnOff(hostname,fromPage) {
+    try {
+
+    // Validar credenciales
+    const credentials = await validateCredentials();
+    if (!credentials) {
+
+      Swal.fire({
+        icon: "error",
+        title: "Acceso denegado",
+        text: "No se pudo validar las credenciales",
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Credenciales aceptadas",
+      text: `Usuario: ${credentials.username}`,
+    });
+
+      console.log("Iniciando ejecución del job para el host:", hostname);
+
+      let template_id = 0;
+      if ( fromPage === 'wst'){
+        template_id = 1283;
+        console.log("fromPage recibido:", fromPage);
+      }
+
+      const response = await fetch('http://sncl1001lx.bancocredicoop.coop:3000/api/awx/launch-job', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          job_template_id: template_id,
+          hostname: hostname,
+        }),
+      });
+
+      const responseText = await response.text();
+
+      console.log("Texto completo de la respuesta:", responseText);
+
+      let data;
+      try {
+          data = JSON.parse(responseText);
+      } catch (jsonError) {
+          console.error("Error al parsear JSON:", jsonError);
+          alert("Error al lanzar el job: Respuesta no válida del servidor.");
+          return;
+      }
+  
+      //const data = await response.json();
+  
+      if (response.ok) {
+        alert(`Job lanzado correctamente en el host ${hostname}. ID del job: ${data.job_id}`);
+      } else {
+        alert(`Error al lanzar el job: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error al lanzar el job:', error);
+      alert('Error al lanzar el job.');
+    }
+  }
+
   async function launchJobUpd(hostname, fromPage) {
     try {
     
@@ -282,6 +348,7 @@ export async function validateCredentials() {
   window.displayHosts = displayHosts;
   window.launchJobWol = launchJobWol;
   window.launchJobUpd = launchJobUpd;
+  window.launchJobCrnOff = launchJobCrnOff;
 
   window.fetchHostsFromDBSrno = fetchHostsFromDBSrno;
   
