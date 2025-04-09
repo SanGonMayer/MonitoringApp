@@ -129,9 +129,26 @@ function recargarFilialesHtml(){
     const actionButton = document.querySelector('#action-button');
     if (actionButton) {
         actionButton.addEventListener('click', () => {
-            const filialContainer = document.querySelector('#filialContainer');
-            filialContainer.innerHTML = '';
-  
+            let filialContainer = document.querySelector('#filialContainer');
+            if (filialContainer) {
+                filialContainer.innerHTML = '';
+            }
+
+            filialContainer = document.querySelector('#filialContainerComercial');
+            if (filialContainer) {
+                filialContainer.innerHTML = '';
+            }
+
+            filialContainer = document.querySelector('#filialContainerTesting');
+            if (filialContainer) {
+                filialContainer.innerHTML = '';
+            }
+
+            filialContainer = document.querySelector('#filialContainerTesting');
+            if (filialContainer) {
+                filialContainer.innerHTML = '';
+            }
+
             const cards = document.querySelectorAll('.main-skills .card .circle span');
             cards.forEach(card => {
                 card.textContent = '';
