@@ -38,7 +38,7 @@ const gruposCajas = [
 
 //////////////////////7
 
-const gruposExcluidosSrno = [
+/* const gruposExcluidosSrno = [
   'f0000',
   'f0071', 'f0661', 'f0663', 'f0664', 'f0662','f0665', 'f0668', 'f0299','wst', 'pve','f0999',
   'f0036','f0174','f0344','f0346',
@@ -54,7 +54,7 @@ const gruposCajasSrno = [
 const gruposObras = [
   'f0036','f0174','f0344','f0346',
 ];
-
+ */
 ////////////////////////////
 
 
@@ -129,7 +129,7 @@ function filtrarFiliales(filiales, tipoTerminal) {
     const isTesting = gruposTesting.includes(filial.name.toLowerCase());
     const isCaja = gruposCajas.includes(filial.name.toLowerCase());
 
-    if (tipoTerminal === 'wst.html' && filial.hasWST) {
+    if ( (tipoTerminal === 'wst.html' || tipoTerminal === 'srno.html') && filial.hasWST) {
       if (!isExcluded && !isCaja) filialesFiltradas.push(filial); // NO debe ser caja
       if (isTesting) filialesTesting.push(filial);
       if (isCaja) filialesCajas.push(filial);
@@ -503,7 +503,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 
     const filiales = await response.json();
 
-    const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFilialesSrno(filiales, tipoTerminal);
+    const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFiliales(filiales, tipoTerminal);
 
     console.log('Filiales filtradas:', filialesFiltradas);
     console.log('Filiales en obras:', filialesObras);
