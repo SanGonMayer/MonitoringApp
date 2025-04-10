@@ -503,10 +503,10 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 
     const filiales = await response.json();
 
-    const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFiliales(filiales, tipoTerminal);
+    const { filialesFiltradas, filialesTesting, filialesCajas } = filtrarFiliales(filiales, tipoTerminal);
 
     console.log('Filiales filtradas:', filialesFiltradas);
-    console.log('Filiales en obras:', filialesObras);
+    console.log('Filiales en Testing:', filialesTesting);
     console.log('Filiales de caja:', filialesCajas);
 
     inicializarEstadosFiliales(); 
@@ -516,7 +516,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
     clearFilialContainer();
     createFilialButtonsSro(filialesFiltradas, tipoTerminal);
     createFilialButtonsComercialSrno(filialesCajas, tipoTerminal);
-    createFilialButtonsObrasSrno(filialesObras, tipoTerminal);
+    createFilialButtonsTestingSrno(filialesTesting, tipoTerminal);
 
 
     console.log('cantidad de filiales actualizadas', window.actualizadas)
@@ -680,7 +680,7 @@ async function createFilialButtonsComercialSrno(filiales, tipoTerminal) {
 }
 
 
-async function createFilialButtonsObrasSrno(filiales, tipoTerminal) {
+async function createFilialButtonsTestingSrno(filiales, tipoTerminal) {
   const filialContainer = document.querySelector('#filialContainerTesting');
   //inicializarEstadosFiliales(); 
   //inicializarEstadosHostsListas();
