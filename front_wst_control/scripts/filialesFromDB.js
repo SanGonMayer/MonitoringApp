@@ -38,7 +38,7 @@ const gruposCajas = [
 
 //////////////////////7
 
-/* const gruposExcluidosSrno = [
+const gruposExcluidosSrno = [
   'f0000',
   'f0071', 'f0661', 'f0663', 'f0664', 'f0662','f0665', 'f0668', 'f0299','wst', 'pve','f0999',
   'f0036','f0174','f0344','f0346',
@@ -53,7 +53,7 @@ const gruposCajasSrno = [
 
 const gruposObras = [
   'f0036','f0174','f0344','f0346',
-]; */
+];
 
 ////////////////////////////
 
@@ -503,7 +503,7 @@ async function fetchFilialesConHostsSrno(tipoTerminal) {
 
     const filiales = await response.json();
 
-    const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFiliales(filiales, tipoTerminal);
+    const { filialesFiltradas, filialesObras, filialesCajas } = filtrarFilialesSrno(filiales, tipoTerminal);
 
     console.log('Filiales filtradas:', filialesFiltradas);
     console.log('Filiales en obras:', filialesObras);
