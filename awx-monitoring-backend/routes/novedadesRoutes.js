@@ -412,6 +412,7 @@ router.get('/update-host-counts', async (req, res) => {
         'filial_id',
         [sequelize.fn('COUNT', sequelize.col('id')), 'count']
       ],
+      where: { enabled: true },
       group: ['filial_id']
     });
 
@@ -421,6 +422,7 @@ router.get('/update-host-counts', async (req, res) => {
         'filial_id',
         [sequelize.fn('COUNT', sequelize.col('id')), 'count']
       ],
+      where: { enabled: true },
       group: ['filial_id']
     });
 
@@ -449,7 +451,7 @@ router.get('/update-host-counts', async (req, res) => {
     });
 
 
-    await TotalHostsPorFilial.destroy({ truncate: true });
+    await TotalHostsPorFilial.truncate({ restartIdentity: true });
 
 
     const recordsToInsert = [];
