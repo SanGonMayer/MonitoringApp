@@ -281,12 +281,14 @@ awxRoutes.get('/api/filiales-con-diferencias-hosts', async (req, res) => {
   try {
     const wstCounts = await Workstation.findAll({
       attributes: ['filial_id', [sequelize.fn('COUNT', sequelize.col('id')), 'wstCount']],
+      where: {enabled: true},
       group: ['filial_id'],
       raw: true,
     });
 
     const cctvCounts = await CCTV.findAll({
       attributes: ['filial_id', [sequelize.fn('COUNT', sequelize.col('id')), 'cctvCount']],
+      where: { enabled: true },
       group: ['filial_id'],
       raw: true,
     });

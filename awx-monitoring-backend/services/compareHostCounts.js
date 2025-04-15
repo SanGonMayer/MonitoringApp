@@ -13,7 +13,7 @@ export const notifyTotalHostsComparison = async () => {
           'filial_id',
           [sequelize.fn('COUNT', sequelize.col('id')), 'wstCount']
         ],
-        //where: {enabled: true},
+        where: {enabled: true},
         group: ['filial_id'],
         raw: true,
       });
@@ -23,7 +23,7 @@ export const notifyTotalHostsComparison = async () => {
           'filial_id',
           [sequelize.fn('COUNT', sequelize.col('id')), 'cctvCount']
         ],
-        //where: {enabled: true},
+        where: {enabled: true},
         group: ['filial_id'],
         raw: true,
       });
