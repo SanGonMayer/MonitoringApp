@@ -188,7 +188,7 @@ function mostrarHostsDefilialHtml(){
       const actionButton = document.getElementById('action-upd-filial');
       if (actionButton) {
         if (fromPage === 'wst') {
-            actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
+            actionButton.textContent = 'Aplicar wst_upd_v1.8.3';
         } else if (fromPage === 'cctv') {
             actionButton.textContent = 'Aplicar ctv_upd_v0.3.1';
         } else {
@@ -327,7 +327,7 @@ function actualizarRecuperarHosts(){
         const actionButton = document.getElementById('action-upd-filial');
         if (actionButton) {
           if (fromPage === 'wst') {
-              actionButton.textContent = 'Aplicar wst_upd_v1.8.1';
+              actionButton.textContent = 'Aplicar wst_upd_v1.8.3';
           } else if (fromPage === 'cctv') {
               actionButton.textContent = 'Aplicar ctv_upd_v0.3.1';
           } else {

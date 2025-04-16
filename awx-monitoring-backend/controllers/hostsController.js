@@ -48,14 +48,14 @@ import { Op } from 'sequelize';
         const lastIPAIndex = jobSummaries.findIndex(summary => summary.job_name.startsWith('wst_ipa_v'));
         const hasIPA = lastIPAIndex !== -1;
 
-        // Buscar si hay un "wst_upd_v1.8.1" exitoso posterior al último "wst_ipa_v"
+        // Buscar si hay un "wst_upd_v1.8.3" exitoso posterior al último "wst_ipa_v"
         const successfulUpdateAfterIPA = jobSummaries.slice(0, lastIPAIndex).find(
-          summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed
+          summary => summary.job_name === 'wst_upd_v1.8.3' && !summary.failed
         );
 
-        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.8.1" exitoso
-        if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.8.1" exitoso. Marcado como actualizado.`);
+        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.8.3" exitoso
+        if (!hasIPA && jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.3' && !summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.8.3" exitoso. Marcado como actualizado.`);
           return {
             id: host.id,
             name: host.name,
@@ -65,9 +65,9 @@ import { Op } from 'sequelize';
           };
         }
 
-        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.8.1" exitoso después de él, está actualizado
+        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.8.3" exitoso después de él, está actualizado
         if (hasIPA && successfulUpdateAfterIPA) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.3" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
           return {
             id: host.id,
             name: host.name,
@@ -77,9 +77,9 @@ import { Op } from 'sequelize';
           };
         }
 
-        // Si hay un "wst_upd_v1.8.1" pero todos fallaron, está fallido
-        if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" fallido. Marcado como fallido.`);
+        // Si hay un "wst_upd_v1.8.3" pero todos fallaron, está fallido
+        if (jobSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.3' && summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.3" fallido. Marcado como fallido.`);
           return {
             id: host.id,
             name: host.name,
@@ -89,7 +89,7 @@ import { Op } from 'sequelize';
           };
         }
 
-        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.8.1" después del "wst_ipa_v1.7.10".`);
+        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.8.3" después del "wst_ipa_v1.7.10".`);
 
         return {
           id: host.id,
@@ -219,12 +219,12 @@ export const getHostsByFilial = async (req, res) => {
         // Filtrar la lista de trabajos si existe un "wst_ipa_v"
         const filteredSummaries = hasIPA ? jobSummaries.slice(0, lastIPAIndex) : jobSummaries;
         const succesfulUpdates = filteredSummaries.filter(
-          summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed
+          summary => summary.job_name === 'wst_upd_v1.8.3' && !summary.failed
         );
 
-        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.8.1" exitoso
+        // Si no hay ningún "wst_ipa_v" y hay un "wst_upd_v1.8.3" exitoso
         if (!hasIPA && succesfulUpdates.length > 0) {
-          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.8.1" exitoso. Marcado como actualizado.`);
+          console.log(`Host ${host.id} - ${host.name} no tiene "wst_ipa_v", pero tiene un "wst_upd_v1.8.3" exitoso. Marcado como actualizado.`);
 
           const oldestSuccessfulUpdate = succesfulUpdates.reduce((oldest, current) =>
             new Date(current.jobCreationDate) < new Date(oldest.jobCreationDate) ? current : oldest
@@ -242,9 +242,9 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.8.1" exitoso después de él, está actualizado
+        // Si hay un "wst_ipa_v" y al menos un "wst_upd_v1.8.3" exitoso después de él, está actualizado
         if (hasIPA && succesfulUpdates.length > 0) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.3" exitoso después del "wst_ipa_v". Marcado como actualizado.`);
 
           const oldestSuccessfulUpdate = succesfulUpdates.reduce((oldest, current) =>
             new Date(current.jobCreationDate) < new Date(oldest.jobCreationDate) ? current : oldest
@@ -262,9 +262,9 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        // Si hay un "wst_upd_v1.8.1" pero todos fallaron, está fallido
-        if (filteredSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed)) {
-          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.1" fallido. Marcado como fallido.`);
+        // Si hay un "wst_upd_v1.8.3" pero todos fallaron, está fallido
+        if (filteredSummaries.some(summary => summary.job_name === 'wst_upd_v1.8.3' && summary.failed)) {
+          console.log(`Host ${host.id} - ${host.name} tiene un "wst_upd_v1.8.3" fallido. Marcado como fallido.`);
           return {
             id: host.id,
             name: host.name,
@@ -274,7 +274,7 @@ export const getHostsByFilial = async (req, res) => {
           };
         }
 
-        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.8.1" después del "wst_ipa_v1.7.10".`);
+        console.log(`Host ${host.id} - ${host.name} está pendiente de un "wst_upd_v1.8.3" después del "wst_ipa_v1.7.10".`);
 
         return {
           id: host.id,

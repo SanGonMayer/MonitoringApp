@@ -12,37 +12,37 @@ export const calculateHostStatus = (host, tipoTerminal) => {
     // 3. Filtrar trabajos POSTERIORES al último wst_ipa_v exitoso
     const relevantSummaries = hasSuccessfulIPA ? jobSummaries.slice(0, lastSuccessfulIPAIndex) : jobSummaries;
 
-    // 4. Verificar si hay AL MENOS UN wst_upd_v1.8.1 exitoso en los trabajos relevantes
+    // 4. Verificar si hay AL MENOS UN wst_upd_v1.8.3 exitoso en los trabajos relevantes
     const hasSuccessfulUpdate = relevantSummaries.some(
-      summary => summary.job_name === 'wst_upd_v1.8.1' && !summary.failed
+      summary => summary.job_name === 'wst_upd_v1.8.3' && !summary.failed
     );
 
-    // 5. Verificar si hay AL MENOS UN wst_upd_v1.8.1 fallido en los trabajos relevantes
+    // 5. Verificar si hay AL MENOS UN wst_upd_v1.8.3 fallido en los trabajos relevantes
     const hasFailedUpdate = relevantSummaries.some(
-      summary => summary.job_name === 'wst_upd_v1.8.1' && summary.failed
+      summary => summary.job_name === 'wst_upd_v1.8.3' && summary.failed
     );
 
-    // Regla 1: Si hay un wst_ipa_v exitoso y AL MENOS UN wst_upd_v1.8.1 exitoso después, estado es actualizado
+    // Regla 1: Si hay un wst_ipa_v exitoso y AL MENOS UN wst_upd_v1.8.3 exitoso después, estado es actualizado
     if (hasSuccessfulIPA && hasSuccessfulUpdate) {
       return 'actualizado';
     }
 
-    // Regla 2: Si hay un wst_ipa_v exitoso y NO HAY NINGÚN wst_upd_v1.8.1 exitoso después, estado es fallido
+    // Regla 2: Si hay un wst_ipa_v exitoso y NO HAY NINGÚN wst_upd_v1.8.3 exitoso después, estado es fallido
     if (hasSuccessfulIPA && !hasSuccessfulUpdate && hasFailedUpdate) {
       return 'fallido';
     }
 
-    // Regla 4: Si no hay wst_ipa_v exitoso y hay AL MENOS UN wst_upd_v1.8.1 exitoso, estado es actualizado
+    // Regla 4: Si no hay wst_ipa_v exitoso y hay AL MENOS UN wst_upd_v1.8.3 exitoso, estado es actualizado
     if (!hasSuccessfulIPA && hasSuccessfulUpdate) {
       return 'actualizado';
     }
 
-    // Regla 3: Si hay un wst_ipa_v exitoso y no hay ningún wst_upd_v1.8.1 posterior, estado es pendiente
+    // Regla 3: Si hay un wst_ipa_v exitoso y no hay ningún wst_upd_v1.8.3 posterior, estado es pendiente
     if (hasSuccessfulIPA) {
       return 'pendiente';
     }
 
-    // Si no hay wst_ipa_v exitoso ni wst_upd_v1.8.1 exitoso, estado es pendiente
+    // Si no hay wst_ipa_v exitoso ni wst_upd_v1.8.3 exitoso, estado es pendiente
     return 'pendiente';
   }
 

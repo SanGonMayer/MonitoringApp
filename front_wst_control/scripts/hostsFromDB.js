@@ -232,7 +232,8 @@ async function fetchHostsFromDB(filialId, tipoTerminal) {
 
       let template_id = 0;
       if ( fromPage === 'wst'){
-        template_id = 1678;
+        //template_id = 1678; este es el 1.8.1
+        template_id = 1716;
         console.log("fromPage recibido:", fromPage);
       } else if (fromPage === 'cctv'){
         template_id = 1695;
